@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2 — Capital Adequacy Ratios | UAE Banking Regulatory Framework</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1a1a2e;--ink-mid:#2d2d4e;--ink-light:#3d3d6e;
+  --gold:#b8860b;--gold-light:#daa520;--gold-pale:#fff8dc;
+  --teal:#0d7377;--teal-light:#14a085;--teal-pale:#e8f8f7;
+  --red:#c0392b;--red-pale:#fdf0ee;
+  --amber:#e67e22;--amber-pale:#fef9f0;
+  --blue:#1a6ea8;--blue-pale:#eef6fb;
+  --green:#27ae60;--green-pale:#edfaf3;
+  --purple:#6c3483;--purple-pale:#f5eef8;
+  --page:#fafaf7;--paper:#ffffff;
+  --border:#e8e4d8;--border-strong:#c8c0a8;
+  --text:#2c2c2c;--text-mid:#555;--text-light:#888;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--page);color:var(--text);line-height:1.75;font-size:16px;}
+
+.book-header{background:var(--ink);color:white;position:relative;overflow:hidden;}
+.book-header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal-light),var(--gold));}
+.book-header-inner{max-width:880px;margin:0 auto;padding:60px 40px;position:relative;z-index:2;}
+.book-series{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:12px;}
+.chapter-num{font-family:'Lora',serif;font-size:90px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;position:absolute;right:40px;top:30px;font-style:italic;}
+.book-title{font-family:'Lora',serif;font-size:40px;font-weight:700;line-height:1.2;margin-bottom:16px;color:white;}
+.book-title span{color:var(--gold-light);font-style:italic;}
+.book-subtitle{font-size:16px;color:rgba(255,255,255,0.6);max-width:580px;line-height:1.6;margin-bottom:28px;}
+.chapter-meta{display:flex;gap:20px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.45);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
+
+.page-wrap{max-width:880px;margin:0 auto;padding:0 40px 80px;}
+
+.toc-box{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:24px 28px;margin:36px 0;box-shadow:var(--shadow);}
+.toc-title{font-family:'Lora',serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;}
+.toc-list{list-style:none;columns:2;column-gap:32px;}
+.toc-list li{font-size:13px;color:var(--text-mid);padding:3px 0;}
+.toc-list li span{color:var(--gold);font-weight:600;margin-right:6px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+
+.sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;margin-top:52px;display:flex;align-items:center;gap:10px;}
+.sm::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'Lora',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:16px;line-height:1.3;}
+h3{font-family:'Lora',serif;font-size:22px;font-weight:600;color:var(--ink-mid);margin:32px 0 12px;line-height:1.3;}
+h4{font-size:13px;font-weight:700;color:var(--ink);margin:22px 0 8px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:14px;color:var(--text);}
+strong{color:var(--ink);}
+sup a{color:var(--blue);font-size:10px;}
+
+.story-box{background:linear-gradient(135deg,#fffbf0,#fff8e7);border:2px solid var(--gold-light);border-radius:16px;padding:24px 28px;margin:28px 0;position:relative;overflow:hidden;}
+.story-box::before{content:'📖';position:absolute;top:-8px;right:18px;font-size:28px;transform:rotate(10deg);}
+.story-label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.story-box p{font-family:'Lora',serif;font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;}
+.story-box p:last-child{margin-bottom:0;}
+
+.beginner{background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:18px 22px;margin:18px 0;}
+.beginner-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.beginner p{font-size:14px;color:var(--ink-mid);margin-bottom:0;}
+
+.formula-box{background:var(--ink);border-radius:10px;padding:18px 22px;margin:18px 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold-light);}
+.fl{font-family:'Source Sans 3',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;}
+.fn{font-family:'Source Sans 3',sans-serif;font-size:12px;color:rgba(255,255,255,0.45);margin-top:6px;font-style:italic;}
+
+.alert{border-radius:8px;padding:16px 20px;margin:18px 0;border-left:4px solid;display:flex;gap:12px;align-items:flex-start;}
+.ai{font-size:19px;flex-shrink:0;margin-top:2px;}
+.ab h5{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ab p{font-size:14px;margin-bottom:0;}
+.a-key{background:#fffbf0;border-color:var(--gold);} .a-key .ab h5{color:var(--gold);}
+.a-uae{background:var(--teal-pale);border-color:var(--teal);} .a-uae .ab h5{color:var(--teal);}
+.a-warn{background:var(--amber-pale);border-color:var(--amber);} .a-warn .ab h5{color:var(--amber);}
+.a-danger{background:var(--red-pale);border-color:var(--red);} .a-danger .ab h5{color:var(--red);}
+.a-good{background:var(--green-pale);border-color:var(--green);} .a-good .ab h5{color:var(--green);}
+
+.table-wrap{overflow-x:auto;margin:18px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;box-shadow:var(--shadow);border-radius:8px;overflow:hidden;}
+thead th{background:var(--ink);color:white;padding:10px 13px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.5px;}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,0,0,0.018);}
+tbody tr:hover td{background:var(--gold-pale);}
+.tp{color:var(--green);font-weight:600;} .tf{color:var(--red);font-weight:600;} .tw{color:var(--amber);font-weight:600;} .th{color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;}
+
+.uae-section{background:linear-gradient(135deg,#e8f8f7,#d4f1ee);border:1px solid var(--teal);border-radius:12px;padding:26px 28px 26px 40px;margin:36px 0;position:relative;}
+.uae-flag-stripe{position:absolute;left:0;top:0;bottom:0;width:8px;border-radius:12px 0 0 12px;background:linear-gradient(to bottom,#00732f 25%,#ffffff 25%,#ffffff 50%,#000000 50%,#000000 75%,#ff0000 75%);}
+.uae-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:white;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.uae-section h3{color:var(--teal);margin-top:0;}
+
+.wd-section{background:var(--paper);border:1px solid #e0b4b4;border-radius:12px;padding:26px 28px;margin:36px 0;box-shadow:var(--shadow);}
+.wd-hdr{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #f0d0d0;}
+.wd-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--red);}
+.wd-sub{font-size:13px;color:var(--text-light);margin-top:2px;}
+.wd-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px dashed #f0d0d0;}
+.wd-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.wd-ih{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.wd-n{background:var(--red);color:white;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.wd-item h5{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--red);}
+.wd-item p{font-size:14px;color:var(--text-mid);margin-bottom:6px;}
+.wl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:2px;}
+.wl-m{color:var(--amber);} .wl-e{color:var(--blue);} .wl-d{color:var(--green);}
+.wnums{background:rgba(26,110,168,0.06);border-left:3px solid var(--blue);padding:10px 14px;border-radius:0 6px 6px 0;margin:8px 0;font-size:12.5px;font-family:'JetBrains Mono',monospace;color:var(--ink-mid);white-space:pre-line;line-height:1.7;}
+
+.sherlock{background:linear-gradient(135deg,#1a1a2e,#2d2d4e);border-radius:12px;padding:26px 28px;margin:36px 0;color:white;}
+.sh-title{font-family:'Lora',serif;font-size:21px;font-weight:700;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.sh-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:20px;}
+.clue{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.clue:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.cn{background:var(--gold);color:var(--ink);min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.clue p{font-size:13px;color:rgba(255,255,255,0.82);margin-bottom:0;line-height:1.65;}
+.clue strong{color:var(--gold-light);}
+.cnums{background:rgba(201,168,76,0.1);border-left:2px solid var(--gold);padding:8px 12px;margin-top:6px;border-radius:0 4px 4px 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.72);white-space:pre-line;line-height:1.6;}
+
+.chart-box{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:22px;margin:22px 0;box-shadow:var(--shadow);}
+.ct{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.cs{font-size:12px;color:var(--text-light);margin-bottom:14px;font-style:italic;}
+
+.cartoon-wrap{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:22px;margin:24px 0;text-align:center;box-shadow:var(--shadow);}
+.cartoon-caption{font-size:12px;color:var(--text-light);font-style:italic;margin-top:10px;}
+
+.metric-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0;}
+.metric-tile{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;box-shadow:var(--shadow);}
+.mv{font-family:'Lora',serif;font-size:24px;font-weight:700;margin-bottom:3px;}
+.ml{font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;}
+.ms{font-size:12px;color:var(--text-light);margin-top:3px;}
+
+.stack-tier{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;margin-bottom:3px;border-radius:8px;cursor:pointer;transition:filter 0.2s;}
+.stack-tier:hover{filter:brightness(1.1);}
+.tier-l{font-size:14px;font-weight:600;}
+.tier-d{font-size:12px;margin-top:3px;}
+.tier-b{font-size:12px;font-weight:600;padding:4px 12px;border-radius:8px;}
+
+.ref-section{background:var(--blue-pale);border:1px solid #c0d8f0;border-radius:8px;padding:18px 22px;margin:36px 0 18px;}
+.ref-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ref-list{list-style:none;}
+.ref-list li{font-size:12px;color:var(--text-mid);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.ref-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+.ref-list a{color:var(--blue);text-decoration:none;}
+
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin:44px 0;}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-top:1px solid var(--border);margin-top:36px;}
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--ink);color:white;border:none;border-radius:6px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:var(--ink-mid);}
+.nav-btn.disabled{background:var(--border);color:var(--text-light);pointer-events:none;}
+
+@media(max-width:768px){
+  .page-wrap{padding:0 18px 60px;}
+  .book-title{font-size:28px;}
+  .metric-strip{grid-template-columns:1fr 1fr;}
+  .toc-list{columns:1;}
+  .chapter-num{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="book-header">
+  <div class="book-header-inner">
+    <div class="book-series">ICAAP &amp; Financial Ratios in UAE Banking · Chapter Two</div>
+    <div class="chapter-num">02</div>
+    <h1 class="book-title">Capital <span>Adequacy</span> Ratios</h1>
+    <p class="book-subtitle">CET1, Tier 1, Total Capital, Leverage Ratio — the capital stack, how provisions connect to Tier 2, RWA mechanics, and the full numerical story from balance sheet to ICAAP stress test.</p>
+    <div class="chapter-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Basel III · BIS 2010</div>
+      <div class="meta-item"><div class="meta-dot"></div>CBUAE Circular 163/2018</div>
+      <div class="meta-item"><div class="meta-dot"></div>IFRS 9 · ECL Framework</div>
+      <div class="meta-item"><div class="meta-dot"></div>Beginner → Advanced</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<div class="toc-box">
+  <div class="toc-title">In This Chapter</div>
+  <ul class="toc-list">
+    <li><span>2.1</span> The Sponge Cake Analogy</li>
+    <li><span>2.2</span> Why Capital Ratios Exist</li>
+    <li><span>2.3</span> The Capital Stack — CET1, AT1, T2</li>
+    <li><span>2.4</span> CET1 Ratio — Deep Dive</li>
+    <li><span>2.5</span> Tier 1 &amp; Total Capital Ratio</li>
+    <li><span>2.6</span> The Leverage Ratio</li>
+    <li><span>2.7</span> RWA — Pillar 1 vs Pillar 2</li>
+    <li><span>2.8</span> Provisions &amp; Tier 2 Capital</li>
+    <li><span>2.9</span> UAE Context — CBUAE Adaptations</li>
+    <li><span>2.10</span> How Window Dressers Hide</li>
+    <li><span>2.11</span> Sherlock Holmes Detection</li>
+    <li><span>2.12</span> Full Numerical Examples</li>
+    <li><span>2.13</span> References</li>
+  </ul>
+</div>
+
+<!-- ═══ 2.1 NARRATIVE ═══ -->
+<div class="sm">2.1 — The Story</div>
+<h2>The Sponge Cake School of Capital Management</h2>
+
+<div class="story-box">
+  <div class="story-label">A Beginner's Parable</div>
+  <p>Imagine a bank is like a very expensive sponge cake at a wedding. The cake (total assets) is magnificent — six layers, fondant icing, the works. But underneath all that icing are three distinct layers of cake.</p>
+  <p>The bottom layer is pure, dense, high-quality chocolate sponge — the best stuff. This is CET1 — ordinary share capital and retained earnings. It absorbs everything first. If a guest drops the cake, this layer takes the hit. The middle layer is good vanilla sponge, but slightly drier — this is Additional Tier 1, bonds that convert to equity under stress. The top decorative layer is a thinner lemon sponge — Tier 2 capital, subordinated debt. Nice to have, but the last thing you want to be relying on when the cake hits the floor.</p>
+  <p>Now here is the punchline: the regulator comes to the wedding and says "your cake must be at least 8% cake and not too much fancy icing (assets)." That is the capital ratio minimum. But your honest internal assessment — ICAAP — says "given the buffet table is unstable, the venue has three large dogs, and Uncle Ahmed is already eyeing the cake, we should probably make 12% of this thing solid sponge, not 8%." <strong>The capital stack is the recipe. Capital ratios measure how much solid cake you have per unit of wedding risk.</strong></p>
+</div>
+
+<div class="cartoon-wrap">
+<svg width="100%" viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" style="max-width:700px">
+  <rect width="700" height="280" fill="#fafaf7" rx="8"/>
+  <!-- Cake layers -->
+  <rect x="120" y="190" width="240" height="50" rx="4" fill="#6c3483" stroke="#5b2875" stroke-width="1.5"/>
+  <text x="240" y="211" font-family="'Source Sans 3',sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="700">TIER 2 — Subordinated Debt + General Provisions</text>
+  <text x="240" y="228" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.75)" text-anchor="middle">Gone-concern | Absorbs losses in resolution only</text>
+
+  <rect x="120" y="132" width="240" height="52" rx="4" fill="#1a6ea8" stroke="#1560a0" stroke-width="1.5"/>
+  <text x="240" y="152" font-family="'Source Sans 3',sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="700">AT1 — Perpetual Bonds, CoCos</text>
+  <text x="240" y="168" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.75)" text-anchor="middle">Going-concern | Converts to equity under stress trigger</text>
+
+  <rect x="120" y="60" width="240" height="66" rx="4" fill="#0d7377" stroke="#0a5f63" stroke-width="2"/>
+  <text x="240" y="82" font-family="'Source Sans 3',sans-serif" font-size="12" fill="white" text-anchor="middle" font-weight="700">CET1 — Common Equity Tier 1</text>
+  <text x="240" y="98" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.85)" text-anchor="middle">Ordinary shares + Retained earnings</text>
+  <text x="240" y="113" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.85)" text-anchor="middle">Absorbs losses FIRST — no conditions</text>
+
+  <!-- Bracket: Tier 1 -->
+  <line x1="362" y1="63" x2="378" y2="63" stroke="#1a6ea8" stroke-width="1"/>
+  <line x1="378" y1="63" x2="378" y2="181" stroke="#1a6ea8" stroke-width="1"/>
+  <line x1="378" y1="181" x2="362" y2="181" stroke="#1a6ea8" stroke-width="1"/>
+  <text x="388" y="112" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a6ea8" font-weight="600">Tier 1</text>
+  <text x="388" y="126" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a6ea8">= CET1+AT1</text>
+
+  <!-- Bracket: Total Capital -->
+  <line x1="362" y1="63" x2="410" y2="63" stroke="#6c3483" stroke-width="1"/>
+  <line x1="410" y1="63" x2="410" y2="237" stroke="#6c3483" stroke-width="1"/>
+  <line x1="410" y1="237" x2="362" y2="237" stroke="#6c3483" stroke-width="1"/>
+  <text x="420" y="145" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#6c3483" font-weight="600">Total</text>
+  <text x="420" y="159" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#6c3483">Capital</text>
+
+  <!-- Quality arrow -->
+  <line x1="95" y1="245" x2="95" y2="55" stroke="#c0392b" stroke-width="1.5" marker-end="url(#qa)"/>
+  <text x="82" y="155" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#c0392b" text-anchor="middle" transform="rotate(-90,82,155)">Loss absorption quality</text>
+
+  <!-- Ratio minimums -->
+  <rect x="480" y="50" width="200" height="200" rx="8" fill="white" stroke="#e8e4d8" stroke-width="1"/>
+  <text x="580" y="70" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">Regulatory Minimums</text>
+  <line x1="495" y1="78" x2="665" y2="78" stroke="#e8e4d8" stroke-width="0.8"/>
+  <text x="495" y="96" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#0d7377" font-weight="600">CET1 ratio</text>
+  <text x="665" y="96" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#c0392b" font-weight="600" text-anchor="end">≥ 4.5% (7% w/ CCB)</text>
+  <text x="495" y="116" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#1a6ea8" font-weight="600">Tier 1 ratio</text>
+  <text x="665" y="116" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#c0392b" font-weight="600" text-anchor="end">≥ 6.0% (8.5% w/ CCB)</text>
+  <text x="495" y="136" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#6c3483" font-weight="600">Total Capital</text>
+  <text x="665" y="136" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#c0392b" font-weight="600" text-anchor="end">≥ 8.0% (10.5% w/ CCB)</text>
+  <text x="495" y="156" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#e67e22" font-weight="600">Leverage ratio</text>
+  <text x="665" y="156" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#c0392b" font-weight="600" text-anchor="end">≥ 3.0%</text>
+  <line x1="495" y1="165" x2="665" y2="165" stroke="#e8e4d8" stroke-width="0.8"/>
+  <text x="580" y="183" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">UAE ICAAP targets</text>
+  <text x="580" y="197" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#0d7377" text-anchor="middle" font-weight="600">CET1: 10–13% | Leverage: 4–5%</text>
+  <text x="580" y="212" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#888" text-anchor="middle" font-style="italic">(above all buffers + P2R + P2G)</text>
+
+  <defs>
+    <marker id="qa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <text x="350" y="270" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Figure 2.1 — The capital stack: CET1 absorbs losses first. Each layer has its own regulatory minimum and ICAAP target.</text>
+</svg>
+<div class="cartoon-caption">Quality decreases downward. CET1 is the only capital that truly absorbs losses without conditions. Everything else has a catch.</div>
+</div>
+
+<!-- ═══ 2.2 WHY CAPITAL RATIOS EXIST ═══ -->
+<div class="sm">2.2 — Why They Exist</div>
+<h2>Why Capital Ratios Exist — The Simple and Technical Answer</h2>
+
+<div class="beginner">
+  <div class="beginner-label">🟢 Simple Version — The Skin in the Game Principle</div>
+  <p>Banks borrow most of what they lend. A bank with AED 100 in assets might only have AED 10 of its own money (equity) and AED 90 borrowed from depositors. If AED 11 of loans go bad, the bank cannot repay its depositors. Capital ratios measure how thick that equity cushion is. The thicker it is, the more losses the bank can absorb before depositors start losing their money.</p>
+</div>
+
+<p><strong>Technical explanation:</strong> Banks operate on fractional reserve principles — a small amount of equity supports a large balance sheet. This leverage amplifies returns in good times but creates systemic fragility in bad times. Capital adequacy regulation exists to ensure the equity cushion is sufficiently large that:</p>
+
+<ul style="padding-left:24px;margin-bottom:16px;font-size:15px;color:var(--text-mid);line-height:2">
+  <li>Unexpected losses can be absorbed without triggering insolvency</li>
+  <li>Depositors and senior creditors are protected from bank failures</li>
+  <li>Systemic contagion is limited — one bank's failure does not immediately bankrupt another</li>
+  <li>Banks have a private incentive to limit risk-taking (they lose their own equity first)</li>
+</ul>
+
+<p>Capital ratios are expressed as a percentage of <strong>Risk-Weighted Assets (RWA)</strong> rather than total assets — because not all assets carry the same risk. A government bond and an unsecured personal loan both sit on the balance sheet at face value, but the loan is far more likely to default. RWA adjusts for this difference.</p>
+
+<div class="formula-box">
+  <div class="fl">The Core Capital Ratio Logic</div>
+  Capital Ratio = Qualifying Capital ÷ Risk-Weighted Assets × 100
+
+  The higher this ratio, the more capital per unit of risk.
+  Regulatory minimum: the floor below which a bank is non-compliant.
+  ICAAP target: the level the bank determines it needs above the floor.
+  <div class="fn">RWA = each asset × its prescribed risk weight. A UAE sovereign bond: 0% weight. An unsecured consumer loan: 75–150% weight.</div>
+</div>
+
+<!-- ═══ 2.3 THE CAPITAL STACK ═══ -->
+<div class="sm">2.3 — The Capital Stack</div>
+<h2>The Capital Stack — Three Tiers, One Purpose</h2>
+
+<p>Not all capital is equally useful for absorbing losses. Basel III classifies capital into tiers based on quality — specifically, how quickly and freely it can absorb losses without conditions or triggers.</p>
+
+<div style="margin:24px 0">
+  <div class="stack-tier" style="background:rgba(13,115,119,0.12);border:1px solid rgba(13,115,119,0.4)">
+    <div>
+      <div class="tier-l" style="color:var(--teal)">CET1 — Common Equity Tier 1</div>
+      <div class="tier-d" style="color:var(--text-mid)">Ordinary shares + retained earnings + eligible reserves + minority interests. Absorbs losses immediately, without any trigger, without conditions. The purest form of capital.</div>
+    </div>
+    <span class="tier-b" style="background:rgba(13,115,119,0.15);color:var(--teal)">Highest quality ↑</span>
+  </div>
+
+  <div style="text-align:center;color:var(--text-light);font-size:13px;padding:4px 0">▼ Lower quality</div>
+
+  <div class="stack-tier" style="background:rgba(26,110,168,0.08);border:1px solid rgba(26,110,168,0.3)">
+    <div>
+      <div class="tier-l" style="color:var(--blue)">AT1 — Additional Tier 1</div>
+      <div class="tier-d" style="color:var(--text-mid)">Perpetual subordinated bonds, contingent convertibles (CoCos). Absorbs losses through conversion to equity or principal write-down when a trigger ratio is breached (typically CET1 &lt; 5.125%). Going-concern capital — bank is alive when these activate.</div>
+    </div>
+    <span class="tier-b" style="background:rgba(26,110,168,0.12);color:var(--blue)">Going concern</span>
+  </div>
+
+  <div style="text-align:center;color:var(--text-light);font-size:13px;padding:4px 0">▼ Lower quality</div>
+
+  <div class="stack-tier" style="background:rgba(108,52,131,0.08);border:1px solid rgba(108,52,131,0.3)">
+    <div>
+      <div class="tier-l" style="color:var(--purple)">Tier 2 — Supplementary Capital</div>
+      <div class="tier-d" style="color:var(--text-mid)">Subordinated debt (min 5yr maturity), general loan loss provisions (limited). Absorbs losses in resolution/wind-down. Gone-concern capital — the bank is being wound up when these absorb losses. <em>Chapter 2.8 explains why general provisions qualify for Tier 2 despite reducing equity.</em></div>
+    </div>
+    <span class="tier-b" style="background:rgba(108,52,131,0.12);color:var(--purple)">Gone concern</span>
+  </div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Capital Element</th><th>Tier</th><th>Regulatory Minimum</th><th>With Conservation Buffer</th><th>UAE ICAAP Typical Target</th></tr></thead>
+<tbody>
+  <tr><td>CET1 Ratio</td><td>Tier 1</td><td class="tf">4.50%</td><td class="tw">7.00%</td><td class="tp">10–13%</td></tr>
+  <tr><td>Tier 1 Ratio (CET1 + AT1)</td><td>Tier 1</td><td class="tf">6.00%</td><td class="tw">8.50%</td><td class="tp">11–14%</td></tr>
+  <tr><td>Total Capital Ratio (T1 + T2)</td><td>All</td><td class="tf">8.00%</td><td class="tw">10.50%</td><td class="tp">13–16%</td></tr>
+  <tr><td>Leverage Ratio (T1 ÷ Exposure)</td><td>Tier 1</td><td class="tf">3.00%</td><td class="tw">3.00%</td><td class="tp">4–5%</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-key">
+  <div class="ai">💡</div>
+  <div class="ab">
+    <h5>Why Regulators Focus on CET1 Above Everything</h5>
+    <p>CET1 is the only capital that absorbs losses unconditionally. AT1 instruments have triggers — they only convert to equity when CET1 falls below a threshold. Tier 2 only absorbs in resolution — by which point depositors may already be harmed. In an ICAAP stress test, regulators almost exclusively focus on whether <strong>CET1</strong> stays above 7% throughout the stress horizon. The other ratios matter — but CET1 is the number that determines whether the bank survives.</p>
+  </div>
+</div>
+
+<!-- ═══ 2.4 CET1 DEEP DIVE ═══ -->
+<div class="sm">2.4 — CET1 Ratio</div>
+<h2>CET1 Ratio — Deep Dive</h2>
+
+<div class="formula-box">
+  <div class="fl">CET1 Ratio Formula</div>
+  CET1 Ratio = CET1 Capital ÷ Risk-Weighted Assets (Pillar 1) × 100
+
+  CET1 Capital = Paid-up ordinary shares
+               + Share premium (from ordinary shares)
+               + Retained earnings
+               + Accumulated other comprehensive income (AOCI)
+               + Other disclosed reserves
+               - Regulatory deductions (goodwill, deferred tax, IRB shortfall etc.)
+  <div class="fn">Sources: Basel III, December 2010 (BIS), Art. 52–88. CBUAE Capital Standards 2018, Section 2.</div>
+</div>
+
+<h4>The Regulatory Deductions — What Gets Subtracted From CET1</h4>
+<p>CET1 is not simply the equity number from the balance sheet. Regulators deduct items that are not reliably available to absorb losses:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Deduction from CET1</th><th>Why Deducted</th><th>Typical Impact (UAE bank)</th></tr></thead>
+<tbody>
+  <tr><td>Goodwill and intangibles</td><td>Cannot be sold in a crisis to absorb losses — zero recovery value</td><td class="tw">−0.3 to −1.5% of RWA</td></tr>
+  <tr><td>Deferred tax assets (DTAs)</td><td>Only valuable if the bank is profitable — useless in a stress</td><td class="tw">−0.2 to −0.8% of RWA</td></tr>
+  <tr><td>IRB provision shortfall</td><td>Where actual provisions &lt; modelled Expected Loss — the gap must be deducted</td><td class="tw">−0.1 to −0.5% of RWA</td></tr>
+  <tr><td>Defined benefit pension deficit</td><td>Future liability on the balance sheet not backed by assets</td><td>Usually immaterial for UAE banks</td></tr>
+  <tr><td>Investments in own shares</td><td>Treasury shares are not real capital — they represent capital held by the bank itself</td><td>Usually immaterial</td></tr>
+  <tr><td>Significant holdings in fin. entities</td><td>Double-counting — the same capital supporting two banks</td><td class="tw">Varies significantly</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>What Moves CET1 — The Four Drivers</h3>
+<p>In ICAAP stress testing, CET1 changes through four mechanisms that the analyst must model separately:</p>
+
+<div class="chart-box">
+  <div class="ct">Four CET1 Drivers — Positive and Negative</div>
+  <div class="cs">Understanding what builds and depletes CET1 is the foundation of ICAAP capital projection</div>
+  <canvas id="cet1DriversChart" height="90"></canvas>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Driver</th><th>Direction</th><th>Mechanism</th><th>ICAAP Stress Impact</th></tr></thead>
+<tbody>
+  <tr><td>Retained earnings</td><td class="tp">+ Builds CET1</td><td>Net profit retained after dividends adds to retained earnings → CET1 rises</td><td>In stress: net losses reduce retained earnings → CET1 falls fastest here</td></tr>
+  <tr><td>Impairment charges</td><td class="tf">− Depletes CET1</td><td>ECL provisioning → P&amp;L charge → reduces retained earnings → reduces CET1</td><td>Primary stress driver. Cost of risk 3% on AED 20bn book = AED 600m annual CET1 drain</td></tr>
+  <tr><td>RWA migration</td><td class="tf">− Depletes CET1 ratio</td><td>Credit deterioration → higher risk weights → RWA denominator rises → ratio falls even if capital constant</td><td>RWA often rises 15–25% in severe stress — compounding capital ratio decline</td></tr>
+  <tr><td>Capital actions</td><td class="tp">+ Builds CET1</td><td>New equity issuance, dividend suspension, asset disposal gains → CET1 rises</td><td>ICAAP management actions — credibility is key (see window dressing section)</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══ 2.5 TIER 1 AND TOTAL CAPITAL ═══ -->
+<div class="sm">2.5 — Tier 1 &amp; Total Capital</div>
+<h2>Tier 1 and Total Capital Ratio</h2>
+
+<div class="formula-box">
+  <div class="fl">Tier 1 and Total Capital Formulas</div>
+  Tier 1 Ratio  = (CET1 + AT1 Capital) ÷ RWA × 100  [Min: 6.0%]
+  Total Capital = (Tier 1 + Tier 2 Capital) ÷ RWA × 100  [Min: 8.0%]
+  <div class="fn">AT1 instruments: must be perpetual, fully paid, subordinated, non-cumulative discretionary distributions. Tier 2: subordinated debt with original maturity ≥ 5 years; amortised in final 5 years before maturity.</div>
+</div>
+
+<div class="beginner">
+  <div class="beginner-label">🟢 When Does Tier 1 vs CET1 Matter?</div>
+  <p>Most analysts focus almost exclusively on CET1 because AT1 instruments have conversion triggers — they only help when CET1 is already severely depleted. In a going-concern stress scenario (the bank is hurt but alive), AT1 may not have triggered yet. The Tier 1 ratio matters most for resolution planning — how much total loss-absorbing capacity the bank has in a wind-down. In ICAAP, CET1 is always the binding constraint.</p>
+</div>
+
+<!-- ═══ 2.6 LEVERAGE RATIO ═══ -->
+<div class="sm">2.6 — Leverage Ratio</div>
+<h2>The Leverage Ratio — The Non-Risk-Based Backstop</h2>
+
+<div class="formula-box">
+  <div class="fl">Leverage Ratio Formula</div>
+  Leverage Ratio = Tier 1 Capital ÷ Total Exposure Measure × 100  [Min: 3.0%]
+
+  Total Exposure = On-balance sheet assets (at exposure value)
+                + Off-balance sheet commitments (at CCF)
+                + Derivatives (replacement cost + PFE add-on)
+                + Securities financing transactions
+  <div class="fn">Source: BCBS, Basel III leverage ratio framework, January 2014 (rev. 2016). BIS. CBUAE: minimum 3%, consistent with Basel III.</div>
+</div>
+
+<div class="beginner">
+  <div class="beginner-label">🟢 Why the Leverage Ratio Exists — The Simple Story</div>
+  <p>Risk-weighted capital ratios can be gamed. A bank can hold enormous volumes of "low risk weight" assets — government bonds at 0%, covered bonds at 10% — and appear very well capitalised by CET1 ratio while actually being dangerously leveraged. The leverage ratio ignores risk weights entirely. It simply says: "For every AED 33 of assets you hold, you must have at least AED 1 of Tier 1 capital." It is a blunt instrument — but blunt instruments are hard to game.</p>
+</div>
+
+<div class="alert a-warn">
+  <div class="ai">⚠️</div>
+  <div class="ab">
+    <h5>The Pre-2008 Banks That Failed the Leverage Test</h5>
+    <p>Several large European banks failed in 2008 with reported CET1 ratios above 8% — because their internal models assigned very low risk weights to mortgage-backed securities and sovereign debt. Their actual leverage ratios were sometimes 40:1 or higher. The leverage ratio was introduced specifically to prevent this. Under the leverage ratio, those positions would have been captured at full face value regardless of internal models.</p>
+  </div>
+</div>
+
+<!-- ═══ 2.7 RWA ═══ -->
+<div class="sm">2.7 — RWA Mechanics</div>
+<h2>RWA — The Denominator That Changes Everything</h2>
+
+<h3>Pillar 1 RWA vs ICAAP Stressed RWA — A Critical Distinction</h3>
+
+<p>This is one of the most commonly misunderstood aspects of ICAAP. There are two completely different contexts in which RWA appears, and confusing them produces wrong analysis.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Context</th><th>RWA Composition</th><th>Used For</th><th>Published?</th></tr></thead>
+<tbody>
+  <tr><td><strong>Pillar 3 Published Ratio</strong></td><td>Pillar 1 credit RWA + market RWA + operational RWA only. Static, point-in-time, regulatory formula.</td><td>Reported CET1% in annual report / Pillar 3 disclosure</td><td class="tp">Yes — public</td></tr>
+  <tr><td><strong>ICAAP Stressed RWA</strong></td><td>Stressed Pillar 1 RWA (higher PD/LGD) + Pillar 2 add-ons (concentration, IRRBB, model risk)</td><td>Internal stress test — projected forward 3–5 years. Shared only with regulator.</td><td class="tf">No — confidential</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-key">
+  <div class="ai">💡</div>
+  <div class="ab">
+    <h5>Pillar 2 Does NOT Change the Published CET1 Ratio</h5>
+    <p>Pillar 2 capital requirements operate on the <em>numerator threshold</em> — they raise the minimum the ratio must exceed. They do NOT add to the RWA denominator in the published ratio. A Pillar 2 requirement of 2% means the bank's CET1 ratio (calculated on Pillar 1 RWA) must be at least 9% (7% floor + 2% P2R) — not that the denominator gets bigger. However, in ICAAP stress testing, the bank builds a larger stressed RWA that includes Pillar 2 risk add-ons for internal capital planning purposes.</p>
+  </div>
+</div>
+
+<h4>How Stressed RWA Is Built — Step by Step</h4>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>RWA Component</th><th>Base (AED m)</th><th>Stress Driver</th><th>Stressed RWA (AED m)</th><th>Increase</th></tr></thead>
+<tbody>
+  <tr><td>Credit risk — mortgage portfolio</td><td>3,500</td><td>PD rises 2.5× | LGD rises from 25% to 45%</td><td class="tw">4,900</td><td class="tf">+40%</td></tr>
+  <tr><td>Credit risk — corporate</td><td>2,800</td><td>PD rises 3× | Rating migration to sub-investment</td><td class="tw">4,340</td><td class="tf">+55%</td></tr>
+  <tr><td>Credit risk — retail consumer</td><td>900</td><td>PD rises 2× | LGD unchanged</td><td class="tw">1,260</td><td class="tf">+40%</td></tr>
+  <tr><td>Market risk</td><td>800</td><td>VaR rises on higher volatility</td><td class="tw">1,040</td><td class="tf">+30%</td></tr>
+  <tr><td>Operational risk</td><td>700</td><td>BIA method — unchanged</td><td>700</td><td>—</td></tr>
+  <tr><td><strong>Total Pillar 1 stressed RWA</strong></td><td><strong>8,700</strong></td><td></td><td class="tw"><strong>12,240</strong></td><td class="tf"><strong>+41%</strong></td></tr>
+  <tr><td>Concentration risk add-on (P2)</td><td>—</td><td>Top 3 developer names, name-level analysis</td><td class="tf">588</td><td>New</td></tr>
+  <tr><td>IRRBB add-on (P2)</td><td>—</td><td>+200bp parallel shock on banking book</td><td class="tf">310</td><td>New</td></tr>
+  <tr><td><strong>Total ICAAP Stressed RWA</strong></td><td><strong>8,700</strong></td><td></td><td class="tf"><strong>13,138</strong></td><td class="tf"><strong>+51%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══ 2.8 PROVISIONS AND TIER 2 ═══ -->
+<div class="sm">2.8 — Provisions &amp; Tier 2</div>
+<h2>Provisions, the Balance Sheet, and Why General Provisions Qualify for Tier 2</h2>
+
+<p>This is one of the most conceptually challenging areas of bank capital accounting — and one of the most frequently misunderstood by practitioners. The key question is: <strong>if a provision reduces both the asset (contra asset) and equity (via P&amp;L), how can it also count as Tier 2 capital?</strong></p>
+
+<div class="beginner">
+  <div class="beginner-label">🟢 The Insurance Premium Analogy</div>
+  <p>Think of a general provision like an insurance premium. When you pay a premium, your bank balance goes down (equity reduced) — but now you hold an insurance policy (the provision sits as a contra asset and then as a collective allowance). The policy has real value — it will pay out if a claim arises. <strong>The premium cost and the policy value are two different things. You paid for the protection. The protection itself still exists and has value — that is what Tier 2 recognises.</strong></p>
+</div>
+
+<h4>The Accounting — What Actually Happens on the Balance Sheet</h4>
+
+<p>When a general provision is raised (AED 50m example):</p>
+
+<div class="formula-box">
+  <div class="fl">Journal Entry — General Provision</div>
+  Dr: Impairment expense (P&amp;L income statement) ............ 50
+  Cr: Loan loss allowance (contra asset, balance sheet) ...... 50
+
+  Effect on balance sheet:
+  → Gross loans: UNCHANGED at face value (still 1,000)
+  → Loan loss allowance: NEW entry of (50) on ASSET side
+  → Net loans: 950 (gross 1,000 minus allowance 50)
+  → Retained earnings: FALLS by 50 (via P&amp;L charge)
+  → Liabilities: UNTOUCHED — they are not involved
+  → Total assets fall 50. Total equity falls 50. Balance sheet balances.
+  <div class="fn">The contra asset and equity reduction are two permanent, simultaneous entries from one journal entry. Neither disappears until the loan is written off.</div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Balance Sheet Item</th><th>Before Provision</th><th>After AED 50 General Provision</th><th>Change</th></tr></thead>
+<tbody>
+  <tr><td>Other assets</td><td>9,000</td><td>9,000</td><td>—</td></tr>
+  <tr><td>Gross loans</td><td>1,000</td><td>1,000</td><td>—</td></tr>
+  <tr><td>Loan loss allowance (contra asset)</td><td>—</td><td class="tf">(50)</td><td>New entry on asset side</td></tr>
+  <tr><td><strong>Net loans</strong></td><td>1,000</td><td class="tw"><strong>950</strong></td><td>−50</td></tr>
+  <tr><td><strong>Total assets</strong></td><td><strong>10,000</strong></td><td class="tw"><strong>9,950</strong></td><td>−50</td></tr>
+  <tr><td>Total liabilities</td><td>9,000</td><td>9,000</td><td class="tp">Untouched</td></tr>
+  <tr><td>Retained earnings</td><td>1,000</td><td class="tf">950</td><td>−50 via P&amp;L</td></tr>
+  <tr><td><strong>Total L+E</strong></td><td><strong>10,000</strong></td><td class="tw"><strong>9,950</strong></td><td>−50</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Why This Does NOT Make Tier 2 Double-Counting</h4>
+
+<p>The provision already reduced CET1 through the P&amp;L hit. That is acknowledged. But the loan loss allowance now sits on the balance sheet as a funded buffer — a pre-paid pool of loss absorption — that will absorb future write-offs <em>before they hit equity again</em>. When a loan is subsequently written off against the allowance:</p>
+
+<div class="formula-box">
+  <div class="fl">Write-Off Entry (later, when loan finally defaults)</div>
+  Dr: Loan loss allowance ............ 50  (removes the contra asset)
+  Cr: Gross loans ..................... 50  (removes the gross loan)
+
+  Effect: Both sides of the asset shrink by 50. Equity is NOT touched.
+  The P&amp;L pain was taken at provision. Write-off is just tidying the balance sheet.
+  <div class="fn">This is why adequate provisioning is critical — if provisions are sufficient, write-offs are smooth. If under-provisioned, write-offs require a fresh P&amp;L charge, creating a sudden CET1 drop.</div>
+</div>
+
+<h4>When Do General Provisions Qualify for Tier 2?</h4>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Provision Type</th><th>Reduces CET1?</th><th>Tier 2 Eligible?</th><th>Cap</th><th>Reason</th></tr></thead>
+<tbody>
+  <tr><td>Specific provision (Stage 3 — identified NPL)</td><td class="tf">Yes</td><td class="tf">No</td><td>—</td><td>Already absorbed into CET1. Counting again is double-counting. Loss event identified.</td></tr>
+  <tr><td>General provision — Stage 1/2 ECL (Standardised Approach)</td><td class="tf">Yes (via P&amp;L)</td><td class="tp">Yes</td><td class="tw">Max 1.25% of credit RWA</td><td>Provision pool absorbs future unidentified losses BEFORE hitting equity again. Tier 2 recognises this buffer.</td></tr>
+  <tr><td>IRB provision surplus (actual ECL &gt; modelled EL)</td><td class="tf">Yes</td><td class="tp">Yes</td><td class="tw">Max 0.6% of credit RWA</td><td>Surplus provision above modelled expected loss represents genuine over-coverage.</td></tr>
+  <tr><td>IRB provision shortfall (actual ECL &lt; modelled EL)</td><td class="tf">Yes + deducted from CET1</td><td class="tf">No</td><td>—</td><td>Gap must be deducted from CET1 — bank has under-provisioned against its own model.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-key">
+  <div class="ai">💡</div>
+  <div class="ab">
+    <h5>The IRB Shortfall Deduction — A Hidden CET1 Risk</h5>
+    <p>Under the Internal Ratings-Based approach, the bank compares its actual provisions to its modelled Expected Loss (EL). If actual provisions are LESS than modelled EL, the entire shortfall is deducted from CET1. This is a double hit: the bank has under-provisioned (bad for credit quality ratios) AND has its CET1 further reduced by the shortfall amount. UAE banks using IRB models must monitor this carefully — an unexpected EL model revision can instantly reduce CET1 by hundreds of millions.</p>
+  </div>
+</div>
+
+<!-- ═══ 2.9 UAE CONTEXT ═══ -->
+<div class="sm">2.9 — UAE Context (Standalone)</div>
+<div class="uae-section">
+  <div class="uae-flag-stripe"></div>
+  <div>
+    <div class="uae-badge">🇦🇪 UAE Specific — Standalone Section</div>
+    <h3>Are Basel Capital Ratios Directly Suitable for UAE Banks?</h3>
+
+    <p>The Basel capital ratio framework is broadly applicable to UAE banks — the CBUAE has adopted the CET1, Tier 1, and Total Capital ratio requirements closely aligned with Basel III. However, four UAE-specific adaptations affect how capital ratios are interpreted and applied.</p>
+
+    <h4>Adaptation 1 — CBUAE Capital Standards and Minimum Levels</h4>
+    <p>The CBUAE Capital Adequacy Standards (Circular 163/2018, updated 2021) set UAE-specific minimums consistent with Basel III: CET1 minimum 4.5%, Capital Conservation Buffer 2.5%, Total effective CET1 floor 7.0%. The CBUAE has not yet activated the Countercyclical Buffer (CCyB) in the UAE as of 2024, though it retains the power to do so.<sup><a href="#ref2">[2]</a></sup></p>
+
+    <h4>Adaptation 2 — D-SIB Surcharges</h4>
+    <p>The CBUAE identified five Domestic Systemically Important Banks in 2020: First Abu Dhabi Bank (FAB), Emirates NBD (ENBD), Abu Dhabi Commercial Bank (ADCB), Dubai Islamic Bank (DIB), and Mashreq. These banks face additional CET1 surcharges of 0.5–2.5%, raising their effective CET1 floor above 7%. This directly affects their ICAAP internal capital targets.<sup><a href="#ref4">[4]</a></sup></p>
+
+    <h4>Adaptation 3 — Islamic Capital Instruments</h4>
+    <p>UAE Islamic banks issue AT1 and Tier 2 capital instruments structured as Islamic contracts (Mudaraba or Musharaka sukuk) rather than conventional bonds. The CBUAE Standards for Islamic banks (2018) govern eligibility criteria — these instruments must be perpetual, non-cumulative, and loss-absorbing in a manner consistent with Sharia.<sup><a href="#ref6">[6]</a></sup> The capital ratio formula is identical — only the composition of qualifying instruments differs.</p>
+
+    <h4>Adaptation 4 — RWA Treatment of UAE Government Exposures</h4>
+    <p>Under the Basel Standardised Approach, claims on UAE federal and emirate-level governments rated AA- and above receive 0% risk weight. However, GRE exposures in the UAE — a large component of many UAE banks' loan books — receive higher risk weights (typically 20–100% depending on rating and whether guaranteed). This means UAE banks with high GRE exposure have materially higher credit RWA than a simple government exposure analysis would suggest.</p>
+
+    <div class="table-wrap" style="margin-top:16px">
+    <table>
+    <thead><tr><th>UAE Bank Type</th><th>Effective CET1 Floor (2024)</th><th>Typical ICAAP Internal Target</th><th>Key Driver Above Minimum</th></tr></thead>
+    <tbody>
+      <tr><td>D-SIB (FAB, ENBD, ADCB, DIB, Mashreq)</td><td class="tw">7.5–9.5% (incl. D-SIB surcharge)</td><td class="tp">12–15%</td><td>D-SIB buffer + real estate concentration + IRRBB</td></tr>
+      <tr><td>Large non-D-SIB conventional</td><td class="tw">7.0%</td><td class="tp">11–13%</td><td>Concentration risk + GRE exposure</td></tr>
+      <tr><td>Large Islamic bank</td><td class="tw">7.0%</td><td class="tp">12–14%</td><td>IRRBB equivalent + limited HQLA pool</td></tr>
+      <tr><td>Smaller Category 2 bank</td><td class="tw">7.0%</td><td class="tp">10–12%</td><td>Concentration in single sector/geography</td></tr>
+    </tbody>
+    </table>
+    </div>
+
+    <div class="alert a-uae" style="margin-top:16px">
+      <div class="ai">🇦🇪</div>
+      <div class="ab">
+        <h5>UAE-Specific ICAAP Capital Drivers</h5>
+        <p>Three Pillar 2 risks dominate UAE banks' ICAAP capital add-ons and are not adequately captured by Pillar 1 formulas: (1) <strong>Real estate concentration</strong> — property cycles in Dubai and Abu Dhabi create correlated losses that standardised risk weights underestimate; (2) <strong>GRE single-name concentration</strong> — several UAE banks have individual GRE exposures exceeding 10% of Tier 1 capital; (3) <strong>Funding concentration</strong> — government and GRE deposits represent unstable funding that requires higher capital buffers under stress scenarios calibrated to the 2008–2009 Dubai crisis.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 2.10 WINDOW DRESSING ═══ -->
+<div class="sm">2.10 — Window Dressing</div>
+<h2>How Window Dressers Hide — Capital Ratios</h2>
+
+<div class="wd-section">
+  <div class="wd-hdr">
+    <div style="font-size:30px">🎭</div>
+    <div>
+      <div class="wd-title">How Window Dressers Hide in Capital Ratios</div>
+      <div class="wd-sub">Four techniques that inflate reported CET1 without genuinely improving the bank's loss-absorption capacity — and the footprints each leaves behind</div>
+    </div>
+  </div>
+
+  <p style="font-size:14px;color:var(--text-mid);margin-bottom:22px">Capital ratio window dressing operates by making the reported CET1 ratio appear stronger than the bank's genuine loss-absorption capacity. Every technique either inflates the numerator artificially or deflates the denominator artificially. The techniques are technically within the rules — which is what makes them dangerous and why detection requires cross-ratio analysis rather than simply reading the reported number.</p>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">1</div><h5>IRB Model Recalibration — Shrinking the Denominator Without Reducing Risk</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Under the Internal Ratings-Based approach, banks use internal models to assign Probability of Default (PD) and Loss Given Default (LGD) to loan portfolios. By recalibrating these models downward — even slightly — RWA falls, and the CET1 ratio rises mechanically. The loan book is unchanged. The risk is unchanged. Only the model's measurement of it has changed.</p>
+    <p><span class="wl wl-e">Numerical Example:</span></p>
+    <div class="wnums">Bank reports CET1 capital:        AED 3,360m (unchanged)
+Original RWA (pre-recalibration): AED 28,000m
+Original CET1 ratio:              12.0%
+
+Model recalibration: LGD on residential mortgages revised from 28% to 21%
+(Bank argues recent low default data supports lower LGD — technically defensible)
+
+New RWA after recalibration:      AED 24,640m (↓ 12%)
+New reported CET1 ratio:          3,360 ÷ 24,640 = 13.6% ← up 160bp
+
+Capital "improvement":  +160bp with ZERO change in actual risk or capital held
+Basel IV output floor: minimum RWA = 72.5% × standardised approach RWA
+Standardised RWA (parallel calc): AED 34,000m
+Output floor RWA:                 AED 24,650m → floor is binding — no gaming possible
+(Basel IV output floor effectively closes this loophole from 2025 onwards)</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Monitor RWA density = RWA ÷ total assets over time. A bank with an unchanged loan book but falling RWA density is recalibrating models. Compare IRB risk weights against the standardised approach equivalent. Request a parallel standardised calculation. The Basel IV output floor (72.5% of SA RWA minimum) was specifically designed to limit this technique from 2025 implementation.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">2</div><h5>Dividend Suspension — Temporary CET1 Boost Without Business Improvement</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Suspending dividends retains earnings in CET1. The ratio improves. But the bank's underlying earnings engine — PPP/RWA — is unchanged. The moment dividends resume, CET1 growth returns to its pre-suspension trajectory. This is a temporary deferral, not a genuine capital improvement.</p>
+    <p><span class="wl wl-e">Numerical Example:</span></p>
+    <div class="wnums">Bank earnings:        AED 480m net profit p.a.
+Normal payout ratio:  70% → Dividend = AED 336m | Retained = AED 144m
+Normal CET1 growth:   144 ÷ 28,000 RWA = +0.51% per year
+
+Window dressing: Bank suspends dividend for 1 year
+New retained earnings: AED 480m (full profit retained)
+CET1 boost vs normal: +336m ÷ 28,000 = +1.20% vs normal year
+
+1-year CET1 improvement from suspension: +120bp (looks dramatic)
+Sustainable recurring improvement: ZERO (payout ratio will return to 70%)
+PPP/RWA: UNCHANGED at 0.6% — the earnings quality problem remains</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Track the payout ratio trend. A sudden drop from 70% to 0% is not a business improvement. Calculate "core CET1 generation" = retained earnings ÷ RWA <em>at the normalised payout ratio</em>. If a bank suspends dividends for 2+ years, ask whether it plans to resume and what happens to CET1 trajectory when it does. Model the "dividend catch-up" scenario.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">3</div><h5>One-Time Disposal Gains — Inflating the Numerator With Non-Recurring Profit</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Selling investment securities or properties at a gain books a one-time profit that flows through to retained earnings and CET1. The ratio looks dramatically improved. But this improvement is non-recurring — the bank cannot sell the same asset twice. Recurring PPP/RWA is unchanged, meaning the bank's capacity to sustain capital in future periods is no better than before.</p>
+    <p><span class="wl wl-e">Numerical Example:</span></p>
+    <div class="wnums">Starting CET1:               AED 3,360m (12.0% of RWA 28,000m)
+Recurring annual PPP/RWA:    0.6% → pre-provision profit = AED 168m p.a.
+
+Window dressing: Bank sells sovereign bond portfolio purchased in 2018
+at higher yield; now trading at premium due to rate decline.
+Gain on sale:          AED 185m (pre-tax)
+Tax at 9%:             AED 17m
+Post-tax gain:         AED 168m → added to retained earnings
+
+New CET1:              3,360 + 168 = AED 3,528m
+New CET1 ratio:        3,528 ÷ 28,000 = 12.6% ← up 60bp
+
+Looks like improvement. But:
+Core (recurring) CET1 generation: still 0.6% PPP/RWA → still below cost of risk
+The bond portfolio that generated the gain is now GONE
+Future NIM reduced as replacement portfolio bought at lower yield
+Net sustainable position: WORSE than before the disposal</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Separate recurring from non-recurring income in the income statement. Calculate "core PPP/RWA" excluding disposal gains, insurance settlements, and revaluation credits. A CET1 improvement of &gt;50bp in a single quarter driven entirely by disposal gains without any improvement in core earnings is a clear flag. Also check: what replaced the sold asset on the balance sheet?</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">4</div><h5>Off-Balance Sheet Structuring — Cosmetic RWA Reduction With Retained Economic Risk</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Moving assets off the balance sheet through securitisation or synthetic risk transfer reduces RWA and improves the CET1 ratio. If the bank genuinely transfers the economic risk to investors, this is legitimate capital relief. If the bank retains the economic risk through guarantees, first-loss retained tranches, or put options — the capital relief is illusory while the ratio improvement is real.</p>
+    <p><span class="wl wl-e">Numerical Example:</span></p>
+    <div class="wnums">Bank securitises AED 800m mortgage portfolio:
+  — Sells 85% senior tranche (AED 680m) to investors: genuine transfer
+  — Retains 15% first-loss piece (AED 120m): economic risk retained
+
+Accounting treatment (if derecognised):
+  RWA removed:    800m × 65% avg weight = 520m RWA off balance sheet
+  CET1 ratio improvement: 520 ÷ 28,000 = +1.9% on CET1 ratio
+
+But economic reality:
+  First-loss piece absorbs first AED 120m of losses on the ENTIRE AED 800m pool
+  Effective concentration risk retained: 15% × 800m = AED 120m at 1250% risk weight
+  Regulatory RWA for first-loss: 120m × 1250% = AED 1,500m → much HIGHER than before
+  CET1 ratio with correct regulatory treatment: 3,360 ÷ (28,000 + 980) = 11.6% ← LOWER
+
+Hidden: AED 380m of CET1 impact from incorrect derecognition treatment</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Review off-balance sheet commitments note and securitisation disclosures. Identify retained interests in securitised pools. A bank whose off-balance sheet exposure grows rapidly while on-balance sheet shrinks, but total credit commitments (including off-B/S) remain stable, is likely structuring for capital relief. Apply the "substance over form" test: who bears the first loss?</p>
+  </div>
+</div>
+
+<!-- ═══ 2.11 SHERLOCK ═══ -->
+<div class="sm">2.11 — Detection</div>
+<div class="sherlock">
+  <div class="sh-title">🔍 Be Sherlock Holmes — Detecting Capital Ratio Window Dressing</div>
+  <div class="sh-sub">"It is a capital mistake to theorise before one has data." The data is always there — you just have to know where to look.</div>
+
+  <div class="clue">
+    <div class="cn">1</div>
+    <p><strong>The RWA Density Clue:</strong> Calculate RWA ÷ total assets (RWA density) every quarter for 8 quarters. It should be broadly stable for an unchanged portfolio mix. A falling RWA density with no documented change in portfolio composition is the primary signal of IRB model recalibration gaming.
+    <div class="cnums">Test: RWA density = RWA ÷ Total Assets
+Healthy range for UAE mixed bank: 55–75%
+Red flag: Density falls more than 5pp in 4 quarters with no major portfolio mix change
+If density falls from 68% to 59%: potential RWA understatement of 8,000 × 9% = AED 720m
+Apply Basel IV output floor: RWA must be ≥ 72.5% × SA-RWA. Request SA parallel run.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">2</div>
+    <p><strong>The Payout Ratio Clue:</strong> Track dividend payout ratio (dividends paid ÷ net profit) over 5 years. A sudden decline to 0% is not an organic improvement — it is capital conservation. Model "normalised CET1 trajectory" = what CET1 would have been at the historical 5-year average payout ratio. Does the bank still meet its target on this normalised basis?
+    <div class="cnums">Example: Bank's 5-year average payout = 65%. Current year: 0%.
+At 65% payout on AED 480m profit: CET1 would have grown by only AED 168m
+At 0% payout: CET1 grew by AED 480m
+"Artificial" CET1 boost from suspension: AED 312m = 1.1% of CET1 ratio
+Ask: When dividends resume at 65%, how does CET1 trajectory look for 3 years?</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">3</div>
+    <p><strong>The Core Earnings Separation Clue:</strong> Decompose reported net profit into: (a) recurring net interest income and fee income, (b) disposal gains and revaluation credits, (c) provision releases. Calculate CET1 trajectory using only (a). If CET1 growth depends heavily on (b) and (c), the bank's capital position is deteriorating in recurring terms even if the reported ratio is stable.
+    <div class="cnums">Red flag: "Non-core income as % of net profit" &gt; 25% for 2+ consecutive years
+Test formula: Core CET1 growth = (NII + fee income − opex − tax − normalised impairment) × (1 − payout) ÷ RWA
+If core CET1 growth &lt; 0: bank is consuming capital in recurring terms despite stable reported ratio</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">4</div>
+    <p><strong>The Off-Balance Sheet Clue:</strong> Compare growth in total credit commitments (on + off balance sheet) against growth in reported RWA. If commitments grow 15% but RWA grows only 5%, credit risk has moved off-balance sheet. Request a breakdown of the RWA impact of all off-balance sheet exposures. Check that first-loss retained interests in securitisations are capitalised at 1250% risk weight as required under Basel III.
+    <div class="cnums">Test: Total credit exposure ratio = (loans + off-B/S credit commitments) ÷ RWA
+This should be broadly stable. If it rises from 2.1× to 2.8×, off-B/S exposure is growing faster than RWA captures.
+For each securitisation: identify the size and risk weight of retained first-loss piece.
+Correct capital impact = first-loss size × 1250% risk weight.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">5</div>
+    <p><strong>The Provision Shortfall Clue (IRB Banks):</strong> Request the ECL model Expected Loss (EL) calculation alongside reported provisions. If actual provisions are materially below EL, the IRB shortfall deduction should be reducing CET1. A bank that uses IRB models but does not disclose whether its provisions exceed or fall short of modelled EL is hiding a potential CET1 headwind.
+    <div class="cnums">Test: IRB shortfall = max(0, EL − eligible provisions)
+This amount is deducted DIRECTLY from CET1 (50% from CET1, 50% from Tier 2 under Basel II; 100% from CET1 under Basel III)
+If a bank's EL is AED 900m but provisions are AED 650m: shortfall = AED 250m
+CET1 deduction = AED 250m → equivalent to ~90bp on a AED 28bn RWA bank
+This shortfall should appear in the Pillar 3 disclosure — check "regulatory capital reconciliation" note.</div></p>
+  </div>
+</div>
+
+<!-- ═══ 2.12 NUMERICAL EXAMPLES ═══ -->
+<div class="sm">2.12 — Full Numerical Examples</div>
+<h2>Full Numerical Examples — Capital Ratios from Balance Sheet to ICAAP</h2>
+
+<h3>Example 1 — Full Capital Ratio Calculation from Raw Data</h3>
+<p>UAE commercial bank (non-D-SIB). All figures AED millions.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Capital Component</th><th>Amount (AED m)</th><th>Regulatory Treatment</th><th>Counts Toward</th></tr></thead>
+<tbody>
+  <tr><td>Paid-up ordinary share capital</td><td class="th">3,000</td><td>Full eligibility</td><td>CET1</td></tr>
+  <tr><td>Share premium (ordinary shares)</td><td class="th">800</td><td>Full eligibility</td><td>CET1</td></tr>
+  <tr><td>Retained earnings</td><td class="th">1,420</td><td>Full eligibility</td><td>CET1</td></tr>
+  <tr><td>Foreign currency translation reserve</td><td class="th">180</td><td>Full eligibility if not hedging gains</td><td>CET1</td></tr>
+  <tr><td>Less: Goodwill &amp; intangibles (net)</td><td class="tf">(340)</td><td>Deducted — no recovery value</td><td>Deducted from CET1</td></tr>
+  <tr><td>Less: Deferred tax assets</td><td class="tf">(120)</td><td>Deducted — value depends on profitability</td><td>Deducted from CET1</td></tr>
+  <tr><td>Less: IRB shortfall (EL 900 − provisions 780)</td><td class="tf">(120)</td><td>Deducted — under-provisioning vs model</td><td>Deducted from CET1</td></tr>
+  <tr><td><strong>CET1 Capital</strong></td><td class="tp"><strong>4,820</strong></td><td></td><td></td></tr>
+  <tr><td>AT1 — Mudaraba perpetual sukuk</td><td class="th">600</td><td>Sharia-compliant AT1 — CBUAE Standards 2018</td><td>AT1</td></tr>
+  <tr><td><strong>Tier 1 Capital (CET1 + AT1)</strong></td><td class="tp"><strong>5,420</strong></td><td></td><td></td></tr>
+  <tr><td>Tier 2 — Subordinated debt (7yr, 4yr remaining)</td><td class="th">800</td><td>Amortised: 4/5 years remaining = 80% eligible</td><td>Tier 2 (640 eligible)</td></tr>
+  <tr><td>Tier 2 — General provisions eligible</td><td class="th">350</td><td>1.25% of credit RWA cap: 38,000 × 1.25% = 475 → 350 eligible in full</td><td>Tier 2</td></tr>
+  <tr><td><strong>Total Capital</strong></td><td class="tp"><strong>6,410</strong></td><td></td><td></td></tr>
+  <tr><td><strong>Pillar 1 RWA</strong></td><td class="th"><strong>38,000</strong></td><td>Credit + market + operational RWA</td><td>Denominator</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="metric-strip">
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--teal)">12.7%</div>
+    <div class="ml">CET1 Ratio</div>
+    <div class="ms">4,820 ÷ 38,000</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--blue)">14.3%</div>
+    <div class="ml">Tier 1 Ratio</div>
+    <div class="ms">5,420 ÷ 38,000</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--purple)">16.9%</div>
+    <div class="ml">Total Capital</div>
+    <div class="ms">6,410 ÷ 38,000</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--amber)">4.2%</div>
+    <div class="ml">Leverage Ratio</div>
+    <div class="ms">5,420 ÷ 129,048 exp.</div>
+  </div>
+</div>
+
+<h3>Example 2 — ICAAP Three-Year Stress Projection</h3>
+
+<div class="chart-box">
+  <div class="ct">ICAAP Stress Projection — CET1 Ratio Path Over 3 Years</div>
+  <div class="cs">Base case vs severe stress (UAE: property −35%, GRE defaults, wholesale funding closure)</div>
+  <canvas id="stressChart" height="120"></canvas>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item (AED m)</th><th>Base Year</th><th>Year 1 — Mild</th><th>Year 2 — Severe</th><th>Year 3 — Prolonged</th></tr></thead>
+<tbody>
+  <tr><td>CET1 capital (opening)</td><td class="tp">4,820</td><td>4,820</td><td>4,608</td><td>3,896</td></tr>
+  <tr><td>Net interest income</td><td>1,710</td><td>1,454</td><td>1,140</td><td>988</td></tr>
+  <tr><td>Non-interest income</td><td>430</td><td>344</td><td>258</td><td>215</td></tr>
+  <tr><td>Operating expenses</td><td>(1,020)</td><td>(969)</td><td>(918)</td><td>(870)</td></tr>
+  <tr><td>Pre-provision profit</td><td class="tp">1,120</td><td class="tw">829</td><td class="tf">480</td><td class="tf">333</td></tr>
+  <tr><td>Cost of risk</td><td>0.75%</td><td>1.60%</td><td>3.10%</td><td>2.80%</td></tr>
+  <tr><td>Impairment charge</td><td>(285)</td><td class="tw">(608)</td><td class="tf">(1,178)</td><td class="tf">(1,064)</td></tr>
+  <tr><td>Net profit / (loss)</td><td class="tp">760</td><td class="tw">201</td><td class="tf">(635)</td><td class="tf">(667)</td></tr>
+  <tr><td>Dividends paid</td><td>(476)</td><td>(120)</td><td>—</td><td>—</td></tr>
+  <tr><td>RWA (Pillar 1 stressed)</td><td>38,000</td><td>41,800</td><td>47,500</td><td>50,000</td></tr>
+  <tr><td>P2 RWA add-ons</td><td>—</td><td>—</td><td>898</td><td>898</td></tr>
+  <tr><td><strong>CET1 ratio (reported P1)</strong></td><td class="tp"><strong>12.7%</strong></td><td class="tw"><strong>11.7%</strong></td><td class="tf"><strong>8.9%</strong></td><td class="tf"><strong>6.5%</strong></td></tr>
+  <tr><td><strong>CET1 ratio (ICAAP stressed)</strong></td><td class="tp"><strong>12.7%</strong></td><td class="tw"><strong>11.7%</strong></td><td class="tf"><strong>8.8%</strong></td><td class="tf"><strong>6.4%</strong></td></tr>
+  <tr><td>Regulatory floor (7%)</td><td>—</td><td class="tp">Safe +4.7%</td><td class="tp">Safe +1.9%</td><td class="tf">BREACH −0.6%</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-danger">
+  <div class="ai">🚨</div>
+  <div class="ab">
+    <h5>Year 3 Breach — What ICAAP Must Address</h5>
+    <p>The stressed projection shows CET1 breaching the 7% regulatory floor in Year 3 by 60bp (= AED 300m additional capital needed). A credible ICAAP must: (1) document this breach explicitly, (2) present specific management actions to prevent it — dividend suspension from Year 1, RWA reduction programme, potential equity issuance in Year 2 if market conditions permit, (3) demonstrate each action is credible and executable, (4) show the revised CET1 trajectory with management actions applied. Hiding this breach or using implausible management actions is the primary form of ICAAP window dressing.</p>
+  </div>
+</div>
+
+<div class="chart-box">
+  <div class="ct">Capital Ratio Dashboard — All Four Ratios vs Thresholds</div>
+  <div class="cs">Current position showing headroom above regulatory minimums and ICAAP internal targets</div>
+  <canvas id="ratiosDashChart" height="90"></canvas>
+</div>
+
+<div class="sep"></div>
+
+<!-- ═══ 2.13 REFERENCES ═══ -->
+<div class="sm">2.13 — References</div>
+<div class="ref-section">
+  <div class="ref-title">Regulatory References &amp; Sources</div>
+  <ul class="ref-list">
+    <li id="ref1">[1] BCBS. <em>Basel III: A global regulatory framework for more resilient banks and banking systems.</em> BIS, December 2010 (revised June 2011). Art. 52–96 (CET1 eligibility criteria). <a href="https://www.bis.org/publ/bcbs189.htm" target="_blank">https://www.bis.org/publ/bcbs189.htm</a></li>
+    <li id="ref2">[2] Central Bank of the UAE (CBUAE). <em>Standards re Capital Adequacy of Banks in the UAE.</em> Circular No. 163/2018, updated 2021. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li id="ref3">[3] BCBS. <em>Basel III leverage ratio framework and disclosure requirements.</em> BIS, January 2014 (revised 2016). <a href="https://www.bis.org/publ/bcbs270.htm" target="_blank">https://www.bis.org/publ/bcbs270.htm</a></li>
+    <li id="ref4">[4] Central Bank of the UAE (CBUAE). <em>Domestic Systemically Important Banks (D-SIBs) Framework.</em> CBUAE, 2020. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li id="ref5">[5] BCBS. <em>Basel III: Finalising post-crisis reforms (Basel IV).</em> BIS, December 2017. Output floor: Section 6. <a href="https://www.bis.org/bcbs/publ/d424.htm" target="_blank">https://www.bis.org/bcbs/publ/d424.htm</a></li>
+    <li id="ref6">[6] CBUAE. <em>Standards for Capital Adequacy of Islamic Banks in the UAE.</em> 2018. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[7] IASB. <em>IFRS 9 Financial Instruments.</em> Effective 1 January 2018. Stage 1/2/3 ECL classification. <a href="https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/" target="_blank">https://www.ifrs.org</a></li>
+    <li>[8] BCBS. <em>Regulatory capital treatment of accounting provisions — interim approach and transitional arrangements.</em> BIS, March 2017. IRB shortfall/surplus framework. <a href="https://www.bis.org/bcbs/publ/d401.htm" target="_blank">https://www.bis.org/publ/bcbs401.htm</a></li>
+    <li>[9] IMF. <em>UAE: Financial System Stability Assessment.</em> Country Report No. 22/66, March 2022. Capital adequacy assessment. <a href="https://www.imf.org" target="_blank">https://www.imf.org</a></li>
+    <li>[10] BCBS. <em>Pillar 3 disclosure requirements — updated framework.</em> BIS, December 2018. CET1 reconciliation requirements. <a href="https://www.bis.org/bcbs/publ/d455.htm" target="_blank">https://www.bis.org/publ/bcbs455.htm</a></li>
+  </ul>
+</div>
+
+<div class="chapter-nav">
+  <a class="nav-btn" href="chapter_01_icaap_foundations.html">← Chapter 1 — ICAAP Foundations</a>
+  <span style="font-size:13px;color:var(--text-light)">Chapter 2 of 8 — Capital Adequacy Ratios</span>
+  <a class="nav-btn" href="chapter_03_lcr_nsfr.html">Chapter 3 — LCR &amp; NSFR →</a>
+</div>
+
+</div>
+
+<script>
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#555';
+const gc = 'rgba(0,0,0,0.05)';
+
+// CET1 DRIVERS
+new Chart(document.getElementById('cet1DriversChart'),{
+  type:'bar',
+  data:{
+    labels:['Retained Earnings\n(base year)','Impairment Charges\n(stress year 1)','RWA Migration\n(denominator rise)','Capital Actions\n(dividend suspend)'],
+    datasets:[{
+      label:'CET1 impact (AED m)',
+      data:[760,-608,-420,120],
+      backgroundColor:['rgba(39,174,96,0.7)','rgba(192,57,43,0.7)','rgba(230,126,34,0.7)','rgba(29,158,117,0.7)'],
+      borderColor:['#27ae60','#c0392b','#e67e22','#0d7377'],
+      borderWidth:1
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw>0?'+':''}${c.raw}m AED`}}},
+    scales:{
+      y:{title:{display:true,text:'AED millions'},grid:{color:gc}},
+      x:{grid:{display:false},ticks:{font:{size:11}}}
+    }
+  }
+});
+
+// STRESS CHART
+new Chart(document.getElementById('stressChart'),{
+  type:'line',
+  data:{
+    labels:['Base','Year 1','Year 2','Year 3'],
+    datasets:[
+      {label:'Base case CET1',data:[12.7,12.4,12.1,11.8],borderColor:'#27ae60',backgroundColor:'rgba(39,174,96,0.08)',tension:0.3,fill:false,pointRadius:5,borderWidth:2.5},
+      {label:'Severe stress CET1',data:[12.7,11.7,8.9,6.5],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',tension:0.3,fill:false,pointRadius:5,borderWidth:2.5,borderDash:[7,3]},
+      {label:'7% Regulatory Floor',data:[7,7,7,7],borderColor:'#e67e22',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{min:4,max:15,title:{display:true,text:'CET1 %'},grid:{color:gc}},
+      x:{grid:{color:gc}}
+    }
+  }
+});
+
+// RATIOS DASHBOARD
+new Chart(document.getElementById('ratiosDashChart'),{
+  type:'bar',
+  data:{
+    labels:['CET1 Ratio','Tier 1 Ratio','Total Capital Ratio','Leverage Ratio'],
+    datasets:[
+      {label:'Bank position',data:[12.7,14.3,16.9,4.2],backgroundColor:'rgba(13,115,119,0.7)',borderColor:'#0d7377',borderWidth:1},
+      {label:'Regulatory minimum (inc. CCB)',data:[7.0,8.5,10.5,3.0],backgroundColor:'rgba(192,57,43,0.3)',borderColor:'#c0392b',borderWidth:1},
+      {label:'ICAAP internal target',data:[12.5,14.0,16.5,4.5],backgroundColor:'rgba(184,134,11,0.2)',borderColor:'#b8860b',borderWidth:1,borderDash:[5,3]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{min:0,max:20,title:{display:true,text:'% of RWA / Exposure'},grid:{color:gc}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+</script>
+</body>
+</html>

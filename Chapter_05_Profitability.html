@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 5 — Profitability Ratios | UAE Banking ICAAP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1a1a2e;--ink-mid:#2d2d4e;
+  --gold:#b8860b;--gold-light:#daa520;--gold-pale:#fff8dc;
+  --teal:#0d7377;--teal-light:#14a085;--teal-pale:#e8f8f7;
+  --red:#c0392b;--red-pale:#fdf0ee;
+  --amber:#e67e22;--amber-pale:#fef9f0;
+  --blue:#1a6ea8;--blue-pale:#eef6fb;
+  --green:#27ae60;--green-pale:#edfaf3;
+  --purple:#6c3483;--purple-pale:#f5eef8;
+  --page:#fafaf7;--paper:#ffffff;
+  --border:#e8e4d8;--border-strong:#c8c0a8;
+  --text:#2c2c2c;--text-mid:#555;--text-light:#888;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--page);color:var(--text);line-height:1.75;font-size:16px;}
+.book-header{background:var(--ink);color:white;position:relative;overflow:hidden;}
+.book-header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal-light),var(--gold));}
+.book-header-inner{max-width:880px;margin:0 auto;padding:56px 40px;position:relative;z-index:2;}
+.book-series{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:10px;}
+.chapter-num{font-family:'Lora',serif;font-size:90px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;position:absolute;right:40px;top:30px;font-style:italic;}
+.book-title{font-family:'Lora',serif;font-size:38px;font-weight:700;line-height:1.2;margin-bottom:14px;color:white;}
+.book-title span{color:var(--gold-light);font-style:italic;}
+.book-subtitle{font-size:16px;color:rgba(255,255,255,0.6);max-width:600px;line-height:1.6;margin-bottom:26px;}
+.chapter-meta{display:flex;gap:18px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.45);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
+.page-wrap{max-width:880px;margin:0 auto;padding:0 40px 80px;}
+.toc-box{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:22px 26px;margin:32px 0;box-shadow:var(--shadow);}
+.toc-title{font-family:'Lora',serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.toc-list{list-style:none;columns:2;column-gap:28px;}
+.toc-list li{font-size:13px;color:var(--text-mid);padding:3px 0;}
+.toc-list li span{color:var(--gold);font-weight:600;margin-right:6px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;margin-top:50px;display:flex;align-items:center;gap:10px;}
+.sm::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3;}
+h3{font-family:'Lora',serif;font-size:21px;font-weight:600;color:var(--ink-mid);margin:30px 0 10px;line-height:1.3;}
+h4{font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 7px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:14px;color:var(--text);}
+strong{color:var(--ink);}
+sup a{color:var(--blue);font-size:10px;}
+ul,ol{padding-left:22px;margin-bottom:14px;}
+li{font-size:15px;color:var(--text-mid);line-height:2;}
+.story-box{background:linear-gradient(135deg,#fffbf0,#fff8e7);border:2px solid var(--gold-light);border-radius:14px;padding:22px 26px;margin:26px 0;position:relative;overflow:hidden;}
+.story-box::before{content:'💰';position:absolute;top:-6px;right:16px;font-size:26px;transform:rotate(10deg);}
+.story-label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.story-box p{font-family:'Lora',serif;font-size:14.5px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;}
+.story-box p:last-child{margin-bottom:0;}
+.beginner{background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:17px 21px;margin:16px 0;}
+.bl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.beginner p{font-size:14px;color:var(--ink-mid);margin-bottom:0;}
+.formula-box{background:var(--ink);border-radius:10px;padding:17px 21px;margin:17px 0;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--gold-light);}
+.fl{font-family:'Source Sans 3',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;}
+.fn{font-family:'Source Sans 3',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.42);margin-top:6px;font-style:italic;}
+.alert{border-radius:8px;padding:15px 19px;margin:17px 0;border-left:4px solid;display:flex;gap:11px;align-items:flex-start;}
+.ai{font-size:18px;flex-shrink:0;margin-top:2px;}
+.ab h5{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ab p{font-size:14px;margin-bottom:0;}
+.a-key{background:#fffbf0;border-color:var(--gold);} .a-key .ab h5{color:var(--gold);}
+.a-uae{background:var(--teal-pale);border-color:var(--teal);} .a-uae .ab h5{color:var(--teal);}
+.a-warn{background:var(--amber-pale);border-color:var(--amber);} .a-warn .ab h5{color:var(--amber);}
+.a-danger{background:var(--red-pale);border-color:var(--red);} .a-danger .ab h5{color:var(--red);}
+.a-good{background:var(--green-pale);border-color:var(--green);} .a-good .ab h5{color:var(--green);}
+.table-wrap{overflow-x:auto;margin:17px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;box-shadow:var(--shadow);border-radius:8px;overflow:hidden;}
+thead th{background:var(--ink);color:white;padding:10px 13px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.4px;}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,0,0,0.018);}
+tbody tr:hover td{background:var(--gold-pale);}
+.tp{color:var(--green);font-weight:600;} .tf{color:var(--red);font-weight:600;} .tw{color:var(--amber);font-weight:600;} .th{color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;}
+.uae-section{background:linear-gradient(135deg,#e8f8f7,#d4f1ee);border:1px solid var(--teal);border-radius:12px;padding:24px 26px 24px 40px;margin:34px 0;position:relative;}
+.uae-flag-stripe{position:absolute;left:0;top:0;bottom:0;width:8px;border-radius:12px 0 0 12px;background:linear-gradient(to bottom,#00732f 25%,#ffffff 25%,#ffffff 50%,#000000 50%,#000000 75%,#ff0000 75%);}
+.uae-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:white;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.uae-section h3{color:var(--teal);margin-top:0;}
+.wd-section{background:var(--paper);border:1px solid #e0b4b4;border-radius:12px;padding:24px 26px;margin:34px 0;box-shadow:var(--shadow);}
+.wd-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:13px;border-bottom:1px solid #f0d0d0;}
+.wd-title{font-family:'Lora',serif;font-size:19px;font-weight:700;color:var(--red);}
+.wd-sub{font-size:13px;color:var(--text-light);margin-top:2px;}
+.wd-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px dashed #f0d0d0;}
+.wd-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.wd-ih{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.wd-n{background:var(--red);color:white;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.wd-item h5{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--red);}
+.wd-item p{font-size:14px;color:var(--text-mid);margin-bottom:6px;}
+.wl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:2px;}
+.wl-m{color:var(--amber);} .wl-e{color:var(--blue);} .wl-d{color:var(--green);}
+.wnums{background:rgba(26,110,168,0.06);border-left:3px solid var(--blue);padding:10px 13px;border-radius:0 6px 6px 0;margin:8px 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--ink-mid);line-height:1.75;}
+.sherlock{background:linear-gradient(135deg,#1a1a2e,#2d2d4e);border-radius:12px;padding:24px 26px;margin:34px 0;color:white;}
+.sh-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.sh-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:18px;}
+.clue{display:flex;gap:11px;margin-bottom:13px;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.clue:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.cn{background:var(--gold);color:var(--ink);min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.clue p{font-size:13px;color:rgba(255,255,255,0.82);margin-bottom:0;line-height:1.65;}
+.clue strong{color:var(--gold-light);}
+.cnums{background:rgba(201,168,76,0.1);border-left:2px solid var(--gold);padding:8px 11px;margin-top:6px;border-radius:0 4px 4px 0;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.72);line-height:1.65;}
+.chart-box{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;box-shadow:var(--shadow);}
+.ct{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.cs{font-size:12px;color:var(--text-light);margin-bottom:13px;font-style:italic;}
+.cartoon-wrap{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:20px;margin:22px 0;text-align:center;box-shadow:var(--shadow);}
+.cartoon-caption{font-size:12px;color:var(--text-light);font-style:italic;margin-top:10px;}
+.metric-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0;}
+.metric-tile{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:13px;text-align:center;box-shadow:var(--shadow);}
+.mv{font-family:'Lora',serif;font-size:22px;font-weight:700;margin-bottom:3px;}
+.ml{font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;}
+.ms{font-size:11px;color:var(--text-light);margin-top:3px;}
+.ratio-card{background:var(--paper);border:1px solid var(--border);border-left:4px solid;border-radius:0 10px 10px 0;padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow);}
+.rc-title{font-family:'Lora',serif;font-size:18px;font-weight:700;margin-bottom:6px;}
+.rc-formula{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--page);padding:8px 12px;border-radius:6px;margin:10px 0;color:var(--ink-mid);}
+.lever-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:20px 0;}
+.lever-card{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:18px;box-shadow:var(--shadow);}
+.lever-num{font-family:'Lora',serif;font-size:32px;font-weight:700;color:var(--teal);opacity:0.25;line-height:1;}
+.lever-title{font-size:13px;font-weight:700;color:var(--teal);margin:4px 0 8px;}
+.lever-body{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.lever-nums{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--teal-pale);padding:6px 10px;border-radius:4px;margin-top:8px;color:var(--teal);line-height:1.6;}
+.ref-section{background:var(--blue-pale);border:1px solid #c0d8f0;border-radius:8px;padding:17px 21px;margin:34px 0 16px;}
+.ref-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ref-list{list-style:none;}
+.ref-list li{font-size:12px;color:var(--text-mid);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.ref-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+.ref-list a{color:var(--blue);text-decoration:none;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin:42px 0;}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid var(--border);margin-top:34px;}
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 17px;background:var(--ink);color:white;border:none;border-radius:6px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:var(--ink-mid);}
+@media(max-width:768px){.page-wrap{padding:0 16px 60px;}.book-title{font-size:26px;}.metric-strip{grid-template-columns:1fr 1fr 1fr;}.lever-grid{grid-template-columns:1fr;}.toc-list{columns:1;}.chapter-num{display:none;}}
+</style>
+</head>
+<body>
+
+<div class="book-header">
+  <div class="book-header-inner">
+    <div class="book-series">ICAAP &amp; Financial Ratios in UAE Banking · Chapter Five</div>
+    <div class="chapter-num">05</div>
+    <h1 class="book-title"><span>Profitability</span> Ratios</h1>
+    <p class="book-subtitle">ROE, ROA, NIM, CIR, and PPP/RWA — why earnings quality determines whether a bank survives a stress, the three levers to improve profitability, UAE benchmarks, and the full two-bank comparison showing how CET1 trajectory diverges entirely based on earnings strength.</p>
+    <div class="chapter-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Basel III Pillar 2</div>
+      <div class="meta-item"><div class="meta-dot"></div>CBUAE SREP Guidance</div>
+      <div class="meta-item"><div class="meta-dot"></div>IRRBB · NIM Stress</div>
+      <div class="meta-item"><div class="meta-dot"></div>Beginner → Advanced</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<div class="toc-box">
+  <div class="toc-title">In This Chapter</div>
+  <ul class="toc-list">
+    <li><span>5.1</span> The Rainfall and Reservoir Parable</li>
+    <li><span>5.2</span> Why Profitability Ratios Matter in ICAAP</li>
+    <li><span>5.3</span> Return on Equity (ROE)</li>
+    <li><span>5.4</span> Return on Assets (ROA)</li>
+    <li><span>5.5</span> Net Interest Margin (NIM) &amp; IRRBB</li>
+    <li><span>5.6</span> Cost-to-Income Ratio (CIR)</li>
+    <li><span>5.7</span> PPP/RWA — The ICAAP Metric</li>
+    <li><span>5.8</span> Three Levers to Improve PPP/RWA</li>
+    <li><span>5.9</span> The Two-Bank Comparison</li>
+    <li><span>5.10</span> UAE Context</li>
+    <li><span>5.11</span> Full Numerical Example</li>
+    <li><span>5.12</span> How Window Dressers Hide</li>
+    <li><span>5.13</span> Sherlock Holmes Detection</li>
+    <li><span>5.14</span> References</li>
+  </ul>
+</div>
+
+<!-- 5.1 NARRATIVE -->
+<div class="sm">5.1 — The Story</div>
+<h2>The Rainfall and the Reservoir</h2>
+
+<div class="story-box">
+  <div class="story-label">A Beginner's Parable</div>
+  <p>Think of a bank's CET1 capital as a large desert reservoir. It was built up over years of careful engineering (retained earnings from past profitable years). Now, in a drought (economic stress), the reservoir is the only water source. Holes are appearing in the walls (credit losses eroding capital). The question ICAAP asks is not just "how full is the reservoir today?" but "how much rain is falling to refill it?"</p>
+  <p>A bank with CET1 of 14% but PPP/RWA of 0.4% has a large reservoir in a drought with almost no rainfall. Every hole in the wall empties it permanently. A bank with CET1 of 12% and PPP/RWA of 3.2% has a smaller reservoir but sits under steady rain. Even as holes appear, the water level barely drops — the rainfall fills them faster than the holes drain.</p>
+  <p>Here is where it gets funny: the banker with the big empty reservoir keeps telling the board "we have excellent capital ratios!" The banker with the steady rainfall says "our CET1 looks modest today, but watch what happens in Year 3 of your stress scenario." Year 3 arrives. The first banker is calling investors for an emergency capital raise. The second banker is issuing dividends. <strong>Capital today is history. Earnings are the future. ICAAP cares about both.</strong></p>
+</div>
+
+<div class="cartoon-wrap">
+<svg width="100%" viewBox="0 0 720 270" xmlns="http://www.w3.org/2000/svg" style="max-width:720px">
+  <rect width="720" height="270" fill="#fafaf7" rx="8"/>
+  <defs>
+    <marker id="ac5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#888" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <!-- Bank A — large reservoir, no rain -->
+  <text x="155" y="28" font-family="'Lora',serif" font-size="12" fill="#1a1a2e" text-anchor="middle" font-weight="700">Bank A — High CET1, Low PPP/RWA</text>
+  <!-- Reservoir A -->
+  <rect x="80" y="60" width="150" height="120" rx="4" fill="#e8e4d8" stroke="#c8c0a8" stroke-width="2"/>
+  <rect x="80" y="90" width="150" height="90" rx="2" fill="#85b7eb" opacity="0.6"/>
+  <text x="155" y="148" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a6ea8" text-anchor="middle" font-weight="600">CET1 = 14.0%</text>
+  <text x="155" y="163" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">"Large reservoir"</text>
+  <!-- Holes draining A -->
+  <ellipse cx="90" cy="175" rx="5" ry="4" fill="#c0392b"/>
+  <ellipse cx="95" cy="188" rx="4" ry="3" fill="#c0392b"/>
+  <ellipse cx="102" cy="176" rx="4" ry="3" fill="#c0392b"/>
+  <text x="88" y="212" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#c0392b" text-anchor="middle">Credit losses</text>
+  <!-- No rain cloud A -->
+  <ellipse cx="155" cy="45" rx="25" ry="12" fill="#e8e4d8" stroke="#c8c0a8" stroke-width="1"/>
+  <ellipse cx="140" cy="50" rx="18" ry="10" fill="#e8e4d8" stroke="#c8c0a8" stroke-width="1"/>
+  <text x="155" y="49" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#888" text-anchor="middle">No rain</text>
+  <text x="155" y="49" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#888" text-anchor="middle"> (PPP/RWA 0.4%)</text>
+  <!-- Year 3 result A -->
+  <rect x="82" y="162" width="146" height="16" rx="2" fill="#fdf0ee" stroke="#c0392b" stroke-width="1"/>
+  <text x="155" y="175" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#c0392b" text-anchor="middle" font-weight="600">Year 3 stress → CET1 6.2% BREACH</text>
+
+  <!-- Divider -->
+  <line x1="360" y1="40" x2="360" y2="230" stroke="#e8e4d8" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- Bank B — moderate reservoir, steady rain -->
+  <text x="555" y="28" font-family="'Lora',serif" font-size="12" fill="#1a1a2e" text-anchor="middle" font-weight="700">Bank B — Moderate CET1, Strong PPP/RWA</text>
+  <!-- Reservoir B -->
+  <rect x="480" y="60" width="150" height="120" rx="4" fill="#e8e4d8" stroke="#c8c0a8" stroke-width="2"/>
+  <rect x="480" y="100" width="150" height="80" rx="2" fill="#85b7eb" opacity="0.6"/>
+  <text x="555" y="155" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a6ea8" text-anchor="middle" font-weight="600">CET1 = 12.0%</text>
+  <text x="555" y="169" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">"Smaller but refilling"</text>
+  <!-- Same holes B -->
+  <ellipse cx="490" cy="175" rx="5" ry="4" fill="#c0392b"/>
+  <ellipse cx="498" cy="185" rx="4" ry="3" fill="#c0392b"/>
+  <!-- Rain cloud B -->
+  <ellipse cx="555" cy="42" rx="28" ry="14" fill="#85b7eb" opacity="0.6" stroke="#378add" stroke-width="1"/>
+  <ellipse cx="538" cy="48" rx="20" ry="12" fill="#85b7eb" opacity="0.5" stroke="#378add" stroke-width="1"/>
+  <text x="555" y="46" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#1a6ea8" text-anchor="middle" font-weight="600">PPP/RWA 3.2%</text>
+  <!-- Rain drops -->
+  <line x1="535" y1="60" x2="533" y2="68" stroke="#378add" stroke-width="1.5"/>
+  <line x1="548" y1="62" x2="546" y2="70" stroke="#378add" stroke-width="1.5"/>
+  <line x1="561" y1="60" x2="559" y2="68" stroke="#378add" stroke-width="1.5"/>
+  <line x1="574" y1="62" x2="572" y2="70" stroke="#378add" stroke-width="1.5"/>
+  <!-- Year 3 result B -->
+  <rect x="482" y="162" width="146" height="16" rx="2" fill="#edfaf3" stroke="#27ae60" stroke-width="1"/>
+  <text x="555" y="175" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#27ae60" text-anchor="middle" font-weight="600">Year 3 stress → CET1 11.4% PASSES</text>
+
+  <!-- Explanation -->
+  <text x="360" y="218" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#555" text-anchor="middle">Same stress scenario applied to both banks. Same industry. Different outcome.</text>
+  <text x="360" y="232" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#b8860b" text-anchor="middle" font-weight="600">The only difference: earnings quality (PPP/RWA).</text>
+  <text x="360" y="254" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Figure 5.1 — CET1 is a stock (the reservoir). PPP/RWA is the flow (the rainfall). ICAAP needs both.</text>
+</svg>
+<div class="cartoon-caption">Capital today is a snapshot of history. Pre-provision profit is the engine that determines where capital goes next.</div>
+</div>
+
+<!-- 5.2 WHY PROFITABILITY RATIOS MATTER -->
+<div class="sm">5.2 — Why They Matter in ICAAP</div>
+<h2>Why Profitability Ratios Matter in ICAAP</h2>
+
+<div class="beginner">
+  <div class="bl">🟢 Simple: The Three Roles of Profitability in ICAAP</div>
+  <p><strong>(1) Capital generation:</strong> Profits retained after dividends are the primary engine of CET1 growth. A bank that earns more than it loses in credit costs continuously builds capital without needing to raise new equity. <strong>(2) Loss absorption buffer:</strong> Pre-provision profit must first absorb credit losses before they hit CET1. The bigger the earnings buffer, the more losses a bank can absorb without eroding capital. <strong>(3) Capital raisability:</strong> A bank with strong, consistent earnings trades at or above book value — making new equity issuance feasible at acceptable dilution. A bank with deteriorating earnings trades at a discount — new capital is expensive or impossible, precisely when it is most needed.</p>
+</div>
+
+<p><strong>Technical explanation:</strong> In ICAAP stress testing, the income statement is projected forward over a 3–5 year horizon. The projection works as follows:</p>
+
+<div class="formula-box">
+  <div class="fl">The ICAAP P&amp;L to CET1 Chain</div>
+  Net Interest Income (NIM × earning assets)
+  + Non-Interest Income (fees, commissions, FX, insurance)
+  = Total Operating Income
+  − Operating Expenses (staff, premises, IT, depreciation)
+  = Pre-Provision Profit (PPP) ← the earnings buffer
+  − Impairment Charge (cost of risk × loan book)
+  = Profit Before Tax
+  − Tax (UAE: 9% CIT on qualifying income since June 2023)
+  = Net Profit After Tax
+  − Dividends paid
+  = Retained Earnings added to CET1
+  <div class="fn">In a stress scenario: if Impairment Charge &gt; PPP, the bank makes a net loss. Every AED of net loss reduces retained earnings and therefore CET1 directly. PPP/RWA determines how large the impairment charge must be before this happens.</div>
+</div>
+
+<!-- 5.3 ROE -->
+<div class="sm">5.3 — Return on Equity</div>
+
+<div class="ratio-card" style="border-left-color:var(--purple)">
+  <div class="rc-title" style="color:var(--purple)">ROE — Return on Equity</div>
+  <div class="rc-formula">ROE = Net Profit After Tax ÷ Average Shareholders' Equity × 100</div>
+
+  <div class="beginner" style="margin-top:12px">
+    <div class="bl">🟢 Simple: The Shareholder's Report Card</div>
+    <p>ROE tells shareholders: for every AED 100 they invested, how many AED did the bank earn this year? A 12% ROE means shareholders earned AED 12 on each AED 100 invested. If the cost of that equity (what shareholders expect to earn given the risk) is 10%, the bank created AED 2 of value per AED 100. If ROE is below the cost of equity, the bank is destroying value — it would be better for shareholders to invest elsewhere.</p>
+  </div>
+
+  <p><strong>The DuPont Decomposition — the most important ROE insight:</strong></p>
+  <div class="formula-box" style="margin:10px 0">
+    <div class="fl">DuPont Decomposition</div>
+    ROE = ROA × Equity Multiplier (Assets ÷ Equity)
+        = Net Profit Margin × Asset Turnover × Equity Multiplier
+
+    A stable ROE can mean:
+    (A) ROA rising + leverage stable → genuine improvement  ✓
+    (B) ROA falling + leverage rising → leverage compensation ✗ (window dressing signal)
+    (C) ROA stable + leverage stable → steady state, sustainable ✓
+  </div>
+
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>ROE Level</th><th>Interpretation</th><th>ICAAP Implication</th><th>UAE Context</th></tr></thead>
+  <tbody>
+    <tr><td class="tf">Below 8%</td><td>Below cost of equity — value destruction</td><td>Capital raises prohibitively expensive; bank may trade at discount to book</td><td>Small Category 2 banks under NIM pressure</td></tr>
+    <tr><td class="tw">8–12%</td><td>Covers cost of equity — value neutral to slightly positive</td><td>Can raise capital but at modest terms; sustainable if NIM stable</td><td>Mid-size UAE conventional banks typical range</td></tr>
+    <tr><td class="tp">12–18%</td><td>Solid return — value creation for shareholders</td><td>Strong capital raisability; ICAAP capital actions credible</td><td>UAE D-SIBs (FAB, ENBD) in benign environment</td></tr>
+    <tr><td class="tp">Above 18%</td><td>Exceptional — examine leverage carefully</td><td>Is high ROE driven by genuine efficiency or dangerous leverage?</td><td>UAE Islamic banks benefit from fee income; some GCC banks</td></tr>
+  </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 5.4 ROA -->
+<div class="sm">5.4 — Return on Assets</div>
+
+<div class="ratio-card" style="border-left-color:var(--blue)">
+  <div class="rc-title" style="color:var(--blue)">ROA — Return on Assets</div>
+  <div class="rc-formula">ROA = Net Profit After Tax ÷ Average Total Assets × 100</div>
+
+  <div class="beginner" style="margin-top:12px">
+    <div class="bl">🟢 Simple: Stripping Out the Leverage Effect</div>
+    <p>ROE can be boosted by borrowing more (leverage). ROA strips that out — it tells you how much profit the bank earns purely from deploying its asset base, regardless of how those assets are funded. A high ROE driven by a shrinking equity base (rising leverage) is dangerous. A high ROA driven by genuine efficiency is healthy. In ICAAP, ROA is the cleaner metric of underlying business quality.</p>
+  </div>
+
+  <p>ROA and ROE are mathematically linked: <strong>ROE = ROA × (Total Assets ÷ Equity)</strong>. This relationship is the key to spotting the leverage compensation window dressing pattern.</p>
+
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>Scenario</th><th>ROA</th><th>Leverage Multiple</th><th>ROE</th><th>ICAAP Signal</th></tr></thead>
+  <tbody>
+    <tr><td>Year 1 — Base</td><td class="tp">1.2%</td><td>10.0×</td><td class="tp">12.0%</td><td class="tp">Genuine — ROA driving ROE</td></tr>
+    <tr><td>Year 2 — NIM falls</td><td class="tw">1.1%</td><td>10.9×</td><td class="tp">12.0%</td><td class="tw">Compensating — leverage rising</td></tr>
+    <tr><td>Year 3 — NIM falls further</td><td class="tf">1.0%</td><td>12.0×</td><td class="tp">12.0%</td><td class="tf">Warning — leverage up 200bps in 2 years</td></tr>
+    <tr><td>Year 4 — NIM compressed</td><td class="tf">0.9%</td><td>13.3×</td><td class="tp">12.0%</td><td class="tf">Danger — CET1 ratio thinning silently</td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <div class="alert a-warn" style="margin-top:12px">
+    <div class="ai">⚠️</div>
+    <div class="ab">
+      <h5>The Leverage Compensation Treadmill</h5>
+      <p>ROE is stable at 12.0% throughout. But the equity multiplier has risen from 10× to 13.3× — meaning the leverage ratio has fallen from 10.0% to 7.5%. CET1 ratio is drifting down even though reported profit is stable. This is the "treadmill" — the bank must grow assets faster than NIM is falling just to maintain the same absolute profit. When the treadmill eventually stops (asset growth slows or NIM hits a floor), profit collapses and there is less capital to absorb it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 5.5 NIM -->
+<div class="sm">5.5 — Net Interest Margin &amp; IRRBB</div>
+
+<div class="ratio-card" style="border-left-color:var(--teal)">
+  <div class="rc-title" style="color:var(--teal)">NIM — Net Interest Margin &amp; IRRBB</div>
+  <div class="rc-formula">NIM = Net Interest Income ÷ Average Interest-Earning Assets × 100</div>
+
+  <div class="beginner" style="margin-top:12px">
+    <div class="bl">🟢 Simple: The Spread Between Borrowing and Lending</div>
+    <p>NIM is the fundamental business of banking in one number. If a bank borrows deposits at 2% and lends mortgages at 5.5%, its gross NIM is 3.5%. After funding costs, overheads, and provisions, that 3.5% spread generates the profit. A falling NIM means the bank is either paying more for its funding, earning less on its loans, or both. In UAE banking, NIM is heavily influenced by the EIBOR rate (Emirates Interbank Offered Rate) — the local equivalent of SOFR/LIBOR.</p>
+  </div>
+
+  <h4>NIM and IRRBB — The Pillar 2 Connection</h4>
+  <p>NIM is where <strong>IRRBB (Interest Rate Risk in the Banking Book)</strong> becomes a Pillar 2 capital risk. Banks typically have asset-liability mismatches in interest rate tenor — they may lend at fixed rates and fund at floating, or vice versa. When rates change, NIM changes — but by different amounts on the asset side and liability side depending on the mismatch.</p>
+
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>Rate Environment</th><th>Fixed-rate loans + Floating deposits</th><th>Floating-rate loans + Fixed deposits</th><th>UAE typical positioning</th></tr></thead>
+  <tbody>
+    <tr><td>Rates rise sharply (+200bp)</td><td class="tf">NIM compresses — assets fixed, funding costs rise</td><td class="tp">NIM expands — assets reprice up, funding locked</td><td>Mixed: corporate loans floating (benefits); mortgages fixed (hurts)</td></tr>
+    <tr><td>Rates fall sharply (−200bp)</td><td class="tp">NIM expands — assets fixed, funding costs fall</td><td class="tf">NIM compresses — assets reprice down, funding locked</td><td>Retail deposits partially floored at 0% — asymmetric benefit on way down</td></tr>
+    <tr><td>Rates stable</td><td>NIM stable</td><td>NIM stable</td><td>Base case — NIM maintained at current level</td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <div class="formula-box" style="margin:14px 0">
+    <div class="fl">IRRBB Pillar 2 Capital Add-On Calculation (Simplified)</div>
+    NII sensitivity to +200bp parallel shock:
+      Change in NII = (Asset repricing gap × Rate change × Time horizon)
+      Example: Fixed-rate mortgage book AED 8,000m (avg 2yr repricing)
+               Funded by 1yr deposits AED 6,000m + 6m wholesale AED 2,000m
+      Year 1 NII sensitivity: −AED 280m (funding reprices up; assets fixed)
+      IRRBB capital add-on = 280 × 15× earnings multiple ÷ RWA × 100 ≈ 1.5% of RWA
+    <div class="fn">The IRRBB Pillar 2 add-on must be quantified in ICAAP. Banks with large fixed-rate mortgage books funded by shorter-duration deposits (common in UAE) carry significant IRRBB that Pillar 1 does not capture at all.</div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>NIM Level</th><th>Interpretation</th><th>ICAAP Signal</th><th>UAE Context (2024)</th></tr></thead>
+  <tbody>
+    <tr><td class="tf">Below 1.5%</td><td>Severely compressed — margin business unviable</td><td>Business model review required; PPP/RWA likely below 0.5%</td><td>Not typical for UAE — European bank territory</td></tr>
+    <tr><td class="tw">1.5–2.5%</td><td>Compressed — cost efficiency critical</td><td>CIR must be very low (&lt;40%) to generate acceptable PPP/RWA</td><td>UAE banks under funding cost pressure</td></tr>
+    <tr><td class="tp">2.5–3.5%</td><td>Healthy — standard UAE commercial bank range</td><td>Normal ICAAP territory; IRRBB sensitivity moderate</td><td>Most UAE mid-size conventional banks</td></tr>
+    <tr><td class="tp">3.5–5.0%</td><td>Strong — UAE advantage from higher rate environment</td><td>PPP/RWA typically &gt;2.5%; strong capital self-repair</td><td>UAE D-SIBs with pricing power; Islamic banks with Murabaha margin</td></tr>
+  </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 5.6 CIR -->
+<div class="sm">5.6 — Cost-to-Income Ratio</div>
+
+<div class="ratio-card" style="border-left-color:var(--amber)">
+  <div class="rc-title" style="color:var(--amber)">CIR — Cost-to-Income Ratio</div>
+  <div class="rc-formula">CIR = Operating Expenses ÷ Operating Income × 100 (lower is better)</div>
+
+  <div class="beginner" style="margin-top:12px">
+    <div class="bl">🟢 Simple: How Much of Every AED of Income Is Eaten by Costs</div>
+    <p>CIR tells you what percentage of income disappears before a single AED of credit loss is absorbed. A CIR of 60% means AED 40 of every AED 100 of income reaches pre-provision profit. A CIR of 38% means AED 62 reaches pre-provision profit. In a stress scenario where income falls 25%, the high-CIR bank's PPP collapses by 62% (from 40 to 15 per 100 of original income) while the low-CIR bank's PPP falls only 40% (from 62 to 37). <strong>High CIR is the amplifier that turns an income shock into a capital crisis.</strong></p>
+  </div>
+
+  <h4>Operating Leverage Effect — Numerical Illustration</h4>
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>Bank</th><th>Income (base)</th><th>CIR</th><th>PPP (base)</th><th>Income falls 30%</th><th>New PPP</th><th>PPP decline</th></tr></thead>
+  <tbody>
+    <tr><td>Efficient bank</td><td>1,000</td><td class="tp">38%</td><td class="tp">620</td><td>700</td><td class="tw">320</td><td class="tw">−48%</td></tr>
+    <tr><td>Average bank</td><td>1,000</td><td class="tw">52%</td><td class="tw">480</td><td>700</td><td class="tf">164</td><td class="tf">−66%</td></tr>
+    <tr><td>High-cost bank</td><td>1,000</td><td class="tf">68%</td><td class="tf">320</td><td>700</td><td class="tf">−76</td><td class="tf">LOSS — PPP gone</td></tr>
+  </tbody>
+  </table>
+  </div>
+
+  <p>The high-cost bank (CIR 68%) makes a loss as soon as income falls 30% — before a single AED of impairment is charged. This is the "double whammy" of a high-CIR bank in a stress: income falls (NIM compression, lower volumes) while costs remain largely fixed, wiping out PPP before credit losses even begin.</p>
+
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>CIR Level</th><th>Interpretation</th><th>UAE Context (2024)</th></tr></thead>
+  <tbody>
+    <tr><td class="tp">Below 35%</td><td>Very efficient — lean operation, strong cost discipline</td><td>FAB, some Islamic banks with low branch cost base</td></tr>
+    <tr><td class="tp">35–45%</td><td>Efficient — well-managed cost base for UAE market</td><td>UAE D-SIBs typical range; digitalised banks</td></tr>
+    <tr><td class="tw">45–55%</td><td>Average — room for improvement, manageable in benign environment</td><td>Mid-size UAE conventional banks</td></tr>
+    <tr><td class="tf">Above 60%</td><td>High — vulnerable to income compression; ICAAP must model PPP collapse</td><td>Smaller Category 2 banks with high branch networks</td></tr>
+  </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 5.7 PPP/RWA -->
+<div class="sm">5.7 — PPP/RWA</div>
+
+<div class="ratio-card" style="border-left-color:var(--green)">
+  <div class="rc-title" style="color:var(--green)">PPP/RWA — The Most Important ICAAP Profitability Metric</div>
+  <div class="rc-formula">PPP/RWA = Pre-Provision Profit ÷ Risk-Weighted Assets × 100</div>
+
+  <div class="beginner" style="margin-top:12px">
+    <div class="bl">🟢 Simple: The Earnings Firewall</div>
+    <p>PPP/RWA measures how much profit the bank generates per unit of risk before any credit losses. It is the firewall between credit losses and CET1. A bank with PPP/RWA of 3.0% can absorb a stressed cost of risk of 2.5% and still be profitable — the 0.5% surplus adds to CET1. A bank with PPP/RWA of 0.8% is wiped out by any cost of risk above 0.8% — every AED beyond that hits CET1 directly.</p>
+  </div>
+
+  <div class="formula-box" style="margin:12px 0">
+    <div class="fl">The PPP/RWA Absorption Test</div>
+    If PPP/RWA &gt; stressed Cost of Risk: Bank is profitable → CET1 grows → passes stress
+    If PPP/RWA &lt; stressed Cost of Risk: Bank makes loss → CET1 erodes → may breach floor
+
+    Annual CET1 drain under stress = (Cost of Risk − PPP/RWA) × (1 − tax rate)
+    Example:  Cost of Risk 2.5%, PPP/RWA 0.6%, Tax 9%
+    Annual drain = (2.5% − 0.6%) × (1 − 9%) = 1.73% of RWA per year
+    Capital runway = (CET1 − 7% floor) ÷ 1.73% = 4.0 years maximum
+    <div class="fn">This formula gives the "capital runway" — how many years of stress the bank can survive before breaching the regulatory floor. Regulators expect a minimum runway of 3–5 years under severe stress.</div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+  <thead><tr><th>PPP/RWA Level</th><th>Interpretation</th><th>Stress Resilience</th><th>UAE Context</th></tr></thead>
+  <tbody>
+    <tr><td class="tp">Above 3.0%</td><td>Strong — robust earnings buffer</td><td>Absorbs severe stress (CoR 2.5%) and still profitable</td><td>UAE D-SIBs in high-rate environment: 2.8–4.2%</td></tr>
+    <tr><td class="tp">2.0–3.0%</td><td>Adequate — comfortable for moderate stress</td><td>Absorbs mild-moderate stress; severe stress erodes CET1 slowly</td><td>Mid-size UAE banks target range: 2.0–2.8%</td></tr>
+    <tr><td class="tw">1.0–2.0%</td><td>Marginal — tight in severe stress</td><td>Cannot absorb severe stress without CET1 erosion; watch carefully</td><td>High-CIR banks or NIM-compressed Category 2 banks</td></tr>
+    <tr><td class="tf">Below 1.0%</td><td>Weak — ICAAP must address as primary risk</td><td>Any stress immediately bleeds CET1; management actions critical</td><td>Banks under cost/NIM pressure; CBUAE supervisory concern</td></tr>
+  </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 5.8 THREE LEVERS -->
+<div class="sm">5.8 — Three Levers to Improve PPP/RWA</div>
+<h2>Three Levers to Genuinely Improve PPP/RWA</h2>
+
+<p>When a bank's ICAAP reveals weak PPP/RWA as a primary risk, the management actions section must present credible steps to improve it. There are only three genuine levers — everything else is either cosmetic or temporary.</p>
+
+<div class="lever-grid">
+  <div class="lever-card">
+    <div class="lever-num">1</div>
+    <div class="lever-title">Grow the Numerator — Improve Pre-Provision Profit</div>
+    <div class="lever-body">
+      <strong>Raise NIM:</strong> Reprice existing loans upward, shift mix toward higher-yielding products, reduce funding costs by growing retail deposits and reducing expensive wholesale.<br><br>
+      <strong>Grow fee income:</strong> Transaction banking, trade finance, wealth management, bancassurance — all generate non-interest income with zero or minimal RWA consumption.<br><br>
+      <strong>Cut costs:</strong> Reduce CIR through digital transformation, branch rationalisation, procurement efficiency. Takes 12–18 months to deliver.
+    </div>
+    <div class="lever-nums">50bp NIM rise on AED 18bn earning assets = AED 90m more PPP = +0.32% PPP/RWA
+AED 40m fee income addition = +0.14% PPP/RWA (zero RWA cost)
+CIR from 55% to 45% on AED 1,120m income = AED 112m more PPP = +0.40% PPP/RWA</div>
+  </div>
+  <div class="lever-card">
+    <div class="lever-num">2</div>
+    <div class="lever-title">Shrink the Denominator — Reduce RWA Efficiently</div>
+    <div class="lever-body">
+      Exit low-yielding, high-risk-weight assets. Replace 3% margin loans at 100% risk weight with 4.5% margin loans at 75% risk weight — both numerator improves AND denominator falls simultaneously.<br><br>
+      This is <em>genuine</em> RWA optimisation (improving the risk-return profile) vs <em>cosmetic</em> RWA optimisation (IRB model recalibration without changing the portfolio).
+    </div>
+    <div class="lever-nums">Replace AED 1,000m corporate loans (3% margin, 100% RW) with
+AED 1,000m retail mortgages (3.8% margin, 65% RW):
+  PPP numerator: +AED 8m (higher margin)
+  RWA denominator: −350m (35% lower risk weight)
+  Net PPP/RWA improvement: +0.09% direct + denominator effect</div>
+  </div>
+  <div class="lever-card">
+    <div class="lever-num">3</div>
+    <div class="lever-title">Restructure the Business Model</div>
+    <div class="lever-body">
+      For structurally weak PPP/RWA, the real answer is often fundamental change: exit unprofitable segments, consolidate branches, digitise to reduce cost base structurally, or merge for scale.<br><br>
+      <strong>UAE Example — FAB creation:</strong> The 2017 merger of NBAD and First Gulf Bank created First Abu Dhabi Bank. The combined entity achieved PPP/RWA improvement through scale economies, reduced duplication, and improved pricing power. Both constituent banks had individually compressed NIM and high relative CIR.
+    </div>
+    <div class="lever-nums">NBAD pre-merger PPP/RWA (est): ~1.8%
+FGB pre-merger PPP/RWA (est):  ~2.2%
+FAB post-merger PPP/RWA:       ~2.8% (scale + cost synergies + pricing power)
+CIR improvement: ~8-10pp reduction over 3 years post-merger</div>
+  </div>
+</div>
+
+<!-- 5.9 TWO-BANK COMPARISON -->
+<div class="sm">5.9 — The Two-Bank Comparison</div>
+<h2>The Two-Bank Comparison — Same CET1, Different Fate</h2>
+
+<p>This is the defining stress test of profitability ratios in ICAAP. Two UAE banks with identical starting CET1 ratios, identical loan books, and identical stress scenarios — but different earnings quality. Their three-year stressed CET1 trajectories diverge entirely based on PPP/RWA.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Metric</th><th>Bank A — Strong Earnings</th><th>Bank B — Weak Earnings</th></tr></thead>
+<tbody>
+  <tr><td>Starting CET1 ratio</td><td class="tp">14.1%</td><td class="tp">14.1%</td></tr>
+  <tr><td>NIM</td><td class="tp">4.50%</td><td class="tf">2.80%</td></tr>
+  <tr><td>CIR</td><td class="tp">36%</td><td class="tf">64%</td></tr>
+  <tr><td>PPP/RWA (base)</td><td class="tp">3.80%</td><td class="tf">0.60%</td></tr>
+  <tr><td>Stressed cost of risk (Year 2)</td><td>2.50%</td><td>2.50%</td></tr>
+  <tr><td>Net PPP surplus/(deficit) after CoR</td><td class="tp">+1.30% → CET1 grows!</td><td class="tf">−1.90% → CET1 bleeds</td></tr>
+  <tr><td>CET1 — Year 1</td><td class="tp">14.8%</td><td class="tw">12.7%</td></tr>
+  <tr><td>CET1 — Year 2</td><td class="tp">15.3%</td><td class="tf">11.3%</td></tr>
+  <tr><td>CET1 — Year 3</td><td class="tp">15.7%</td><td class="tf">9.4%</td></tr>
+  <tr><td>Capital runway to 7% floor</td><td class="tp">Never breaches</td><td class="tw">~4.0 years at current rate</td></tr>
+  <tr><td>ICAAP outcome</td><td class="tp">Passes comfortably — no action</td><td class="tf">Passes but stressed — P2G likely</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="chart-box">
+  <div class="ct">Two-Bank CET1 Trajectory Under Same Stress</div>
+  <div class="cs">Identical starting CET1, identical stress. PPP/RWA is the only difference.</div>
+  <canvas id="twoBankChart" height="120"></canvas>
+</div>
+
+<div class="alert a-key">
+  <div class="ai">💡</div>
+  <div class="ab">
+    <h5>The Core ICAAP Insight — Capital Today vs Capital Tomorrow</h5>
+    <p>Bank A's PPP/RWA of 3.80% exceeds the stressed cost of risk of 2.50% — it is still <em>profitable</em> in the stress. Retained earnings continue to build CET1 even while losses hit the income statement. Bank B's PPP/RWA of 0.60% is destroyed by a cost of risk of 2.50% — it makes a net loss of 1.90% of RWA per year. Every year of stress permanently erodes CET1 with no mechanism for self-repair. <strong>The starting capital ratio tells you where you are. The PPP/RWA tells you where you will be.</strong></p>
+  </div>
+</div>
+
+<!-- 5.10 UAE CONTEXT -->
+<div class="sm">5.10 — UAE Context (Standalone)</div>
+<div class="uae-section">
+  <div class="uae-flag-stripe"></div>
+  <div>
+    <div class="uae-badge">🇦🇪 UAE Specific — Standalone Section</div>
+    <h3>Profitability in UAE Banking — Structural Characteristics</h3>
+
+    <h4>UAE Corporate Income Tax — Impact on Profitability Ratios (Since June 2023)</h4>
+    <p>The UAE introduced a 9% Corporate Income Tax (CIT) on taxable profits above AED 375,000 effective for financial years starting 1 June 2023. This materially impacts profitability ratios for UAE banks for the first time. Pre-CIT, UAE banks reported near-full pre-tax profits as post-tax profits. Post-CIT, net profit is reduced by ~9% of taxable income, and therefore retained earnings added to CET1 are reduced proportionately.<sup><a href="#ref5">[5]</a></sup></p>
+
+    <h4>NIM in the UAE Rate Environment</h4>
+    <p>UAE bank NIM is heavily correlated with EIBOR (Emirates Interbank Offered Rate), which tracks the US Federal Funds Rate given the AED/USD peg. The 2022–2023 Fed rate hiking cycle (0% to 5.25%) materially boosted UAE bank NIM — particularly for banks with floating-rate corporate loan books that repriced faster than their retail deposit costs. UAE D-SIBs saw NIM expand from ~2.6% in 2021 to ~3.8–4.2% in 2023–2024. Any future rate cutting cycle by the Fed would compress UAE NIM — ICAAP must stress test this sensitivity.</p>
+
+    <h4>UAE Profitability Benchmarks (2023–2024)</h4>
+    <div class="table-wrap">
+    <table>
+    <thead><tr><th>Metric</th><th>UAE D-SIBs</th><th>Mid-size UAE Banks</th><th>Category 2 Small Banks</th><th>UAE Islamic Banks</th></tr></thead>
+    <tbody>
+      <tr><td>ROE</td><td class="tp">14–20%</td><td class="tw">10–14%</td><td class="tw">7–11%</td><td class="tp">12–18%</td></tr>
+      <tr><td>ROA</td><td class="tp">1.6–2.2%</td><td class="tw">1.0–1.5%</td><td class="tw">0.7–1.1%</td><td class="tp">1.5–2.0%</td></tr>
+      <tr><td>NIM</td><td class="tp">3.4–4.2%</td><td class="tw">2.8–3.5%</td><td class="tw">2.2–3.0%</td><td class="tp">3.0–4.0%</td></tr>
+      <tr><td>CIR</td><td class="tp">32–42%</td><td class="tw">42–55%</td><td class="tf">50–65%</td><td class="tp">35–48%</td></tr>
+      <tr><td>PPP/RWA</td><td class="tp">2.8–4.2%</td><td class="tw">1.8–2.8%</td><td class="tw">1.0–2.0%</td><td class="tp">2.2–3.5%</td></tr>
+    </tbody>
+    </table>
+    </div>
+
+    <h4>Islamic Banking Profitability — Different but Comparable</h4>
+    <p>Islamic banks in the UAE report equivalent profitability metrics using Islamic finance terminology: Return on investment (ROI) equivalent to ROA; financing margin equivalent to NIM (the profit rate on Islamic financing products minus the return paid to investment account holders). Islamic banks typically achieve slightly higher financing margins because murabaha and ijara structures often carry slightly higher effective margins than equivalent conventional loans, partly due to Sharia compliance costs being priced in.</p>
+
+    <div class="alert a-uae" style="margin-top:16px">
+      <div class="ai">🇦🇪</div>
+      <div class="ab">
+        <h5>IRRBB in UAE Banks — A Growing ICAAP Concern</h5>
+        <p>The 2022–2024 rate cycle exposed a significant IRRBB vulnerability in UAE banks with large fixed-rate mortgage portfolios. While rising rates boosted NIM on corporate books, banks with substantial AED fixed-rate residential mortgages (originated at 3–4% in 2018–2020) saw these assets become loss-making relative to new funding costs at 5%+. The CBUAE has intensified its focus on IRRBB quantification in ICAAP submissions following this experience. Banks must now model a +200bp and −200bp parallel shift, a steepening, and a flattening scenario for the banking book — all four scenarios producing a capital add-on estimate.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5.11 FULL NUMERICAL EXAMPLE -->
+<div class="sm">5.11 — Full Numerical Example</div>
+<h2>Full Numerical Example — UAE Commercial Bank Profitability Analysis</h2>
+
+<h3>Starting Income Statement and Ratio Calculations</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Income Statement Item</th><th>Base Year (AED m)</th><th>Notes</th></tr></thead>
+<tbody>
+  <tr><td>Interest income</td><td class="th">1,710</td><td>Earning assets AED 36,000m × avg yield 4.75%</td></tr>
+  <tr><td>Interest expense</td><td class="th">(570)</td><td>Interest-bearing liabilities × avg cost 1.88%</td></tr>
+  <tr><td><strong>Net Interest Income</strong></td><td class="th"><strong>1,140</strong></td><td>NIM = 1,140 ÷ 36,000 = <strong>3.17%</strong></td></tr>
+  <tr><td>Fee and commission income</td><td class="th">285</td><td>Trade finance, remittances, card fees</td></tr>
+  <tr><td>FX income</td><td class="th">95</td><td>Customer FX and structured products</td></tr>
+  <tr><td>Other income</td><td class="th">40</td><td>Dividend, insurance distribution</td></tr>
+  <tr><td><strong>Total Operating Income</strong></td><td class="th"><strong>1,560</strong></td><td></td></tr>
+  <tr><td>Staff costs</td><td class="th">(420)</td><td>Largest single cost line</td></tr>
+  <tr><td>Premises and equipment</td><td class="th">(145)</td><td>22 branches + head office</td></tr>
+  <tr><td>Technology and other</td><td class="th">(95)</td><td>Core banking, compliance systems</td></tr>
+  <tr><td><strong>Total Operating Expenses</strong></td><td class="th"><strong>(660)</strong></td><td>CIR = 660 ÷ 1,560 = <strong>42.3%</strong></td></tr>
+  <tr><td><strong>Pre-Provision Profit (PPP)</strong></td><td class="tp"><strong>900</strong></td><td>PPP/RWA = 900 ÷ 28,000 = <strong>3.21%</strong></td></tr>
+  <tr><td>Impairment charge (cost of risk 0.75%)</td><td class="th">(150)</td><td>On AED 20,000m gross loans</td></tr>
+  <tr><td><strong>Profit Before Tax</strong></td><td class="tp"><strong>750</strong></td><td></td></tr>
+  <tr><td>Corporate Income Tax (9% on taxable income)</td><td class="th">(63)</td><td>UAE CIT effective June 2023</td></tr>
+  <tr><td><strong>Net Profit After Tax</strong></td><td class="tp"><strong>687</strong></td><td>ROA = 687 ÷ 45,000 = <strong>1.53%</strong></td></tr>
+  <tr><td>Dividends paid (55% payout ratio)</td><td class="th">(378)</td><td></td></tr>
+  <tr><td><strong>Retained earnings → added to CET1</strong></td><td class="tp"><strong>309</strong></td><td>ROE = 687 ÷ 4,200 = <strong>16.4%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="metric-strip">
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--teal)">3.17%</div>
+    <div class="ml">NIM</div>
+    <div class="ms">Strong for UAE</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--green)">42.3%</div>
+    <div class="ml">CIR</div>
+    <div class="ms">Efficient</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--green)">3.21%</div>
+    <div class="ml">PPP/RWA</div>
+    <div class="ms">Strong buffer</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--teal)">1.53%</div>
+    <div class="ml">ROA</div>
+    <div class="ms">Above benchmark</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--teal)">16.4%</div>
+    <div class="ml">ROE</div>
+    <div class="ms">Exceeds cost of equity</div>
+  </div>
+</div>
+
+<h3>Three-Year ICAAP Stress Projection — All Profitability Ratios</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item (AED m unless stated)</th><th>Base Year</th><th>Year 1 — Mild</th><th>Year 2 — Severe</th><th>Year 3 — Prolonged</th></tr></thead>
+<tbody>
+  <tr><td>Net interest income</td><td>1,140</td><td class="tw">967</td><td class="tf">760</td><td class="tf">659</td></tr>
+  <tr><td>NIM</td><td class="tp">3.17%</td><td class="tw">2.69%</td><td class="tf">2.11%</td><td class="tf">1.83%</td></tr>
+  <tr><td>Non-interest income</td><td>420</td><td class="tw">336</td><td class="tf">252</td><td class="tf">214</td></tr>
+  <tr><td>Total operating income</td><td>1,560</td><td class="tw">1,303</td><td class="tf">1,012</td><td class="tf">873</td></tr>
+  <tr><td>Operating expenses</td><td>(660)</td><td>(627)</td><td>(594)</td><td>(564)</td></tr>
+  <tr><td>CIR</td><td class="tp">42.3%</td><td class="tw">48.1%</td><td class="tf">58.7%</td><td class="tf">64.6%</td></tr>
+  <tr><td><strong>Pre-Provision Profit</strong></td><td class="tp"><strong>900</strong></td><td class="tw"><strong>676</strong></td><td class="tf"><strong>418</strong></td><td class="tf"><strong>309</strong></td></tr>
+  <tr><td>PPP/RWA</td><td class="tp">3.21%</td><td class="tw">2.25%</td><td class="tf">1.24%</td><td class="tf">0.89%</td></tr>
+  <tr><td>Cost of risk</td><td class="tp">0.75%</td><td class="tw">1.80%</td><td class="tf">3.40%</td><td class="tf">2.90%</td></tr>
+  <tr><td>Impairment charge</td><td>(150)</td><td class="tw">(360)</td><td class="tf">(680)</td><td class="tf">(580)</td></tr>
+  <tr><td>Net profit / (loss)</td><td class="tp">687</td><td class="tw">288</td><td class="tf">(243)</td><td class="tf">(246)</td></tr>
+  <tr><td>ROA</td><td class="tp">1.53%</td><td class="tw">0.64%</td><td class="tf">neg.</td><td class="tf">neg.</td></tr>
+  <tr><td>ROE</td><td class="tp">16.4%</td><td class="tw">6.8%</td><td class="tf">neg.</td><td class="tf">neg.</td></tr>
+  <tr><td>CET1 capital (opening)</td><td>4,200</td><td>4,200</td><td>4,361</td><td>4,096</td></tr>
+  <tr><td>RWA (stressed)</td><td>28,000</td><td>30,000</td><td>33,600</td><td>34,800</td></tr>
+  <tr><td><strong>CET1 ratio</strong></td><td class="tp"><strong>15.0%</strong></td><td class="tw"><strong>14.5%</strong></td><td class="tf"><strong>12.2%</strong></td><td class="tf"><strong>11.8%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="chart-box">
+  <div class="ct">Pre-Provision Profit vs Impairment Charge — Three-Year Stress</div>
+  <div class="cs">When the red bar exceeds the green bar, the bank makes a net loss and CET1 bleeds. Year 2 is the critical crossing point.</div>
+  <canvas id="pppChart" height="110"></canvas>
+</div>
+
+<div class="chart-box">
+  <div class="ct">NIM and CIR Stress Trajectory</div>
+  <div class="cs">NIM compresses under funding cost pressure; CIR rises as fixed costs dominate falling income — the double squeeze</div>
+  <canvas id="nimCirChart" height="110"></canvas>
+</div>
+
+<!-- 5.12 WINDOW DRESSING -->
+<div class="sm">5.12 — Window Dressing</div>
+<h2>How Window Dressers Hide — Profitability Ratios</h2>
+
+<div class="wd-section">
+  <div class="wd-hdr">
+    <div style="font-size:30px">🎭</div>
+    <div>
+      <div class="wd-title">How Window Dressers Hide in Profitability Ratios</div>
+      <div class="wd-sub">Four techniques that inflate reported earnings without improving the recurring income engine — and the footprints they always leave</div>
+    </div>
+  </div>
+
+  <p style="font-size:14px;color:var(--text-mid);margin-bottom:20px">Profitability window dressing is particularly dangerous because it directly inflates the capital base (via retained earnings) while leaving the underlying earnings weakness intact. A CET1 ratio inflated by non-recurring income looks identical to one inflated by genuine earnings — until the next stress removes the non-recurring income and the ratio collapses.</p>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">1</div><h5>One-Time Disposal Gains — Non-Recurring Profit Boosts CET1 Permanently</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Selling investment securities, properties, or subsidiary stakes at a gain books a one-time profit flowing to retained earnings and CET1. Reported ROE and ROA look dramatically improved. But the asset generating the gain is gone — future income is lower, and the bank's recurring earnings quality is unchanged or worse.</p>
+    <p><span class="wl wl-e">UAE Numerical Example:</span></p>
+    <div class="wnums">Bank's recurring profile:
+  NIM: 2.1% | CIR: 63% | PPP/RWA: 0.62% | Net profit: AED 240m | ROE: 6.8%
+  (Below cost of equity — bank under earnings pressure)
+
+Window dressing — sell UAE sovereign bond portfolio:
+  Bonds purchased 2018 at par (AED 800m face value)
+  Current market value: AED 952m (rates fallen since purchase)
+  Gain on disposal: AED 152m (pre-tax)
+  Post-tax gain at 9% CIT: AED 138m
+
+Reported results with disposal:
+  Net profit: AED 240m + AED 138m = AED 378m
+  Reported ROE: 378 ÷ 3,500 = 10.8% ← looks acceptable
+  Reported PPP/RWA (inc. disposal): (0.62% effective) ← unchanged!
+  CET1 boost from disposal: +138 ÷ 28,000 = +0.49%
+
+Reality:
+  Recurring net profit: AED 240m → core ROE: 6.8% — below cost of equity
+  Future NIM reduced: bond portfolio replacing loan income now gone
+  Replacement investment at current rates = lower yield = future NIM compression
+  Core PPP/RWA: 0.62% → ICAAP stress shows CET1 breach in Year 3</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Decompose the income statement into recurring (NII + fee income − opex) and non-recurring (disposal gains, insurance settlements, revaluation credits). Calculate "core ROE" and "core PPP/RWA" on recurring income only. If reported ROE is 10.8% but core ROE is 6.8% for two consecutive years, the bank's recurring earnings are deteriorating behind a facade of asset sales. Also check: what replaced the sold asset on the balance sheet? Reinvested at a lower yield? Then future NIM is lower — the gain today is a loan on future income.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">2</div><h5>Leverage Compensation — Stable ROE Hiding Falling ROA and Thinning Capital</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> As NIM falls, the bank grows assets and leverage to maintain absolute profit and therefore ROE. The ratio looks stable quarter-on-quarter. But ROA is falling, the equity multiplier is rising, and the leverage ratio (and CET1 ratio) is deteriorating silently every quarter.</p>
+    <p><span class="wl wl-e">Four-Quarter Treadmill Example:</span></p>
+    <div class="wnums">Q1: NIM 3.8% | ROA 1.2% | Equity multiplier 10.0× | ROE 12.0% | Leverage ratio 10.0%
+Q2: NIM 3.5% | ROA 1.1% | Equity multiplier 10.9× | ROE 12.0% | Leverage ratio  9.2%
+Q3: NIM 3.2% | ROA 1.0% | Equity multiplier 12.0× | ROE 12.0% | Leverage ratio  8.3%
+Q4: NIM 2.9% | ROA 0.9% | Equity multiplier 13.3× | ROE 12.0% | Leverage ratio  7.5%
+
+ROE is perfectly flat at 12.0% — board sees "stable, consistent performance"
+Leverage ratio: fallen from 10.0% to 7.5% — 250bp silent deterioration in 4 quarters
+CET1 ratio: thinning as RWA grows faster than retained earnings can build capital
+
+Tipping point: If NIM falls to 2.6% and bank cannot grow assets further:
+  Net profit collapses from AED 480m to AED 355m
+  ROE falls from 12.0% to 8.7% — first visible signal
+  But CET1 ratio is already 250bp lower than it was at Q1
+  There is far less capital to absorb the coming income shock</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Always decompose ROE into ROA × equity multiplier. Plot both on separate trend lines over 8 quarters. Falling ROA + rising multiplier + stable ROE = compensation treadmill. Calculate "normalised CET1 trajectory" — what happens to CET1 if the bank stops growing assets and ROE falls to ROA × current equity base? Also monitor leverage ratio trend — a falling leverage ratio is the direct measurement of this problem.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">3</div><h5>Provision Release to Inflate Quarterly Earnings</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Releasing previously raised provisions back through the P&amp;L in periods of earnings pressure — citing improved economic outlook or revised ECL model assumptions — to turn a quarterly net loss into a profit. This inflates reported PPP, ROA, ROE, and the period's retained earnings. But it is non-recurring: the provisions must eventually be re-raised when conditions deteriorate, creating a future P&amp;L charge.</p>
+    <p><span class="wl wl-e">Quarterly Smoothing Example:</span></p>
+    <div class="wnums">Q3 — NIM compressed, fee income flat, bank under pressure:
+  Pre-provision profit: AED 185m (genuine)
+  New provisions required: AED 240m
+  Expected net loss (before release): AED 55m × (1−9%) = AED 50m after tax
+
+Window dressing — management revises Stage 2 ECL assumptions:
+  Stage 2 book: AED 3,200m
+  Previous Stage 2 provision rate: 8.0% → provisions AED 256m
+  New Stage 2 provision rate: 5.5% (citing "improved GCC economic outlook")
+  Provision release: 3,200 × 2.5% = AED 80m released to income
+
+Reported Q3:
+  Net impairment: AED 240m − AED 80m release = AED 160m
+  Reported profit: AED 185m − AED 160m = AED 25m × (1−9%) = AED 23m
+  Reported quarterly ROA: +0.20% | Reported PPP/RWA: appears strong
+
+Q4 reality — Stage 2 re-provisions required (conditions did not improve):
+  Must raise AED 80m of provisions that were released in Q3 PLUS new provisions
+  Q4 impairment charge: AED 240m + AED 80m catch-up = AED 320m
+  Q4 net loss: AED 320m − AED 185m PPP = AED 135m loss
+  Annual smoothing effect: zero — total provisions for the year unchanged
+  Damage: board was misled in Q3; risk management credibility damaged</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Track net impairment charge (gross provisions minus releases) by quarter. A "lumpy" pattern — large Q4 charges and Q1 releases — while underlying credit quality appears stable is a provision management signal. Compare Stage 2 ECL provision rate quarter-over-quarter — a sharp downward revision in a stable or deteriorating credit environment is a red flag. Calculate the 8-quarter rolling average cost of risk and compare each quarter to this average; deviations of more than ±0.5% without an identifiable credit quality driver warrant investigation.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">4</div><h5>Fee Income Front-Loading — Booking Multi-Year Arrangement Fees Upfront</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Booking multi-year loan arrangement fees, insurance commissions, or trade finance fees in the origination period rather than amortising them over the life of the transaction. This inflates non-interest income in origination-heavy quarters and deflates it in subsequent periods. PPP/RWA, ROA, and ROE look strong in origination periods — masking the underlying recurring income weakness.</p>
+    <p><span class="wl wl-e">Numerical Example:</span></p>
+    <div class="wnums">Project finance loan originated: AED 1,200m, 7-year term, 2.0% arrangement fee
+Correct IFRS 9 treatment: amortise fee over 7 years as part of effective interest rate
+  Annual fee income recognition: AED 1,200m × 2.0% ÷ 7 years = AED 3.4m per year
+
+Window dressing — book fee upfront:
+  Year 1 fee income: AED 1,200m × 2.0% = AED 24m (full upfront)
+  Years 2–7: fee income AED 0 (already booked)
+
+Year 1 impact on PPP/RWA:
+  Additional non-interest income: AED 24m − AED 3.4m = AED 20.6m inflated
+  PPP/RWA inflation: AED 20.6m ÷ AED 28,000m RWA = +0.07% per transaction
+
+If bank originates 15 such transactions per year:
+  Total annual fee inflation: AED 20.6m × 15 = AED 309m
+  PPP/RWA inflation: +1.1% — material!
+  Cliff effect: in Year 2, PPP/RWA collapses by 1.1% as front-loaded fees are not replaced</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Request a breakdown of non-interest income by recognition method (upfront vs amortised). Compare fee income growth against loan origination volumes — if fees grow 30% while originations grew 8%, front-loading is likely. Monitor the deferred fee income liability on the balance sheet — a declining deferred fee balance while originations are flat signals prior front-loading being unwound. Also check: does the bank's fee income show a cyclical pattern correlated with origination volumes rather than the underlying loan book size?</p>
+  </div>
+</div>
+
+<!-- 5.13 SHERLOCK -->
+<div class="sm">5.13 — Detection</div>
+<div class="sherlock">
+  <div class="sh-title">🔍 Be Sherlock Holmes — Detecting Profitability Window Dressing</div>
+  <div class="sh-sub">"Elementary, my dear Watson — but only if you know where to look." Five analytical tests that expose what the headline ROE is hiding.</div>
+
+  <div class="clue">
+    <div class="cn">1</div>
+    <p><strong>The Core Earnings Separation Clue:</strong> Always decompose reported net profit into (a) recurring net interest income + fee income − opex, (b) one-time disposal gains and revaluation credits, and (c) provision releases. Calculate core PPP/RWA using only (a). If reported PPP/RWA is 2.8% but core PPP/RWA is 1.1%, the bank's recurring earnings are structurally weak regardless of the headline.
+    <div class="cnums">Test formula: Core PPP/RWA = (NII + recurring fees − opex) ÷ RWA
+Red flag: (Reported PPP/RWA − Core PPP/RWA) &gt; 0.5% for 2+ consecutive years
+This gap represents non-recurring income the ICAAP stress cannot rely upon.
+Also flag: if "other income" grows faster than total assets by more than 10% per year,
+  investigate each component for one-time items.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">2</div>
+    <p><strong>The ROE Decomposition Clue:</strong> Always split ROE = ROA × equity multiplier and plot both on the same chart over 8 quarters. If ROA is falling while the multiplier is rising and ROE is stable, the bank is running the leverage compensation treadmill. Calculate the leverage ratio (equity ÷ total assets) — a falling leverage ratio alongside stable ROE is the primary signal.
+    <div class="cnums">Test: ROE decomposition quarterly over 8 periods
+If ROA falls &gt;0.1% per year AND equity multiplier rises &gt;0.5× per year → flag
+Leverage ratio test: if leverage ratio falls &gt;50bp per year with stable ROE → compensation
+Normalised ROE = ROA × historical average equity multiplier (5-year avg)
+If normalised ROE is materially below reported ROE → leverage is doing the work</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">3</div>
+    <p><strong>The PPP Runway Clue:</strong> Calculate the capital runway explicitly: (Current CET1 − 7%) ÷ Annual CET1 drain in stress = years to floor. If this number is less than 3 years under the bank's own "severe stress scenario," the bank has a profitability problem regardless of what the current CET1 ratio shows.
+    <div class="cnums">Test: Capital runway = (CET1 − 7%) ÷ [(stressed CoR − PPP/RWA) × (1 − tax)]
+Example: CET1 14%, PPP/RWA 0.6%, stressed CoR 2.5%, tax 9%:
+  Annual drain = (2.5% − 0.6%) × 91% = 1.73%
+  Runway = (14% − 7%) ÷ 1.73% = 4.0 years
+Minimum acceptable under severe stress: 5+ years
+If runway &lt; 3 years: ICAAP must include specific earnings improvement plan
+If runway &lt; 2 years: P2G likely; P2R add-on possible</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">4</div>
+    <p><strong>The NIM Sustainability Clue:</strong> Compare current NIM to the bank's 5-year historical average. If current NIM is above the 5-year average, test whether it is sustainable or driven by a temporary rate environment. For UAE banks: calculate NIM sensitivity to a −200bp rate scenario (Fed cutting cycle). If NIM falls by &gt;100bp under this scenario, the current NIM is not sustainable and the ICAAP stress test must reflect the lower level.
+    <div class="cnums">Test: NIM stress scenario
+Current NIM: 3.8% (elevated by 2022-2023 rate cycle)
+5-year historical average NIM: 2.9%
+Fed cutting cycle scenario (−200bp EIBOR by 2026): NIM impact −80bp → NIM 3.0%
+PPP/RWA impact: −80bp × earning asset ratio ÷ RWA = approximately −0.7% PPP/RWA
+If ICAAP does not model this NIM compression: PPP/RWA in stress is overstated by 0.7%
+Correct stressed PPP/RWA: 3.8% − 0.7% (NIM) − 0.3% (volume) = 2.8% (not the 3.8% reported)</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">5</div>
+    <p><strong>The Fee Income Quality Clue:</strong> Request a breakdown of non-interest income into: transactional (recurring, volume-based), structural (relationship-based advisory), and episodic (one-time arrangement fees, disposal gains). The ICAAP stress scenario should apply a 30–40% haircut to transactional income (volumes fall in stress) and a 70–90% haircut to episodic income (non-recurring). If the ICAAP applies the same moderate haircut to all three categories, it is overstating stressed earnings.
+    <div class="cnums">Test: Non-interest income stress decomposition
+  Transactional fees (card, FX, remittance): apply 35% stress haircut
+  Structural fees (advisory, syndication): apply 50% stress haircut
+  Episodic income (disposals, arrangement upfront): apply 90% stress haircut
+Example: Reported non-interest income AED 420m
+  Transactional: AED 200m × 65% = AED 130m stressed
+  Structural: AED 120m × 50% = AED 60m stressed
+  Episodic: AED 100m × 10% = AED 10m stressed
+  Total stressed non-interest income: AED 200m (vs reported AED 420m, −52%)
+  If ICAAP uses only −20% haircut: stressed PPP/RWA overstated by ~0.8%</div></p>
+  </div>
+</div>
+
+<!-- 5.14 REFERENCES -->
+<div class="sm">5.14 — References</div>
+<div class="ref-section">
+  <div class="ref-title">Regulatory References &amp; Sources</div>
+  <ul class="ref-list">
+    <li>[1] BCBS. <em>Principles for sound stress testing practices and supervision.</em> BIS, May 2009. Income projection methodology. <a href="https://www.bis.org/publ/bcbs155.htm" target="_blank">https://www.bis.org/publ/bcbs155.htm</a></li>
+    <li>[2] BCBS. <em>Interest rate risk in the banking book (IRRBB).</em> BIS, April 2016. Revised IRRBB framework — Pillar 2 capital add-on methodology. <a href="https://www.bis.org/bcbs/publ/d368.htm" target="_blank">https://www.bis.org/bcbs/publ/d368.htm</a></li>
+    <li>[3] Central Bank of the UAE (CBUAE). <em>Standards re Capital Adequacy — ICAAP Guidance.</em> 2022. IRRBB quantification requirements for UAE banks. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[4] European Banking Authority (EBA). <em>Guidelines on the management of interest rate risk arising from non-trading book activities.</em> EBA/GL/2022/14. IRRBB measurement best practice. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li id="ref5">[5] UAE Ministry of Finance. <em>Federal Decree-Law No. 47 of 2022 on the Taxation of Corporations and Businesses.</em> UAE Corporate Income Tax, effective 1 June 2023. 9% on taxable income &gt; AED 375,000. <a href="https://mof.gov.ae" target="_blank">https://mof.gov.ae</a></li>
+    <li>[6] IMF. <em>UAE: Financial System Stability Assessment.</em> Country Report 22/66, March 2022. Profitability assessment of UAE banks. <a href="https://www.imf.org" target="_blank">https://www.imf.org</a></li>
+    <li>[7] IASB. <em>IFRS 9 Financial Instruments — Effective Interest Rate method.</em> Fee amortisation requirements. <a href="https://www.ifrs.org" target="_blank">https://www.ifrs.org</a></li>
+    <li>[8] BCBS. <em>Supervisory guidance for assessing banks' financial instrument fair value practices.</em> BIS, April 2009. Disposal gain recognition standards. <a href="https://www.bis.org/publ/bcbs153.htm" target="_blank">https://www.bis.org/publ/bcbs153.htm</a></li>
+  </ul>
+</div>
+
+<div class="chapter-nav">
+  <a class="nav-btn" href="chapter_04_credit_quality.html">← Chapter 4 — Credit Quality</a>
+  <span style="font-size:13px;color:var(--text-light)">Chapter 5 of 8 — Profitability Ratios</span>
+  <a class="nav-btn" href="chapter_06_inconsistency_flags.html">Chapter 6 — Inconsistency Flags →</a>
+</div>
+</div>
+
+<script>
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#555';
+const gc = 'rgba(0,0,0,0.05)';
+
+// TWO-BANK CHART
+new Chart(document.getElementById('twoBankChart'), {
+  type: 'line',
+  data: {
+    labels: ['Base', 'Year 1', 'Year 2', 'Year 3'],
+    datasets: [
+      {label: 'Bank A — PPP/RWA 3.8% (Strong)', data: [14.1, 14.8, 15.3, 15.7],
+       borderColor: '#27ae60', backgroundColor: 'rgba(39,174,96,0.08)', tension: 0.3,
+       fill: false, pointRadius: 6, borderWidth: 2.5},
+      {label: 'Bank B — PPP/RWA 0.6% (Weak)', data: [14.1, 12.7, 11.3, 9.4],
+       borderColor: '#c0392b', backgroundColor: 'rgba(192,57,43,0.08)', tension: 0.3,
+       fill: false, pointRadius: 6, borderWidth: 2.5, borderDash: [7,3]},
+      {label: '7% Regulatory Floor', data: [7,7,7,7],
+       borderColor: '#e67e22', borderWidth: 1.5, borderDash: [4,4], pointRadius: 0, fill: false}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {min: 5, max: 17, title: {display: true, text: 'CET1 Ratio %'}, grid: {color: gc}},
+      x: {grid: {color: gc}}
+    }
+  }
+});
+
+// PPP vs IMPAIRMENT CHART
+new Chart(document.getElementById('pppChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Base Year', 'Year 1 — Mild', 'Year 2 — Severe', 'Year 3 — Prolonged'],
+    datasets: [
+      {label: 'Pre-Provision Profit (AED m)', data: [900, 676, 418, 309],
+       backgroundColor: 'rgba(13,115,119,0.7)', borderColor: '#0d7377', borderWidth: 1},
+      {label: 'Impairment Charge (AED m)', data: [150, 360, 680, 580],
+       backgroundColor: 'rgba(192,57,43,0.65)', borderColor: '#c0392b', borderWidth: 1}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {title: {display: true, text: 'AED millions'}, grid: {color: gc}},
+      x: {grid: {display: false}}
+    }
+  }
+});
+
+// NIM AND CIR CHART
+new Chart(document.getElementById('nimCirChart'), {
+  type: 'line',
+  data: {
+    labels: ['Base', 'Year 1', 'Year 2', 'Year 3'],
+    datasets: [
+      {label: 'NIM %', data: [3.17, 2.69, 2.11, 1.83],
+       borderColor: '#0d7377', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2.5, yAxisID: 'y'},
+      {label: 'CIR %', data: [42.3, 48.1, 58.7, 64.6],
+       borderColor: '#e67e22', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2.5,
+       borderDash: [6,3], yAxisID: 'y2'}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {min: 0, max: 5, title: {display: true, text: 'NIM %'}, grid: {color: gc}},
+      y2: {position: 'right', min: 30, max: 80, title: {display: true, text: 'CIR %'},
+           grid: {display: false}},
+      x: {grid: {color: gc}}
+    }
+  }
+});
+</script>
+</body>
+</html>

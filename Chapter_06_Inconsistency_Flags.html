@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 6 — Inconsistency Flags &amp; Advanced Analysis | UAE Banking ICAAP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1a1a2e;--ink-mid:#2d2d4e;
+  --gold:#b8860b;--gold-light:#daa520;--gold-pale:#fff8dc;
+  --teal:#0d7377;--teal-light:#14a085;--teal-pale:#e8f8f7;
+  --red:#c0392b;--red-pale:#fdf0ee;
+  --amber:#e67e22;--amber-pale:#fef9f0;
+  --blue:#1a6ea8;--blue-pale:#eef6fb;
+  --green:#27ae60;--green-pale:#edfaf3;
+  --purple:#6c3483;--purple-pale:#f5eef8;
+  --page:#fafaf7;--paper:#ffffff;
+  --border:#e8e4d8;--border-strong:#c8c0a8;
+  --text:#2c2c2c;--text-mid:#555;--text-light:#888;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--page);color:var(--text);line-height:1.75;font-size:16px;}
+.book-header{background:var(--ink);color:white;position:relative;overflow:hidden;}
+.book-header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal-light),var(--gold));}
+.book-header-inner{max-width:880px;margin:0 auto;padding:56px 40px;position:relative;z-index:2;}
+.book-series{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:10px;}
+.chapter-num{font-family:'Lora',serif;font-size:90px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;position:absolute;right:40px;top:30px;font-style:italic;}
+.book-title{font-family:'Lora',serif;font-size:36px;font-weight:700;line-height:1.2;margin-bottom:14px;color:white;}
+.book-title span{color:var(--gold-light);font-style:italic;}
+.book-subtitle{font-size:16px;color:rgba(255,255,255,0.6);max-width:620px;line-height:1.6;margin-bottom:26px;}
+.chapter-meta{display:flex;gap:18px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.45);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
+.page-wrap{max-width:880px;margin:0 auto;padding:0 40px 80px;}
+.toc-box{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:22px 26px;margin:32px 0;box-shadow:var(--shadow);}
+.toc-title{font-family:'Lora',serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.toc-list{list-style:none;columns:2;column-gap:28px;}
+.toc-list li{font-size:13px;color:var(--text-mid);padding:3px 0;}
+.toc-list li span{color:var(--gold);font-weight:600;margin-right:6px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;margin-top:50px;display:flex;align-items:center;gap:10px;}
+.sm::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3;}
+h3{font-family:'Lora',serif;font-size:21px;font-weight:600;color:var(--ink-mid);margin:30px 0 10px;line-height:1.3;}
+h4{font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 7px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:14px;color:var(--text);}
+strong{color:var(--ink);}
+sup a{color:var(--blue);font-size:10px;}
+.story-box{background:linear-gradient(135deg,#fffbf0,#fff8e7);border:2px solid var(--gold-light);border-radius:14px;padding:22px 26px;margin:26px 0;position:relative;overflow:hidden;}
+.story-box::before{content:'🔬';position:absolute;top:-6px;right:16px;font-size:26px;transform:rotate(10deg);}
+.story-label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.story-box p{font-family:'Lora',serif;font-size:14.5px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;}
+.story-box p:last-child{margin-bottom:0;}
+.beginner{background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:17px 21px;margin:16px 0;}
+.bl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.beginner p{font-size:14px;color:var(--ink-mid);margin-bottom:0;}
+.formula-box{background:var(--ink);border-radius:10px;padding:17px 21px;margin:17px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold-light);}
+.fl{font-family:'Source Sans 3',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;}
+.fn{font-family:'Source Sans 3',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.42);margin-top:6px;font-style:italic;}
+.alert{border-radius:8px;padding:15px 19px;margin:17px 0;border-left:4px solid;display:flex;gap:11px;align-items:flex-start;}
+.ai{font-size:18px;flex-shrink:0;margin-top:2px;}
+.ab h5{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ab p{font-size:14px;margin-bottom:0;}
+.a-key{background:#fffbf0;border-color:var(--gold);} .a-key .ab h5{color:var(--gold);}
+.a-uae{background:var(--teal-pale);border-color:var(--teal);} .a-uae .ab h5{color:var(--teal);}
+.a-warn{background:var(--amber-pale);border-color:var(--amber);} .a-warn .ab h5{color:var(--amber);}
+.a-danger{background:var(--red-pale);border-color:var(--red);} .a-danger .ab h5{color:var(--red);}
+.a-good{background:var(--green-pale);border-color:var(--green);} .a-good .ab h5{color:var(--green);}
+.table-wrap{overflow-x:auto;margin:17px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;box-shadow:var(--shadow);border-radius:8px;overflow:hidden;}
+thead th{background:var(--ink);color:white;padding:10px 13px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.4px;}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,0,0,0.018);}
+tbody tr:hover td{background:var(--gold-pale);}
+.tp{color:var(--green);font-weight:600;} .tf{color:var(--red);font-weight:600;} .tw{color:var(--amber);font-weight:600;} .th{color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;}
+.flag-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:var(--shadow);}
+.flag-header{display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid var(--border);}
+.flag-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:18px;font-weight:700;flex-shrink:0;color:white;}
+.flag-title{font-family:'Lora',serif;font-size:18px;font-weight:700;}
+.flag-body{padding:20px 24px;}
+.flag-body p{font-size:14px;color:var(--text-mid);margin-bottom:10px;}
+.wnums{background:rgba(26,110,168,0.06);border-left:3px solid var(--blue);padding:10px 13px;border-radius:0 6px 6px 0;margin:10px 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--ink-mid);line-height:1.75;}
+.wl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:3px;}
+.wl-s{color:var(--red);} .wl-n{color:var(--amber);} .wl-d{color:var(--green);}
+.chart-box{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;box-shadow:var(--shadow);}
+.ct{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.cs{font-size:12px;color:var(--text-light);margin-bottom:13px;font-style:italic;}
+.cartoon-wrap{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:20px;margin:22px 0;text-align:center;box-shadow:var(--shadow);}
+.cartoon-caption{font-size:12px;color:var(--text-light);font-style:italic;margin-top:10px;}
+.detection-layer{background:var(--paper);border:1px solid var(--border);border-left:4px solid;border-radius:0 10px 10px 0;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow);}
+.dl-title{font-size:13px;font-weight:700;margin-bottom:8px;}
+.dl-body{font-size:13px;color:var(--text-mid);line-height:1.65;}
+.dl-nums{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--page);padding:8px 12px;border-radius:6px;margin-top:10px;color:var(--ink-mid);line-height:1.65;}
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
+.check-item{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;gap:10px;align-items:flex-start;box-shadow:var(--shadow);}
+.check-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;color:white;}
+.check-body{font-size:12px;color:var(--text-mid);line-height:1.5;}
+.check-body strong{color:var(--ink);font-size:13px;display:block;margin-bottom:3px;}
+.uae-section{background:linear-gradient(135deg,#e8f8f7,#d4f1ee);border:1px solid var(--teal);border-radius:12px;padding:24px 26px 24px 40px;margin:34px 0;position:relative;}
+.uae-flag-stripe{position:absolute;left:0;top:0;bottom:0;width:8px;border-radius:12px 0 0 12px;background:linear-gradient(to bottom,#00732f 25%,#ffffff 25%,#ffffff 50%,#000000 50%,#000000 75%,#ff0000 75%);}
+.uae-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:white;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.uae-section h3{color:var(--teal);margin-top:0;}
+.sherlock{background:linear-gradient(135deg,#1a1a2e,#2d2d4e);border-radius:12px;padding:24px 26px;margin:34px 0;color:white;}
+.sh-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.sh-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:18px;}
+.clue{display:flex;gap:11px;margin-bottom:13px;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.clue:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.cn{background:var(--gold);color:var(--ink);min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.clue p{font-size:13px;color:rgba(255,255,255,0.82);margin-bottom:0;line-height:1.65;}
+.clue strong{color:var(--gold-light);}
+.cnums{background:rgba(201,168,76,0.1);border-left:2px solid var(--gold);padding:8px 11px;margin-top:6px;border-radius:0 4px 4px 0;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.72);line-height:1.65;}
+.ref-section{background:var(--blue-pale);border:1px solid #c0d8f0;border-radius:8px;padding:17px 21px;margin:34px 0 16px;}
+.ref-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ref-list{list-style:none;}
+.ref-list li{font-size:12px;color:var(--text-mid);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.ref-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+.ref-list a{color:var(--blue);text-decoration:none;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin:42px 0;}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid var(--border);margin-top:34px;}
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 17px;background:var(--ink);color:white;border:none;border-radius:6px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:var(--ink-mid);}
+@media(max-width:768px){.page-wrap{padding:0 16px 60px;}.book-title{font-size:26px;}.checklist-grid{grid-template-columns:1fr;}.toc-list{columns:1;}.chapter-num{display:none;}}
+</style>
+</head>
+<body>
+
+<div class="book-header">
+  <div class="book-header-inner">
+    <div class="book-series">ICAAP &amp; Financial Ratios in UAE Banking · Chapter Six</div>
+    <div class="chapter-num">06</div>
+    <h1 class="book-title"><span>Inconsistency Flags</span><br>&amp; Advanced Analysis</h1>
+    <p class="book-subtitle">The four critical cross-ratio flags that expose hidden risk — when individual ratios look fine but their combination tells a dangerous story. Full numerical examples, detection frameworks, and the compound stress scenario where all four flags appear simultaneously.</p>
+    <div class="chapter-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Cross-Ratio Analysis</div>
+      <div class="meta-item"><div class="meta-dot"></div>ICAAP Advanced Techniques</div>
+      <div class="meta-item"><div class="meta-dot"></div>Window Dressing Detection</div>
+      <div class="meta-item"><div class="meta-dot"></div>Advanced</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<div class="toc-box">
+  <div class="toc-title">In This Chapter</div>
+  <ul class="toc-list">
+    <li><span>6.1</span> The Orchestra Parable</li>
+    <li><span>6.2</span> Why Cross-Ratio Analysis Matters</li>
+    <li><span>6.3</span> Flag 1 — Rising Stage 2, Stable NPL</li>
+    <li><span>6.4</span> Flag 2 — Falling NIM, Stable ROE</li>
+    <li><span>6.5</span> Flag 3 — High LCR, Failing NSFR</li>
+    <li><span>6.6</span> Flag 4 — Strong CET1, Low PPP/RWA</li>
+    <li><span>6.7</span> The Compound Stress Scenario</li>
+    <li><span>6.8</span> Four-Layer Detection Framework</li>
+    <li><span>6.9</span> UAE Context</li>
+    <li><span>6.10</span> Master Detection Checklist</li>
+    <li><span>6.11</span> Sherlock Holmes — Advanced Detection</li>
+    <li><span>6.12</span> References</li>
+  </ul>
+</div>
+
+<!-- 6.1 NARRATIVE -->
+<div class="sm">6.1 — The Story</div>
+<h2>The Orchestra Out of Tune</h2>
+
+<div class="story-box">
+  <div class="story-label">A Beginner's Parable</div>
+  <p>Imagine a 100-piece orchestra at the Abu Dhabi Philharmonic. You are sitting in the audience as the conductor taps his baton. The cellos begin — they sound magnificent. The violins enter — also beautiful. The brass section comes in — impressive. Every section, evaluated individually, sounds perfect.</p>
+  <p>But something is wrong. The cellos are playing slightly flat. The violins are playing half a beat ahead. The brass is compensating by playing louder than the score requires. Each instrument is covering for the other's flaw. Individually, each section would pass any audition. Together, they are producing something subtly discordant that only a trained conductor notices.</p>
+  <p>Bank ratios work exactly the same way. An NPL ratio of 4% sounds fine. A broad coverage ratio of 115% sounds fine. A CET1 ratio of 13.5% sounds fine. A PPP/RWA of 0.7% sounds fine — until you notice it is inconsistent with the other three. The NPL suppression (Stage 2 accumulation) is covering the credit deterioration. The broad coverage (general provisions) is covering the weak specific coverage. The high CET1 (from a capital raise) is covering the inability to self-repair. Only by reading all four together does the full story emerge. <strong>Cross-ratio analysis is the conductor's ear — the ability to hear the whole orchestra, not just the individual instruments.</strong></p>
+</div>
+
+<!-- 6.2 WHY CROSS-RATIO MATTERS -->
+<div class="sm">6.2 — Why It Matters</div>
+<h2>Why Cross-Ratio Analysis Is the Most Powerful ICAAP Tool</h2>
+
+<div class="beginner">
+  <div class="bl">🟢 Simple: The Broken Thermometer Test</div>
+  <p>If a patient's thermometer reads 36.6°C (normal) but they are sweating, shaking, and their blood pressure is 160/110 — you do not trust the thermometer. You look at all the signals together and conclude something is wrong despite the normal temperature. <strong>A single passing ratio is a single instrument. Inconsistency between related ratios is the diagnostic signal that something is being hidden or missed.</strong></p>
+</div>
+
+<p><strong>Technical explanation:</strong> Risk cannot be destroyed — it can only be relocated. Every form of window dressing that improves one ratio must, by the conservation of financial risk, worsen something else somewhere. The discipline of cross-ratio analysis is finding where the risk went. Because the risk is always there — it just moved to a less-observed corner of the balance sheet or income statement.</p>
+
+<div class="formula-box">
+  <div class="fl">The Conservation of Financial Risk Principle</div>
+  If Ratio A improves through window dressing:
+  → the underlying risk did NOT disappear
+  → it relocated to: Ratio B (same dimension), OR
+                     Ratio C (different dimension), OR
+                     Off-balance sheet (outside all ratios)
+
+  The detective work: identify which ratio should have worsened — and check whether it did.
+  If it did NOT worsen: either (a) the improvement was genuine, or (b) that ratio is also being manipulated.
+  Both ratios being simultaneously "improved" narrows the detection to the off-balance sheet.
+  <div class="fn">This principle underlies the four inconsistency flags in this chapter. Each flag describes a specific relocation pattern where risk moved from an observed ratio to a less-observed one.</div>
+</div>
+
+<div class="cartoon-wrap">
+<svg width="100%" viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" style="max-width:720px">
+  <rect width="720" height="250" fill="#fafaf7" rx="8"/>
+  <defs>
+    <marker id="ac6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#c0392b" stroke-width="1.5"/>
+    </marker>
+    <marker id="ac6g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#27ae60" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <!-- Four ratio boxes -->
+  <rect x="40" y="80" width="140" height="70" rx="8" fill="rgba(39,174,96,0.1)" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="110" y="105" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">NPL Ratio</text>
+  <text x="110" y="121" font-family="'Source Sans 3',sans-serif" font-size="13" fill="#27ae60" text-anchor="middle" font-weight="700">4.1% ✓</text>
+  <text x="110" y="138" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#555" text-anchor="middle">Stable, within range</text>
+
+  <rect x="220" y="80" width="140" height="70" rx="8" fill="rgba(192,57,43,0.08)" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="290" y="105" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">Stage 2 Ratio</text>
+  <text x="290" y="121" font-family="'Source Sans 3',sans-serif" font-size="13" fill="#c0392b" text-anchor="middle" font-weight="700">21% ↑↑↑</text>
+  <text x="290" y="138" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#555" text-anchor="middle">Rising 6 quarters</text>
+
+  <rect x="400" y="80" width="140" height="70" rx="8" fill="rgba(39,174,96,0.1)" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="470" y="105" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">CET1 Ratio</text>
+  <text x="470" y="121" font-family="'Source Sans 3',sans-serif" font-size="13" fill="#27ae60" text-anchor="middle" font-weight="700">13.5% ✓</text>
+  <text x="470" y="138" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#555" text-anchor="middle">Above target</text>
+
+  <rect x="580" y="80" width="130" height="70" rx="8" fill="rgba(192,57,43,0.08)" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="645" y="105" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">PPP/RWA</text>
+  <text x="645" y="121" font-family="'Source Sans 3',sans-serif" font-size="13" fill="#c0392b" text-anchor="middle" font-weight="700">0.7% ↓↓</text>
+  <text x="645" y="138" font-family="'Source Sans 3',sans-serif" font-size="9.5" fill="#555" text-anchor="middle">Declining earnings</text>
+
+  <!-- Cross-arrows showing inconsistency -->
+  <line x1="180" y1="105" x2="218" y2="105" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#ac6)"/>
+  <text x="199" y="99" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#c0392b" text-anchor="middle">✗ inconsistent</text>
+
+  <line x1="360" y1="115" x2="398" y2="115" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#ac6)"/>
+  <text x="379" y="109" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#c0392b" text-anchor="middle">✗ inconsistent</text>
+
+  <!-- Explanation box -->
+  <rect x="40" y="175" width="640" height="50" rx="8" fill="var(--red-pale)" stroke="#c0392b" stroke-width="1"/>
+  <text x="360" y="195" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#c0392b" text-anchor="middle" font-weight="700">Individually: 3 of 4 ratios look fine. Together: the pattern is unmistakeable.</text>
+  <text x="360" y="211" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#555" text-anchor="middle">Rising Stage 2 contradicts stable NPL (window dressing). Low PPP/RWA contradicts strong CET1 (no self-repair engine).</text>
+
+  <text x="360" y="240" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Figure 6.1 — Three green ratios, one red — but the red ones invalidate the green ones when read together.</text>
+</svg>
+<div class="cartoon-caption">Individual ratios mislead. Cross-ratio inconsistencies reveal. This is the central lesson of advanced ICAAP analysis.</div>
+</div>
+
+<!-- 6.3 FLAG 1 -->
+<div class="sm">6.3 — Flag 1</div>
+
+<div class="flag-card">
+  <div class="flag-header" style="background:rgba(192,57,43,0.06)">
+    <div class="flag-num" style="background:var(--red)">F1</div>
+    <div>
+      <div class="flag-title" style="color:var(--red)">Rising Stage 2 Ratio but Stable NPL Ratio</div>
+      <div style="font-size:13px;color:var(--text-light);margin-top:3px">The primary signal of Stage 2 accumulation window dressing — Chapter 4 mechanism in full analytical detail</div>
+    </div>
+  </div>
+  <div class="flag-body">
+    <p><strong>What the inconsistency reveals:</strong> NPL ratio measures Stage 3 (credit-impaired) loans. Stage 2 measures loans with a significant increase in credit risk — deteriorating but not yet defaulted. In a genuinely healthy portfolio, both should move in the same direction: when conditions improve, both fall; when conditions deteriorate, both rise. A flat NPL alongside rising Stage 2 almost always means the bank is <strong>actively keeping deteriorating loans out of Stage 3</strong> — through restructuring, evergreening, or weak UTP classification.</p>
+
+    <p><span class="wl wl-s">Six-Quarter Divergence Pattern — Full Numbers:</span></p>
+    <div class="wnums">Bank: AED 20,000m gross loan book. UAE real estate developer concentration 42%.
+Property market declining 5–8% per quarter over the observation period.
+
+Quarter | NPL ratio | Stage 2 ratio | Broad coverage | Shadow NPL estimate
+Q1      |   4.0%    |     8.0%      |    110%        |  8,000×8%×35% = 4.0% + 2.24% = 6.24%
+Q2      |   4.0%    |    10.4%      |    112%        |  shadow NPL: 7.2%
+Q3      |   4.1%    |    12.8%      |    115%        |  shadow NPL: 8.6%
+Q4      |   4.1%    |    15.5%      |    118%        |  shadow NPL: 9.8% ← FLAG RAISED
+Q5      |   4.2%    |    18.2%      |    120%        |  shadow NPL: 10.6%
+Q6      |   4.2%    |    21.0%      |    122%        |  shadow NPL: 11.6%
+
+Shadow NPL formula:
+  Stage 2 balance = 21% × 20,000 = AED 4,200m
+  Historical Stage 2→3 migration rate: 35% (UAE RE loans in downturn)
+  Shadow NPLs from Stage 2: 4,200 × 35% = AED 1,470m
+  Reported NPLs: 4.2% × 20,000 = AED 840m
+  Shadow NPL ratio: (840 + 1,470) ÷ 20,000 = 11.55% vs reported 4.2%
+
+Provision gap estimate:
+  Additional specific provision on shadow NPLs: 1,470 × 45% LGD = AED 662m
+  Current general provisions (Stage 2): ~3.2% × 4,200 = AED 134m
+  Net additional provision required when migration occurs: AED 528m
+  CET1 impact: 528 × (1−9%) = AED 481m = 1.7% of RWA</div>
+
+    <p><span class="wl wl-n">The Cliff-Edge Realisation:</span></p>
+    <div class="wnums">Q7 — Property price falls another 12% in one quarter; 3 developers miss payments:
+  New Stage 3 migrations: AED 1,430m (from Stage 2, as predicted by shadow NPL)
+  NPL ratio: 4.2% → (840 + 1,430) ÷ 20,000 = 11.35% ← +7.15pp in ONE QUARTER
+
+  Additional impairment charge required in Q7:
+    New specific provisions: 1,430 × 45% LGD = AED 644m
+    Less: Stage 2 general provisions released: AED 134m (now converted to specific)
+    Net additional P&L charge: AED 510m
+
+  CET1 impact: 510 × (1−9%) = AED 464m = 1.66% of RWA
+  CET1 falls from e.g. 12.5% to 10.8% in a single quarter — visible shock after 6 quiet quarters</div>
+
+    <div class="chart-box">
+      <div class="ct">Flag 1 — NPL vs Stage 2 Divergence Over 7 Quarters</div>
+      <div class="cs">Flat NPL concealing rapidly accumulating hidden stress. Q7 shows the cliff-edge realisation.</div>
+      <canvas id="flag1Chart" height="120"></canvas>
+    </div>
+
+    <p><span class="wl wl-d">Detection Tests:</span></p>
+    <div class="wnums">Test 1: Stage 2 trend rate
+  If Stage 2 rises &gt;2pp per year while NPL is flat → flag immediately
+
+Test 2: Shadow NPL calculation
+  Shadow NPL = (Stage 2 × historical migration rate + reported NPL) ÷ gross loans
+  If shadow NPL exceeds reported NPL by more than 3pp → material window dressing suspected
+
+Test 3: Stage 2 provision rate vs historical LGD
+  If Stage 2 provision rate &lt; 50% of historical post-migration LGD → under-provisioned
+
+Test 4: Forbearance ratio
+  Request restructured/modified loans as % of gross loans
+  If &gt;5% and rising → evergreening likely; apply higher Stage 2 ECL rate
+
+Test 5: New NPL inflow rate
+  New Stage 3 inflows each quarter ÷ opening Stage 2 balance
+  If inflow rate is &lt;5% despite rising Stage 2 → migrations being suppressed</div>
+  </div>
+</div>
+
+<!-- 6.4 FLAG 2 -->
+<div class="sm">6.4 — Flag 2</div>
+
+<div class="flag-card">
+  <div class="flag-header" style="background:rgba(230,126,34,0.06)">
+    <div class="flag-num" style="background:var(--amber)">F2</div>
+    <div>
+      <div class="flag-title" style="color:var(--amber)">Falling NIM but Stable ROE</div>
+      <div style="font-size:13px;color:var(--text-light);margin-top:3px">The leverage compensation treadmill — Chapter 5 mechanism showing silent CET1 deterioration behind a stable headline</div>
+    </div>
+  </div>
+  <div class="flag-body">
+    <p><strong>What the inconsistency reveals:</strong> NIM is the primary driver of bank earnings. A falling NIM reduces income per unit of assets. ROE measures profit ÷ equity. The only way to maintain stable ROE when NIM (and therefore ROA) is falling is to grow assets faster than equity — i.e. increase leverage. But increasing leverage thins the CET1 ratio and leverage ratio. The bank is running a treadmill: growing its way to the same profit with less capital coverage per unit of risk.</p>
+
+    <p><span class="wl wl-s">Full Four-Quarter Example:</span></p>
+    <div class="wnums">Bank: AED 45,000m total assets. Starting CET1 ratio 13.5%. Tax rate 9%.
+
+Quarter | NIM   | Net profit | Total assets | Equity  | ROE   | ROA   | Lev. ratio | CET1 approx
+Q1      | 3.80% | AED 540m   | AED 45,000m  | 4,500m  | 12.0% | 1.20% | 10.0%      | 13.5%
+Q2      | 3.50% | AED 540m   | AED 49,100m  | 4,500m  | 12.0% | 1.10% |  9.2%      | 12.7%
+Q3      | 3.20% | AED 540m   | AED 54,000m  | 4,500m  | 12.0% | 1.00% |  8.3%      | 12.0%
+Q4      | 2.90% | AED 540m   | AED 60,000m  | 4,500m  | 12.0% | 0.90% |  7.5%      | 11.3%
+
+Observation: ROE perfectly flat. Board sees "consistent, stable 12% ROE."
+Reality: Leverage ratio fell 250bp in 4 quarters. CET1 fell 220bp.
+Bank has grown assets by AED 15,000m (33%) with ZERO increase in equity.
+
+Tipping point calculation:
+  If NIM falls to 2.6% (Fed cutting scenario) in Q5:
+    To maintain AED 540m profit: need AED 20,769m MORE assets (at 2.6% ROA equivalent)
+    This requires AED 65,000m+ in total assets → leverage ratio 6.9% → CET1 ~10.8%
+  At some point asset growth becomes physically impossible (funding constraints, ASRR breach)
+  When growth stops: profit collapses from AED 540m to ~AED 375m
+  ROE falls suddenly from 12% to 8.3% — first visible signal
+  But CET1 is already 220bp lower than when the treadmill started</div>
+
+    <div class="chart-box">
+      <div class="ct">Flag 2 — ROE Stable While ROA Falls and Leverage Rises</div>
+      <div class="cs">The treadmill: stable ROE concealing silent CET1 deterioration through rising leverage</div>
+      <canvas id="flag2Chart" height="120"></canvas>
+    </div>
+
+    <p><span class="wl wl-d">Detection Tests:</span></p>
+    <div class="wnums">Test 1: ROE decomposition
+  ROE = ROA × (Assets ÷ Equity)
+  If ROA falls &gt;0.1% per year AND equity multiplier rises &gt;0.5× → treadmill confirmed
+
+Test 2: Leverage ratio trend
+  If leverage ratio falls &gt;50bp per year with stable ROE → compensation confirmed
+  Red flag: leverage ratio below 6% (approaching regulatory minimum of 3%)
+
+Test 3: Asset growth vs deposit growth
+  If assets grow 25% but deposits grow 10% → wholesale funding gap growing
+  → Likely NSFR/ASRR deterioration simultaneously (Flag 3 often accompanies Flag 2)
+
+Test 4: Normalised ROE
+  Normalised ROE = ROA × (5-year historical average equity multiplier)
+  If normalised ROE is &gt;300bp below reported ROE → leverage doing the work</div>
+  </div>
+</div>
+
+<!-- 6.5 FLAG 3 -->
+<div class="sm">6.5 — Flag 3</div>
+
+<div class="flag-card">
+  <div class="flag-header" style="background:rgba(26,110,168,0.06)">
+    <div class="flag-num" style="background:var(--blue)">F3</div>
+    <div>
+      <div class="flag-title" style="color:var(--blue)">High LCR but Failing NSFR (or High ELAR but Failing ASRR)</div>
+      <div style="font-size:13px;color:var(--text-light);margin-top:3px">The short-term vs structural liquidity paradox — Chapter 3 mechanics in advanced cross-ratio context</div>
+    </div>
+  </div>
+  <div class="flag-body">
+    <p><strong>What the inconsistency reveals:</strong> LCR measures 30-day survival. NSFR measures 1-year structural funding stability. A bank with high LCR and failing NSFR has purchased HQLA with short-term wholesale funding — passing the 30-day test while creating a structural cliff edge on day 31. The same pattern appears in the UAE framework as: high ELAR (point-in-time liquid assets ÷ liabilities looks fine) but failing ASRR (the loan book is funded by unstable GRE deposits).</p>
+
+    <p><span class="wl wl-s">Full Example — Category 1 UAE Bank:</span></p>
+    <div class="wnums">Starting position: LCR 76% (failing) | NSFR 76% (failing) — both visible
+
+Window dressing: buy AED 400m additional Level 1 HQLA funded by short-term wholesale
+
+Post-purchase:
+  HQLA: 1,500 → 1,900m (+400)
+  Short-term wholesale: 1,200 → 1,600m (+400, at 100% outflow rate)
+
+LCR calculation:
+  New outflows: 400 × 100% = +400m outflow; net outflows 1,610 → 2,010m
+  BUT: 400 HQLA added to numerator at 0% haircut (Level 1)
+  New LCR: 1,900 ÷ 2,010 = 94.5% ← improved 18.5pp  (still failing but moving toward 100%)
+
+Repeat 2 more times (total AED 1,200m purchase):
+  HQLA: 2,700m | Short-term wholesale: 2,400m
+  New outflows: 1,610 + 1,200 = 2,810m
+  LCR: 2,700 ÷ 2,810 = 96.1% ← almost passing!
+  NSFR: ASF barely changes (wholesale is 0% ASF) | RSF falls (HQLA = 0% RSF)
+  NSFR: 79% → 88% ← improved mechanically but STILL FAILING structural test
+
+Why LCR improves faster than NSFR:
+  Each AED 100 of wholesale adds: +100 to LCR numerator, +40 to denominator (40% outflow rate)
+  Net LCR improvement per 100: +60/denominator (always improves LCR mechanically!)
+  Each AED 100 of wholesale adds: +0 to NSFR numerator (0% ASF), −0 to denominator (HQLA = 0% RSF)
+  Net NSFR improvement: none from new wholesale. Only RSF denominator falls (HQLA displacing other assets).
+
+Day-31 cliff edge:
+  After window dressing: LCR 96%, NSFR 88%
+  Day 31: need to roll AED 2,400m short-term wholesale
+  If wholesale market closes (as in 2009): bank has consumed its HQLA buffer in days 1-30
+  Remaining HQLA: ~300m | Remaining long-term loans: AED 8,000m (illiquid)
+  Survival beyond day 30: effectively zero</div>
+
+    <div class="chart-box">
+      <div class="ct">Flag 3 — LCR Rising While NSFR Lags and Wholesale Dependency Grows</div>
+      <div class="cs">Three purchases of HQLA with wholesale funding: LCR improves mechanically, NSFR barely moves, structural fragility worsens</div>
+      <canvas id="flag3Chart" height="110"></canvas>
+    </div>
+
+    <p><span class="wl wl-d">Detection Tests:</span></p>
+    <div class="wnums">Test 1: Cross-ratio consistency
+  LCR rising + NSFR flat or falling + wholesale dependency rising = HQLA gaming confirmed
+
+Test 2: Day-31 survival horizon
+  (HQLA − 30-day outflows) ÷ daily wholesale maturity run-rate
+  If answer &lt;15 days: structural cliff edge despite passing LCR
+
+Test 3: HQLA composition trend
+  If Level 1 HQLA grows rapidly while repo book grows simultaneously → gaming
+  Check: is HQLA encumbered (pledged as collateral for the new wholesale)?
+
+Test 4: ELAR / ASRR inconsistency (UAE Category 2)
+  ELAR passing but ASRR failing → GRE deposit structural mismatch
+  GRE deposits provide near-zero stable resources but count at face value in ELAR denominator
+  The ELAR test is passed easily; the structural ASRR test reveals the real risk</div>
+  </div>
+</div>
+
+<!-- 6.6 FLAG 4 -->
+<div class="sm">6.6 — Flag 4</div>
+
+<div class="flag-card">
+  <div class="flag-header" style="background:rgba(108,52,131,0.06)">
+    <div class="flag-num" style="background:var(--purple)">F4</div>
+    <div>
+      <div class="flag-title" style="color:var(--purple)">Strong CET1 but Low PPP/RWA</div>
+      <div style="font-size:13px;color:var(--text-light);margin-top:3px">Capital today vs capital tomorrow — the earnings engine that determines long-run ICAAP sustainability</div>
+    </div>
+  </div>
+  <div class="flag-body">
+    <p><strong>What the inconsistency reveals:</strong> CET1 is a stock — it represents accumulated history (past retained earnings, past capital raises). PPP/RWA is a flow — it represents the rate at which the bank can self-repair under stress. A high CET1 with low PPP/RWA means the bank is well-capitalised today but structurally fragile over time. Every AED of credit loss permanently erodes CET1 with no earnings mechanism to refill it. The high CET1 is a one-time endowment, not a sustainable competitive advantage.</p>
+
+    <p><span class="wl wl-s">Two-Bank Stress Projection — Full Numbers:</span></p>
+    <div class="wnums">Both banks: Same RWA AED 28,000m | Same stress scenario | Same starting CET1 14.1%
+Stressed cost of risk: Year 1: 1.8% | Year 2: 3.4% | Year 3: 2.9%
+
+BANK A (Strong PPP): NIM 4.5% | CIR 36% | PPP/RWA 3.8%
+  Annual PPP: 3.8% × 28,000 = AED 1,064m
+  Year 1: PPP 1,064 − CoR (504) = profit 560 × 91% = AED 510m retained
+           CET1: 4,200−(retained earnings negative: profit retained adds) → 14.8%
+  Year 2: PPP 852 − CoR (952) = loss (100) × 91% = −91m → CET1: 15.3% (RWA rise offsets)
+  Year 3: PPP 750 − CoR (812) = loss (62) × 91% = −56m → CET1: 15.7% (profitable years buffer)
+
+BANK B (Weak PPP): NIM 2.8% | CIR 64% | PPP/RWA 0.6%
+  Annual PPP: 0.6% × 28,000 = AED 168m
+  Year 1: PPP 134 − CoR (504) = loss (370) × 91% = −337m → CET1: 12.7%
+  Year 2: PPP 118 − CoR (952) = loss (834) × 91% = −759m → CET1: 11.3% (RWA 33,600)
+  Year 3: PPP 100 − CoR (812) = loss (712) × 91% = −648m → CET1: 9.4% (RWA 34,800)
+  Year 4 projection: at same rate → CET1: 7.6% → 3-5 year breach approaching
+
+Capital runway comparison:
+  Bank A: (14.1% − 7%) ÷ ~0% annual drain = effectively unlimited
+  Bank B: (14.1% − 7%) ÷ 1.73% annual drain = 4.1 years to floor under persistent stress</div>
+
+    <div class="chart-box">
+      <div class="ct">Flag 4 — CET1 Trajectory: Strong PPP/RWA vs Weak PPP/RWA Bank</div>
+      <div class="cs">Identical starting CET1. Same stress. Different fate — determined entirely by earnings quality.</div>
+      <canvas id="flag4Chart" height="120"></canvas>
+    </div>
+
+    <p><span class="wl wl-d">Detection Tests:</span></p>
+    <div class="wnums">Test 1: Capital runway calculation
+  Runway = (CET1 − 7%) ÷ [(stressed CoR − PPP/RWA) × (1 − tax)]
+  Red flag: runway &lt;3 years under severe stress
+
+Test 2: CET1 source analysis
+  Of current CET1, how much came from: (a) accumulated retained earnings vs (b) recent capital raises
+  A bank that raised AED 1,500m of equity 2 years ago but has PPP/RWA of 0.7% has a structural problem:
+  The capital raise is eroding slowly as losses exceed earnings. CET1 will return to equilibrium level
+  determined by recurring earnings — not the raised amount.
+
+Test 3: PPP/RWA vs cost of equity
+  If PPP/RWA (after tax) &lt; cost of equity (typically 8–10%), the bank's equity is destroying value
+  Even without any credit stress — the going-concern capital position is weakening each year
+  Cost of equity proxy: if bank trades at &lt;0.8× book value, market implies earnings below cost of equity
+
+Test 4: Cross-flag check with Flag 1
+  If Flag 4 (weak PPP/RWA) AND Flag 1 (Stage 2 rising) simultaneously:
+  → Low PPP/RWA means credit losses immediately hit CET1
+  → Hidden Stage 2 stock will become sudden NPL inflows
+  → Compound scenario: Year 3 CET1 may be much worse than either flag suggests individually</div>
+  </div>
+</div>
+
+<!-- 6.7 COMPOUND STRESS -->
+<div class="sm">6.7 — Compound Stress</div>
+<h2>The Compound Stress Scenario — All Four Flags Together</h2>
+
+<p>In a real crisis, all four flags do not appear sequentially — they appear simultaneously, compound each other, and create a feedback loop. This is exactly what happened to several UAE banks in 2009. The compound scenario is the most important stress test an ICAAP analyst must run.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Year</th><th>Flag 1 — NPL/Stage 2</th><th>Flag 2 — NIM/ROE</th><th>Flag 3 — LCR/NSFR</th><th>Flag 4 — CET1/PPP</th><th>Combined CET1 Impact</th></tr></thead>
+<tbody>
+  <tr><td><strong>Pre-stress</strong></td><td>NPL 4%, Stage 2 21% hidden</td><td>ROE stable, NIM 2.9%, leverage rising</td><td>LCR 102%, NSFR 88% failing</td><td>CET1 14.1%, PPP/RWA 0.7%</td><td class="tp">14.1% — looks fine individually</td></tr>
+  <tr><td><strong>Stress begins</strong></td><td>Stage 2 → Stage 3 migration starts: +AED 700m NPL</td><td>Wholesale funding costs rise 150bp: NIM −0.6%</td><td>Wholesale refuses to roll: LCR consumed, HQLA used</td><td>Credit losses exceed PPP immediately: every AED hits CET1</td><td class="tw">12.8% — visible deterioration</td></tr>
+  <tr><td><strong>Year 1</strong></td><td>NPL 8% → provisions +AED 560m P&L charge</td><td>NIM 2.3% → PPP falls further to 0.3%</td><td>HQLA buffer 40% consumed; fire sales begin</td><td>Net loss AED 350m; CET1 shrinking fast</td><td class="tf">10.4% — approaching danger zone</td></tr>
+  <tr><td><strong>Year 2</strong></td><td>NPL 12.5% → provisions +AED 820m P&L charge</td><td>NIM 1.8% → PPP barely covers opex</td><td>Fire sales at 20% discount → AED 180m realised loss</td><td>Annual drain 2.5% with PPP nearly zero</td><td class="tf">7.9% — near breach</td></tr>
+  <tr><td><strong>Year 3</strong></td><td>NPL stabilises 14% but book still AED 1.6bn provisioning gap</td><td>NIM 1.5% → bank structurally loss-making on recurring basis</td><td>Liquidity stabilised only by CBUAE support</td><td>PPP negative → every AED of loss is pure CET1 drain</td><td class="tf">5.8% ← BREACH</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-danger">
+  <div class="ai">🚨</div>
+  <div class="ab">
+    <h5>Why the Compound Scenario Is Far Worse Than Summing the Individual Flags</h5>
+    <p>Each flag individually might appear manageable — NPL rising but coverage adequate; NIM falling but ROE stable; LCR passing; CET1 above target. But the flags are not independent — they interact and compound. Rising NPLs (Flag 1) consume the earnings the bank needed to cover higher funding costs (Flag 2). Higher funding costs make the HQLA-with-wholesale strategy collapse (Flag 3). The collapse of LCR forces fire sales which crystallise losses that a low PPP/RWA bank cannot absorb (Flag 4). The order matters: Flag 3 triggers the crisis; Flag 1 delivers the losses; Flag 2 removes the earnings firewall; Flag 4 means every loss hits CET1 permanently. The ICAAP must model all four together — not in separate silos.</p>
+  </div>
+</div>
+
+<!-- 6.8 DETECTION LAYERS -->
+<div class="sm">6.8 — Detection Framework</div>
+<h2>The Four-Layer Detection Framework</h2>
+
+<div class="detection-layer" style="border-left-color:var(--red)">
+  <div class="dl-title" style="color:var(--red)">Layer 1 — Cross-Ratio Inconsistency</div>
+  <div class="dl-body">Two ratios measuring related phenomena should move together. When they diverge, risk has been relocated from one to the other.</div>
+  <div class="dl-nums">Key inconsistency pairs to monitor:
+  NPL flat + Stage 2 rising → credit stress accumulating (Flag 1)
+  ROE stable + ROA falling + leverage rising → compensation treadmill (Flag 2)
+  LCR rising + NSFR flat/falling + wholesale rising → HQLA gaming (Flag 3)
+  CET1 strong + PPP/RWA weak + capital raise history → endowment not engine (Flag 4)
+  Broad coverage high + narrow coverage falling → provision composition (Chapter 4)
+  ELAR passing + ASRR failing → GRE structural mismatch (Chapter 3)</div>
+</div>
+
+<div class="detection-layer" style="border-left-color:var(--amber)">
+  <div class="dl-title" style="color:var(--amber)">Layer 2 — Trend Divergence Within a Single Ratio</div>
+  <div class="dl-body">Each headline ratio has components that should move consistently. When components diverge internally, manipulation is hiding inside the ratio itself.</div>
+  <div class="dl-nums">Internal component divergence signals:
+  LCR: HQLA growing + net outflows growing at same rate → genuine; HQLA growing + outflows barely changing → gaming
+  ROE: stable but ROA falling → leverage compensation (Flag 2 detection within ROE alone)
+  Coverage: broad ratio rising + specific ratio falling → provision composition manipulation
+  CET1: ratio rising + RWA density falling + no portfolio change → model recalibration (Chapter 2)
+  PPP: total PPP rising + recurring PPP flat → disposal gains inflating headline (Chapter 5)</div>
+</div>
+
+<div class="detection-layer" style="border-left-color:var(--blue)">
+  <div class="dl-title" style="color:var(--blue)">Layer 3 — Sub-Ratio Drilling</div>
+  <div class="dl-body">Headline ratios aggregate away detail. Sub-ratios expose what is concealed inside.</div>
+  <div class="dl-nums">Critical sub-ratios by headline ratio:
+  NPL ratio → Stage 2 ratio, forbearance ratio, new NPL inflow rate, write-off rate
+  Coverage ratio → narrow (specific only) vs broad, Stage 2 provision rate vs LGD
+  LCR → HQLA composition (Level 1 % vs 2A/2B), day-31 survival horizon, currency split
+  NSFR → ASF by source, wholesale dependency %, maturity profile of wholesale
+  CET1 → RWA density, capital generation rate, source of recent CET1 change
+  ROE → ROA trend, equity multiplier trend, core PPP/RWA (ex non-recurring)
+  NIM → asset yield trend, funding cost trend, rate sensitivity (IRRBB)</div>
+</div>
+
+<div class="detection-layer" style="border-left-color:var(--purple)">
+  <div class="dl-title" style="color:var(--purple)">Layer 4 — Stress Reverse Engineering</div>
+  <div class="dl-body">Work backwards from stated stressed ratios to identify embedded assumptions — then test whether those assumptions are internally consistent.</div>
+  <div class="dl-nums">Reverse engineering tests:
+  Credit: If stressed NPL rises from 4% to 8% — what implied Stage 2 migration rate?
+    Is that consistent with UAE 2009 experience (40-60%) or suspiciously optimistic (15%)?
+
+  Liquidity: What is the day-31 survival horizon implied by the LCR figure?
+    What daily wholesale refinancing does the bank need from day 31?
+    Is that consistent with market depth and the bank's own NSFR?
+
+  Capital: Is the stressed CET1 consistent with the implied cost of risk, LGD assumptions,
+    and RWA migration ALL applied simultaneously?
+    Cherry-picked assumptions across sections produce a flattering outcome that
+    simultaneous application would not support.
+
+  Profitability: Does the stressed PPP/RWA reflect the NIM compression AND CIR rise AND
+    volume decline all simultaneously? Or does the model hold one stable while stressing others?</div>
+</div>
+
+<!-- 6.9 UAE CONTEXT -->
+<div class="sm">6.9 — UAE Context</div>
+<div class="uae-section">
+  <div class="uae-flag-stripe"></div>
+  <div>
+    <div class="uae-badge">🇦🇪 UAE Specific — All Four Flags in UAE Context</div>
+    <h3>How the Four Flags Manifested in UAE Banking History</h3>
+
+    <h4>Flag 1 in UAE History — The 2009 GRE Crisis</h4>
+    <p>The 2009 Dubai World / Nakheel restructuring is the textbook UAE example of Flag 1. Several UAE banks had maintained apparently stable NPL ratios throughout 2007–2008 while their GRE and developer loan books were showing clear signs of stress — payment delays, refinancing requests, project cancellations. The restructuring announcements in Q4 2009 triggered mass Stage 3 migrations that pushed some UAE bank NPL ratios from reported 3–5% to observed 10–15% within two quarters. The Stage 2 accumulation had been building for 18–24 months.</p>
+
+    <h4>Flag 2 in UAE History — The 2014–2016 Oil Price Cycle</h4>
+    <p>The 2014–2016 oil price decline (Brent from $115 to $28) reduced UAE government spending, slowed GRE deposit growth, and compressed NIM as funding competition intensified. Several mid-size UAE banks responded by growing their loan books aggressively — maintaining ROE through volume growth as spreads fell. Those that grew most aggressively saw their leverage ratios deteriorate materially, leaving them with less capital cushion when the credit cycle eventually turned.</p>
+
+    <h4>Flag 3 in UAE Context — GRE Deposit Reliance + ASRR</h4>
+    <p>The Flag 3 dynamic in UAE manifests most commonly not as LCR/NSFR divergence (Category 1 banks) but as ELAR passing/ASRR failing (Category 2 banks). A bank with 35% GRE funding can maintain ELAR at 12–15% (ELAR uses total liabilities, treating GRE deposits at face value) while failing ASRR at 115–125% (ASRR weights GRE deposits at near-zero stability). This is precisely the structural mismatch that caused the 2009 funding crisis in smaller UAE banks.</p>
+
+    <h4>Flag 4 in UAE Context — Post-Crisis Capital Raises</h4>
+    <p>Several UAE banks undertook government-supported capital raises in 2009–2011 that significantly boosted CET1 ratios — in some cases to 15–18%. But the underlying earnings engines (NIM, CIR, PPP/RWA) remained structurally weak. Over the subsequent 4–5 years, these banks saw CET1 ratios gradually erode back toward 12–13% as accumulated losses from the remaining NPL book exceeded the thin recurring earnings streams. The Flag 4 pattern was clearly visible to any analyst who separated the capital endowment (historical raises) from the recurring earnings engine.</p>
+
+    <div class="alert a-uae" style="margin-top:16px">
+      <div class="ai">🇦🇪</div>
+      <div class="ab">
+        <h5>CBUAE SREP and Cross-Ratio Monitoring</h5>
+        <p>The CBUAE's Supervisory Review and Evaluation Process (SREP) explicitly includes cross-ratio consistency analysis. Following the 2009 crisis, the CBUAE introduced requirements for banks to submit concurrent NPL, Stage 2, coverage, and earnings data on a quarterly basis — specifically to enable Flag 1 monitoring. The CBUAE has also progressively enhanced ILAAP requirements to capture the Flag 3 pattern (ELAR/ASRR divergence) following cases where banks reported passing individual ratios while failing the structural funding test.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6.10 MASTER CHECKLIST -->
+<div class="sm">6.10 — Master Detection Checklist</div>
+<h2>Master Detection Checklist — 12 Cross-Ratio Checks</h2>
+
+<div class="checklist-grid">
+  <div class="check-item">
+    <div class="check-num" style="background:var(--red)">1</div>
+    <div class="check-body"><strong>NPL vs Stage 2 Divergence</strong>NPL flat/falling while Stage 2 rises &gt;2pp/year → Stage 2 accumulation. Calculate shadow NPL = (Stage 2 × 35%) + reported NPL.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--red)">2</div>
+    <div class="check-body"><strong>Narrow vs Broad Coverage Gap</strong>Gap &gt;30pp and growing → general provision inflation. Calculate what narrow coverage would be if Stage 2 provisions matched historical LGD.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--amber)">3</div>
+    <div class="check-body"><strong>LCR Rising + NSFR Failing + Wholesale Rising</strong>All three moving together → HQLA gaming. Calculate day-31 survival horizon.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--amber)">4</div>
+    <div class="check-body"><strong>ELAR Passing + ASRR Failing</strong>UAE Category 2 specific. GRE deposit structural mismatch. Verify top-20 deposits counterparty classification.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--blue)">5</div>
+    <div class="check-body"><strong>CET1 Rising + RWA Density Falling</strong>No portfolio mix change → IRB model recalibration. Request SA parallel run; check Basel IV output floor compliance.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--blue)">6</div>
+    <div class="check-body"><strong>ROE Stable + ROA Falling + Leverage Rising</strong>Compensation treadmill. Calculate leverage ratio trend and normalised ROE at historical average multiplier.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--purple)">7</div>
+    <div class="check-body"><strong>High CET1 + Low PPP/RWA</strong>Endowment vs engine. Calculate capital runway. If &lt;3 years under severe stress → management action plan required.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--purple)">8</div>
+    <div class="check-body"><strong>PPP Reported vs Core PPP Gap &gt;0.5%</strong>Non-recurring income inflating earnings. Separate recurring NII+fees from disposal gains and provision releases.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--teal)">9</div>
+    <div class="check-body"><strong>Cost of Risk Volatility</strong>Quarterly CoR standard deviation &gt;0.5% with stable credit quality → provision smoothing. Track gross vs net impairment.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--teal)">10</div>
+    <div class="check-body"><strong>ASRR Advances vs Credit RWA Implied Gap</strong>ASRR advances &gt;15% below credit-RWA-implied loan volume → reclassification to investment category.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--gold)">11</div>
+    <div class="check-body"><strong>ELAR Quarter-End Spike</strong>Quarter-end ELAR &gt;300bp above 90-day average → repo window dressing. Check CBUAE reserve balance trend.</div>
+  </div>
+  <div class="check-item">
+    <div class="check-num" style="background:var(--gold)">12</div>
+    <div class="check-body"><strong>ICAAP Stress Scenario vs Historical Severity</strong>Bank's "severe" property stress &lt;30% decline for UAE RE-heavy bank → calibrate against 2009 actual. Ensure simultaneous shocks not sequential.</div>
+  </div>
+</div>
+
+<!-- 6.11 SHERLOCK ADVANCED -->
+<div class="sm">6.11 — Advanced Detection</div>
+<div class="sherlock">
+  <div class="sh-title">🔍 Be Sherlock Holmes — Advanced Cross-Ratio Detection</div>
+  <div class="sh-sub">"The little things are infinitely the most important." — Five advanced techniques that catch the compound window dressing pattern the individual-ratio analyst misses entirely.</div>
+
+  <div class="clue">
+    <div class="cn">1</div>
+    <p><strong>The Four-Flag Simultaneous Screen:</strong> Run all four flags in a single screening exercise on any bank. Score each flag 0 (clean) to 3 (severe). A total score of 6 or above across all four flags indicates a bank where individual ratio analysis would miss significant hidden risk. The compound scenario stress test must be run for any bank scoring 6+.
+    <div class="cnums">Scoring guide:
+Flag 1 (Stage 2 divergence): 0=no divergence; 1=moderate; 2=strong divergence; 3=cliff-edge imminent
+Flag 2 (leverage compensation): 0=clean; 1=slight; 2=moderate; 3=severe treadmill
+Flag 3 (liquidity structure): 0=both pass; 1=LCR>NSFR gap&lt;10pp; 2=gap 10-20pp; 3=NSFR failing &gt;20pp
+Flag 4 (CET1/PPP mismatch): 0=runway&gt;5yr; 1=runway 3-5yr; 2=runway 2-3yr; 3=runway&lt;2yr
+Total score &gt;= 6: Run compound stress. Total score &gt;= 9: Immediate escalation.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">2</div>
+    <p><strong>The Reverse Engineering Consistency Test:</strong> Take the bank's ICAAP stressed CET1 in Year 3 and work backwards. What implied cost of risk, what implied RWA migration, what implied NIM compression, and what implied PPP/RWA does that stressed CET1 require? Are all four assumptions simultaneously consistent with each other, with historical UAE data, and with the bank's current risk profile? If the only way the stressed CET1 can pass is with optimistic assumptions in ALL four simultaneously, the stress test is not credible.
+    <div class="cnums">Consistency test matrix for Year 3 stressed CET1:
+  Check 1: Implied cost of risk → consistent with NPL projection and LGD assumption?
+  Check 2: Implied RWA migration → consistent with credit quality deterioration magnitude?
+  Check 3: Implied NIM in stress → consistent with funding cost rise and volume decline?
+  Check 4: Implied management actions → credible and executable within stress timeline?
+  If ALL four require 30th-percentile (optimistic) assumptions: ICAAP is not stress-tested, it is back-filled.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">3</div>
+    <p><strong>The Year-on-Year ICAAP Comparison:</strong> Request the bank's ICAAP documents for three consecutive years. Compare: the stressed NPL projection for Year N (as stated in the ICAAP at Year N−2), the actual NPL outturn in Year N, and the ICAAP's explanation for any divergence. If the bank consistently over-states recovery speed in its ICAAP projections (NPL falls faster in the model than it did in reality), its stress calibration is systematically optimistic.
+    <div class="cnums">Example: Year N−2 ICAAP predicted NPL falling from 7% to 4.5% by Year N
+  Actual NPL in Year N: 6.2% (still elevated — slower recovery than modelled)
+  Explanation in Year N ICAAP: "market conditions evolved differently than projected"
+  Systematic pattern over 3 years: ICAAP consistently over-optimistic on recovery
+  → stress calibration bias confirmed; P2G add-on warranted</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">4</div>
+    <p><strong>The Peer Consistency Test:</strong> Compare the bank's key ratios against the UAE peer group. A bank whose NPL ratio is materially below peers operating in the same sector and geography, while its Stage 2 ratio is materially above peers, is almost certainly using more aggressive Stage 2 management than the industry norm. Peers provide a calibration baseline.
+    <div class="cnums">Example: UAE real estate-focused bank cluster (5 banks, similar portfolios):
+  Peer average NPL: 7.2% | Bank's NPL: 4.1% — significantly better than peers
+  Peer average Stage 2: 12% | Bank's Stage 2: 21% — significantly worse than peers
+  Implication: Bank has AED 1,800m of Stage 2 that peers have classified as Stage 3
+  Shadow NPL if peer-normalised: 4.1% + (9%×migration rate 35%) = 7.3% ← peer-equivalent
+  Conclusion: Bank is "outperforming" on NPL by keeping loans in Stage 2 that peers have recognised as NPL</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">5</div>
+    <p><strong>The Compound Impact Calculator:</strong> For any bank showing 2+ flags simultaneously, calculate the compound CET1 impact under the worst-case combination. Do not add the individual flag impacts linearly — model the interaction effects. Rising NPLs reduce PPP (because impairment charges consume earnings). Lower PPP means each AED of NPL has larger CET1 impact. Higher leverage means the NSFR/LCR deterioration creates larger fire-sale losses. The compound impact is typically 1.5–2.5× the sum of individual impacts.
+    <div class="cnums">Compound multiplier examples:
+  Flag 1 + Flag 4: each AED of unexpected NPL hits CET1 at full LGD (no PPP buffer)
+    Individual sum: e.g. CET1 −250bp (F1) + −180bp (F4) = −430bp
+    Compound reality: −430bp × 1.8 interaction = −770bp compound impact
+
+  Flag 2 + Flag 3: higher funding costs (F2) → can't roll wholesale (F3) → fire sales
+    Individual sum: −120bp (F2) + −90bp (F3) = −210bp
+    Compound reality: fire sale losses under funding stress = additional −150bp → total −360bp
+
+Rule of thumb: compound impact ≈ 1.5-2.5× simple sum for 2 simultaneous flags;
+               ≈ 3-4× simple sum for 3+ simultaneous flags</div></p>
+  </div>
+</div>
+
+<!-- 6.12 REFERENCES -->
+<div class="sm">6.12 — References</div>
+<div class="ref-section">
+  <div class="ref-title">Regulatory References &amp; Sources</div>
+  <ul class="ref-list">
+    <li>[1] BCBS. <em>Principles for Sound Stress Testing Practices and Supervision.</em> BIS, May 2009. Simultaneous scenario methodology. <a href="https://www.bis.org/publ/bcbs155.htm" target="_blank">https://www.bis.org/publ/bcbs155.htm</a></li>
+    <li>[2] BCBS. <em>Guidance on the application of the Core Principles for Effective Banking Supervision to the regulation and supervision of institutions relevant to financial inclusion.</em> Cross-ratio monitoring framework. <a href="https://www.bis.org" target="_blank">https://www.bis.org</a></li>
+    <li>[3] EBA. <em>Guidelines on ICAAP and ILAAP information collected for SREP purposes.</em> EBA/GL/2016/10. Cross-pillar consistency requirements. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li>[4] EBA. <em>EBA Report on the convergence of supervisory practices.</em> 2021. Cross-ratio analysis in SREP methodology. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li>[5] CBUAE. <em>ICAAP Supervisory Guidance.</em> 2022. Simultaneous stress scenario requirements. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[6] IMF. <em>UAE: Financial System Stability Assessment.</em> Country Report 22/66, March 2022. Cross-ratio analysis of UAE banking system. <a href="https://www.imf.org" target="_blank">https://www.imf.org</a></li>
+    <li>[7] BCBS. <em>Supervisory guidance for assessing banks' financial instrument fair value practices.</em> April 2009. Internal consistency in fair value measurement. <a href="https://www.bis.org/publ/bcbs153.htm" target="_blank">https://www.bis.org/publ/bcbs153.htm</a></li>
+    <li>[8] BCBS. <em>Range of practices and issues in economic capital frameworks.</em> BIS, March 2009. Compound stress scenario methodology. <a href="https://www.bis.org/publ/bcbs152.htm" target="_blank">https://www.bis.org/publ/bcbs152.htm</a></li>
+  </ul>
+</div>
+
+<div class="chapter-nav">
+  <a class="nav-btn" href="chapter_05_profitability.html">← Chapter 5 — Profitability</a>
+  <span style="font-size:13px;color:var(--text-light)">Chapter 6 of 8 — Inconsistency Flags</span>
+  <a class="nav-btn" href="chapter_07_window_dressing_framework.html">Chapter 7 — Detection Framework →</a>
+</div>
+</div>
+
+<script>
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#555';
+const gc = 'rgba(0,0,0,0.05)';
+
+// FLAG 1 — NPL vs Stage 2 Divergence
+new Chart(document.getElementById('flag1Chart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1','Q2','Q3','Q4','Q5','Q6','Q7 (cliff)'],
+    datasets: [
+      {label: 'NPL Ratio %', data: [4.0, 4.0, 4.1, 4.1, 4.2, 4.2, 11.4],
+       borderColor: '#0d7377', tension: 0.2, fill: false, pointRadius: 5, borderWidth: 2.5},
+      {label: 'Stage 2 Ratio %', data: [8.0, 10.4, 12.8, 15.5, 18.2, 21.0, 6.0],
+       borderColor: '#c0392b', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2.5, borderDash: [6,3]},
+      {label: 'Shadow NPL % (est.)', data: [6.2, 7.2, 8.6, 9.8, 10.6, 11.6, 11.4],
+       borderColor: '#e67e22', tension: 0.3, fill: false, pointRadius: 4, borderWidth: 1.5,
+       borderDash: [3,3]}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'},
+      tooltip: {callbacks: {label: c => `${c.dataset.label}: ${c.raw}%`}}},
+    scales: {
+      y: {min: 0, max: 24, title: {display: true, text: '%'}, grid: {color: gc}},
+      x: {grid: {color: gc}}
+    }
+  }
+});
+
+// FLAG 2 — ROE stable, ROA falling, leverage rising
+new Chart(document.getElementById('flag2Chart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1','Q2','Q3','Q4'],
+    datasets: [
+      {label: 'ROE %', data: [12.0, 12.0, 12.0, 12.0],
+       borderColor: '#27ae60', tension: 0, fill: false, pointRadius: 6, borderWidth: 2.5},
+      {label: 'ROA %', data: [1.20, 1.10, 1.00, 0.90],
+       borderColor: '#c0392b', tension: 0.2, fill: false, pointRadius: 6, borderWidth: 2.5,
+       borderDash: [6,3], yAxisID: 'y2'},
+      {label: 'Leverage Ratio %', data: [10.0, 9.2, 8.3, 7.5],
+       borderColor: '#e67e22', tension: 0.2, fill: false, pointRadius: 6, borderWidth: 2,
+       borderDash: [3,3], yAxisID: 'y2'}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {min: 8, max: 15, title: {display: true, text: 'ROE %'}, grid: {color: gc}},
+      y2: {position: 'right', min: 0, max: 14,
+           title: {display: true, text: 'ROA % / Leverage %'}, grid: {display: false}},
+      x: {grid: {color: gc}}
+    }
+  }
+});
+
+// FLAG 3 — LCR gaming
+new Chart(document.getElementById('flag3Chart'), {
+  type: 'bar',
+  data: {
+    labels: ['Start','After 1st purchase','After 2nd purchase','After 3rd purchase'],
+    datasets: [
+      {label: 'LCR %', data: [76, 83, 90, 96],
+       backgroundColor: 'rgba(13,115,119,0.6)', borderColor: '#0d7377', borderWidth: 1},
+      {label: 'NSFR %', data: [76, 80, 84, 88],
+       backgroundColor: 'rgba(230,126,34,0.6)', borderColor: '#e67e22', borderWidth: 1},
+      {label: 'Wholesale Dependency %', data: [28, 32, 36, 40],
+       backgroundColor: 'rgba(192,57,43,0.5)', borderColor: '#c0392b', borderWidth: 1}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'},
+      annotation: {annotations: {
+        line1: {type: 'line', yMin: 100, yMax: 100, borderColor: '#c0392b', borderWidth: 1, borderDash: [5,3]},
+      }}},
+    scales: {
+      y: {min: 0, max: 120, title: {display: true, text: '%'}, grid: {color: gc}},
+      x: {grid: {display: false}}
+    }
+  }
+});
+
+// FLAG 4 — Two-bank CET1
+new Chart(document.getElementById('flag4Chart'), {
+  type: 'line',
+  data: {
+    labels: ['Base', 'Year 1', 'Year 2', 'Year 3', 'Year 4 (projected)'],
+    datasets: [
+      {label: 'Bank A — PPP/RWA 3.8%', data: [14.1, 14.8, 15.3, 15.7, 16.0],
+       borderColor: '#27ae60', tension: 0.3, fill: false, pointRadius: 6, borderWidth: 2.5},
+      {label: 'Bank B — PPP/RWA 0.7%', data: [14.1, 12.7, 11.3, 9.4, 7.6],
+       borderColor: '#c0392b', tension: 0.3, fill: false, pointRadius: 6, borderWidth: 2.5,
+       borderDash: [7,3]},
+      {label: '7% Regulatory Floor', data: [7, 7, 7, 7, 7],
+       borderColor: '#e67e22', borderWidth: 1.5, borderDash: [4,4], pointRadius: 0, fill: false}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {min: 5, max: 17, title: {display: true, text: 'CET1 Ratio %'}, grid: {color: gc}},
+      x: {grid: {color: gc}}
+    }
+  }
+});
+</script>
+</body>
+</html>

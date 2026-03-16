@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 8 — Putting It All Together: The ICAAP Narrative | UAE Banking</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1a1a2e;--ink-mid:#2d2d4e;
+  --gold:#b8860b;--gold-light:#daa520;--gold-pale:#fff8dc;
+  --teal:#0d7377;--teal-light:#14a085;--teal-pale:#e8f8f7;
+  --red:#c0392b;--red-pale:#fdf0ee;
+  --amber:#e67e22;--amber-pale:#fef9f0;
+  --blue:#1a6ea8;--blue-pale:#eef6fb;
+  --green:#27ae60;--green-pale:#edfaf3;
+  --purple:#6c3483;--purple-pale:#f5eef8;
+  --page:#fafaf7;--paper:#ffffff;
+  --border:#e8e4d8;--border-strong:#c8c0a8;
+  --text:#2c2c2c;--text-mid:#555;--text-light:#888;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--page);color:var(--text);line-height:1.75;font-size:16px;}
+.book-header{background:var(--ink);color:white;position:relative;overflow:hidden;}
+.book-header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal-light),var(--gold));}
+.book-header-inner{max-width:880px;margin:0 auto;padding:56px 40px;position:relative;z-index:2;}
+.book-series{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:10px;}
+.chapter-num{font-family:'Lora',serif;font-size:90px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;position:absolute;right:40px;top:30px;font-style:italic;}
+.book-title{font-family:'Lora',serif;font-size:36px;font-weight:700;line-height:1.2;margin-bottom:14px;color:white;}
+.book-title span{color:var(--gold-light);font-style:italic;}
+.book-subtitle{font-size:15px;color:rgba(255,255,255,0.6);max-width:640px;line-height:1.6;margin-bottom:26px;}
+.chapter-meta{display:flex;gap:18px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.45);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
+.page-wrap{max-width:880px;margin:0 auto;padding:0 40px 80px;}
+.toc-box{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:22px 26px;margin:32px 0;box-shadow:var(--shadow);}
+.toc-title{font-family:'Lora',serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.toc-list{list-style:none;columns:2;column-gap:28px;}
+.toc-list li{font-size:13px;color:var(--text-mid);padding:3px 0;}
+.toc-list li span{color:var(--gold);font-weight:600;margin-right:6px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;margin-top:50px;display:flex;align-items:center;gap:10px;}
+.sm::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3;}
+h3{font-family:'Lora',serif;font-size:21px;font-weight:600;color:var(--ink-mid);margin:30px 0 10px;line-height:1.3;}
+h4{font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 7px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:14px;color:var(--text);}
+strong{color:var(--ink);}
+sup a{color:var(--blue);font-size:10px;}
+ul,ol{padding-left:22px;margin-bottom:14px;}
+li{font-size:15px;color:var(--text-mid);line-height:2;}
+.story-box{background:linear-gradient(135deg,#fffbf0,#fff8e7);border:2px solid var(--gold-light);border-radius:14px;padding:22px 26px;margin:26px 0;position:relative;overflow:hidden;}
+.story-box::before{content:'📋';position:absolute;top:-6px;right:16px;font-size:26px;transform:rotate(5deg);}
+.story-label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.story-box p{font-family:'Lora',serif;font-size:14.5px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;}
+.story-box p:last-child{margin-bottom:0;}
+.beginner{background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:17px 21px;margin:16px 0;}
+.bl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.beginner p{font-size:14px;color:var(--ink-mid);margin-bottom:0;}
+.formula-box{background:var(--ink);border-radius:10px;padding:17px 21px;margin:17px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold-light);line-height:1.7;}
+.fl{font-family:'Source Sans 3',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;}
+.fn{font-family:'Source Sans 3',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.42);margin-top:6px;font-style:italic;}
+.alert{border-radius:8px;padding:15px 19px;margin:17px 0;border-left:4px solid;display:flex;gap:11px;align-items:flex-start;}
+.ai{font-size:18px;flex-shrink:0;margin-top:2px;}
+.ab h5{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ab p{font-size:14px;margin-bottom:0;}
+.a-key{background:#fffbf0;border-color:var(--gold);} .a-key .ab h5{color:var(--gold);}
+.a-uae{background:var(--teal-pale);border-color:var(--teal);} .a-uae .ab h5{color:var(--teal);}
+.a-warn{background:var(--amber-pale);border-color:var(--amber);} .a-warn .ab h5{color:var(--amber);}
+.a-danger{background:var(--red-pale);border-color:var(--red);} .a-danger .ab h5{color:var(--red);}
+.a-good{background:var(--green-pale);border-color:var(--green);} .a-good .ab h5{color:var(--green);}
+.table-wrap{overflow-x:auto;margin:17px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;box-shadow:var(--shadow);border-radius:8px;overflow:hidden;}
+thead th{background:var(--ink);color:white;padding:10px 13px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.4px;}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,0,0,0.018);}
+tbody tr:hover td{background:var(--gold-pale);}
+.tp{color:var(--green);font-weight:600;} .tf{color:var(--red);font-weight:600;} .tw{color:var(--amber);font-weight:600;} .th{color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;}
+.uae-section{background:linear-gradient(135deg,#e8f8f7,#d4f1ee);border:1px solid var(--teal);border-radius:12px;padding:24px 26px 24px 40px;margin:34px 0;position:relative;}
+.uae-flag-stripe{position:absolute;left:0;top:0;bottom:0;width:8px;border-radius:12px 0 0 12px;background:linear-gradient(to bottom,#00732f 25%,#ffffff 25%,#ffffff 50%,#000000 50%,#000000 75%,#ff0000 75%);}
+.uae-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:white;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.uae-section h3{color:var(--teal);margin-top:0;}
+.chart-box{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;box-shadow:var(--shadow);}
+.ct{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.cs{font-size:12px;color:var(--text-light);margin-bottom:13px;font-style:italic;}
+.cartoon-wrap{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:20px;margin:22px 0;text-align:center;box-shadow:var(--shadow);}
+.cartoon-caption{font-size:12px;color:var(--text-light);font-style:italic;margin-top:10px;}
+/* ICAAP STRUCTURE */
+.icaap-doc{background:var(--paper);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);margin:24px 0;}
+.icaap-doc-header{background:var(--ink);padding:16px 22px;display:flex;align-items:center;gap:12px;}
+.icaap-doc-title{font-family:'Lora',serif;font-size:16px;font-weight:700;color:white;}
+.icaap-doc-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;}
+.icaap-section{border-bottom:1px solid var(--border);padding:16px 22px;display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:flex-start;}
+.icaap-section:last-child{border-bottom:none;}
+.is-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+.is-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.is-body{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.is-ratios{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.ratio-pill{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;}
+/* FLOW DIAGRAM */
+.flow-grid{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr;align-items:center;gap:0;margin:24px 0;}
+.fg-box{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;box-shadow:var(--shadow);}
+.fg-box .fb-title{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.fg-box .fb-sub{font-size:11px;color:var(--text-light);}
+.fg-arrow{text-align:center;color:var(--gold-light);font-size:20px;}
+/* MANAGEMENT ACTIONS */
+.action-card{background:var(--paper);border:1px solid var(--border);border-left:4px solid;border-radius:0 10px 10px 0;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow);}
+.ac-title{font-family:'Lora',serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+.ac-body{font-size:13px;color:var(--text-mid);line-height:1.65;}
+.ac-nums{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--page);padding:8px 12px;border-radius:6px;margin-top:10px;color:var(--ink-mid);line-height:1.65;}
+/* BOOK CLOSE */
+.book-close{background:linear-gradient(135deg,var(--ink),var(--ink-mid));border-radius:14px;padding:36px 40px;margin:40px 0;color:white;text-align:center;}
+.bc-title{font-family:'Lora',serif;font-size:24px;font-weight:700;color:var(--gold-light);margin-bottom:16px;}
+.bc-quote{font-family:'Lora',serif;font-size:17px;font-style:italic;color:rgba(255,255,255,0.8);line-height:1.8;max-width:680px;margin:0 auto 24px;}
+.bc-attr{font-size:13px;color:rgba(255,255,255,0.45);}
+/* REF */
+.ref-section{background:var(--blue-pale);border:1px solid #c0d8f0;border-radius:8px;padding:17px 21px;margin:34px 0 16px;}
+.ref-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ref-list{list-style:none;}
+.ref-list li{font-size:12px;color:var(--text-mid);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.ref-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+.ref-list a{color:var(--blue);text-decoration:none;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin:42px 0;}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid var(--border);margin-top:34px;}
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 17px;background:var(--ink);color:white;border:none;border-radius:6px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:var(--ink-mid);}
+.nav-btn.disabled{background:var(--border);color:var(--text-light);pointer-events:none;}
+/* COMPLETE BANK PROFILE */
+.full-profile{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:20px 0;}
+.fp-card{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:var(--shadow);}
+.fp-category{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;}
+.fp-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:13px;}
+.fp-row:last-child{border-bottom:none;}
+.fp-label{color:var(--text-mid);}
+.fp-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;}
+@media(max-width:768px){
+  .page-wrap{padding:0 16px 60px;}.book-title{font-size:26px;}.toc-list{columns:1;}.chapter-num{display:none;}
+  .full-profile{grid-template-columns:1fr;}.flow-grid{grid-template-columns:1fr;}.fg-arrow{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="book-header">
+  <div class="book-header-inner">
+    <div class="book-series">ICAAP &amp; Financial Ratios in UAE Banking · Chapter Eight — Final Chapter</div>
+    <div class="chapter-num">08</div>
+    <h1 class="book-title">Putting It <span>All Together</span><br>The ICAAP Narrative</h1>
+    <p class="book-subtitle">How every ratio, every flag, and every detection technique in this book assembles into a complete, credible ICAAP narrative — the document structure, the capital adequacy conclusion, CBUAE submission requirements, management actions framework, and the full worked example bringing all eight chapters together in one place.</p>
+    <div class="chapter-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Complete ICAAP Structure</div>
+      <div class="meta-item"><div class="meta-dot"></div>CBUAE Submission Requirements</div>
+      <div class="meta-item"><div class="meta-dot"></div>Management Actions</div>
+      <div class="meta-item"><div class="meta-dot"></div>Full Worked Example</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<div class="toc-box">
+  <div class="toc-title">In This Chapter</div>
+  <ul class="toc-list">
+    <li><span>8.1</span> The Architect's Final Drawing</li>
+    <li><span>8.2</span> The ICAAP Document Structure</li>
+    <li><span>8.3</span> How Every Ratio Feeds the Narrative</li>
+    <li><span>8.4</span> The Capital Adequacy Conclusion</li>
+    <li><span>8.5</span> CBUAE Submission Requirements</li>
+    <li><span>8.6</span> Management Actions — Credibility Standards</li>
+    <li><span>8.7</span> The Full Worked Example — One Bank, All Chapters</li>
+    <li><span>8.8</span> The Final Radar — All Chapters Combined</li>
+    <li><span>8.9</span> UAE Context — SREP and Regulatory Dialogue</li>
+    <li><span>8.10</span> What This Book Taught You</li>
+    <li><span>8.11</span> References</li>
+  </ul>
+</div>
+
+<!-- 8.1 NARRATIVE -->
+<div class="sm">8.1 — The Story</div>
+<h2>The Architect's Final Drawing</h2>
+
+<div class="story-box">
+  <div class="story-label">The Closing Parable</div>
+  <p>Imagine an architect who has spent seven chapters learning everything about structural engineering: how steel beams work, how concrete behaves under load, how foundations interact with soil, how water flows through drainage systems. Each system was studied in isolation — perfectly understood in its own right.</p>
+  <p>Now, in Chapter Eight, the architect must draw the building. Not a beam. Not a drainage plan. Not a foundation specification. The building. The document that integrates every system into a single coherent structure that stands as a whole — where the drainage serves the foundation, the foundation holds the beams, and the beams support the walls that make the building inhabitable.</p>
+  <p>The ICAAP narrative is that drawing. The ratios are the engineering systems. The analyst who has mastered each chapter individually now must answer the one question the regulator actually cares about: <strong>"Given everything you know about your bank — its capital, its liquidity, its credit quality, its earnings, and its vulnerabilities — can it survive a severe three-year stress without threatening depositor safety or requiring public support?"</strong></p>
+  <p>This chapter is the drawing. Every ratio has its place. Every flag has its resolution. Every window dressing signal has its honest answer. <strong>The ICAAP is not a ratio report. It is a survival declaration.</strong></p>
+</div>
+
+<!-- 8.2 DOCUMENT STRUCTURE -->
+<div class="sm">8.2 — Document Structure</div>
+<h2>The ICAAP Document Structure</h2>
+
+<p>A complete ICAAP document submitted to the CBUAE follows a prescribed structure. The document is a narrative — not a collection of ratio tables. Every number must be embedded in a story about what it means, why it matters, and what the bank has done or will do about it.</p>
+
+<div class="icaap-doc">
+  <div class="icaap-doc-header">
+    <div>
+      <div class="icaap-doc-title">Complete ICAAP Document — Contents and Chapter Mapping</div>
+      <div class="icaap-doc-sub">Each section maps to the ratio families and analytical frameworks covered in this book</div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--blue)">1</div>
+    <div>
+      <div class="is-title">Executive Summary &amp; Board Statement</div>
+      <div class="is-body">The board's formal assertion that the ICAAP represents an honest, complete assessment of capital adequacy. States the internal capital target (ICG), the regulatory floor, and the headroom. Contains the board's view on the bank's risk appetite and capital strategy. This section is signed — it creates accountability.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(26,110,168,0.1);color:var(--blue)">Chapter 1 — ICAAP foundations</span>
+        <span class="ratio-pill" style="background:rgba(184,134,11,0.1);color:var(--gold)">ICG vs CET1 — Chapter 2</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--purple)">2</div>
+    <div>
+      <div class="is-title">Business Model &amp; Strategic Plan</div>
+      <div class="is-body">Describes what the bank does, where it makes money, and what risks it takes to do so. Maps the business model to the risk profile. Explains concentrations — geographic, sector, counterparty. This section provides the "why" behind every ratio that follows.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(108,52,131,0.1);color:var(--purple)">LDR — Chapter 4</span>
+        <span class="ratio-pill" style="background:rgba(230,126,34,0.1);color:var(--amber)">NIM — Chapter 5</span>
+        <span class="ratio-pill" style="background:rgba(13,115,119,0.1);color:var(--teal)">UAE context — all chapters</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--teal)">3</div>
+    <div>
+      <div class="is-title">Risk Identification &amp; Assessment (Pillar 1 + Pillar 2)</div>
+      <div class="is-body">Catalogs every material risk the bank faces. For each: qualitative description, quantitative assessment, and Pillar 2 capital add-on. Credit risk, market risk, operational risk (Pillar 1) plus concentration, IRRBB, pension, model risk, reputational, strategic risk (Pillar 2). This is the longest and most technically demanding section.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(192,57,43,0.1);color:var(--red)">NPL/Coverage — Chapter 4</span>
+        <span class="ratio-pill" style="background:rgba(13,115,119,0.1);color:var(--teal)">LCR/ELAR — Chapter 3</span>
+        <span class="ratio-pill" style="background:rgba(26,110,168,0.1);color:var(--blue)">RWA/P2 — Chapter 2</span>
+        <span class="ratio-pill" style="background:rgba(230,126,34,0.1);color:var(--amber)">IRRBB — Chapter 5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--amber)">4</div>
+    <div>
+      <div class="is-title">Capital Adequacy Assessment — Base Case</div>
+      <div class="is-body">Applies all Pillar 1 and Pillar 2 risk add-ons to calculate the internal capital target (ICG). Shows the full buffer stack from 4.5% CET1 minimum to the internal target. Compares ICG against actual CET1. If actual &lt; ICG: capital plan required. If actual &gt; ICG: quantify the headroom.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(108,52,131,0.1);color:var(--purple)">CET1/Leverage — Chapter 2</span>
+        <span class="ratio-pill" style="background:rgba(39,174,96,0.1);color:var(--green)">PPP/RWA — Chapter 5</span>
+        <span class="ratio-pill" style="background:rgba(184,134,11,0.1);color:var(--gold)">Buffer stack — Chapter 1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--red)">5</div>
+    <div>
+      <div class="is-title">Stress Testing — Scenarios and Results</div>
+      <div class="is-body">Three scenarios minimum: base case, mild stress, severe stress. Each scenario projects the full P&amp;L and balance sheet forward 3–5 years. Shows CET1 ratio, leverage ratio, LCR/ELAR, NPL ratio, and cost of risk under each scenario. The most important section for credibility.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(192,57,43,0.1);color:var(--red)">All ratio chapters 2–6</span>
+        <span class="ratio-pill" style="background:rgba(26,110,168,0.1);color:var(--blue)">Cross-ratio flags — Chapter 6</span>
+        <span class="ratio-pill" style="background:rgba(230,126,34,0.1);color:var(--amber)">UAE scenarios — Ch 3,4 UAE sections</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--green)">6</div>
+    <div>
+      <div class="is-title">Management Actions Plan</div>
+      <div class="is-body">For each scenario where the stressed CET1 approaches or breaches the regulatory floor: specific, costed, time-bound management actions. Each action must be executable within the stress timeline. Board pre-approval required for each. Credibility standards per Chapter 7.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(39,174,96,0.1);color:var(--green)">Chapter 8.6 — this chapter</span>
+        <span class="ratio-pill" style="background:rgba(192,57,43,0.1);color:var(--red)">Window dressing test — Chapter 7</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--gold)">7</div>
+    <div>
+      <div class="is-title">Liquidity Adequacy Assessment (ILAAP)</div>
+      <div class="is-body">The liquidity twin of the capital ICAAP. ELAR, ASRR (Category 2) or LCR, NSFR (Category 1). Stress testing of both short-term survival and structural funding stability. GRE deposit run-off scenarios. Wakalah certificate reliance quantified. Day-31 survival horizon.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(13,115,119,0.1);color:var(--teal)">Chapter 3 — full liquidity chapter</span>
+        <span class="ratio-pill" style="background:rgba(230,126,34,0.1);color:var(--amber)">ASRR/ELAR — UAE sections</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icaap-section">
+    <div class="is-num" style="background:var(--ink-light)">8</div>
+    <div>
+      <div class="is-title">Governance &amp; Process Description</div>
+      <div class="is-body">How ICAAP is governed, challenged, and approved. Who owns each section. How the board was involved. Challenge from internal audit and risk function. Historical accuracy — how last year's stressed projections compared to actual outcomes.</div>
+      <div class="is-ratios">
+        <span class="ratio-pill" style="background:rgba(184,134,11,0.1);color:var(--gold)">CBUAE governance requirements</span>
+        <span class="ratio-pill" style="background:rgba(39,174,96,0.1);color:var(--green)">Historical track record — Chapter 7</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8.3 HOW RATIOS FEED THE NARRATIVE -->
+<div class="sm">8.3 — Ratio Flow Map</div>
+<h2>How Every Ratio Feeds the ICAAP Narrative</h2>
+
+<div class="cartoon-wrap">
+<svg width="100%" viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" style="max-width:720px">
+  <rect width="720" height="340" fill="#fafaf7" rx="8"/>
+  <defs>
+    <marker id="ac8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#888" stroke-width="1.5"/>
+    </marker>
+    <marker id="ac8g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#27ae60" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <!-- Chapter boxes feeding into ICAAP -->
+  <!-- Ch2 Capital -->
+  <rect x="20" y="30" width="130" height="50" rx="6" fill="rgba(108,52,131,0.1)" stroke="#6c3483" stroke-width="1.5"/>
+  <text x="85" y="51" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">Ch2 — Capital</text>
+  <text x="85" y="65" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">CET1 · T1 · Total Capital</text>
+  <text x="85" y="77" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">Leverage · RWA</text>
+  <!-- Ch3 Liquidity -->
+  <rect x="20" y="100" width="130" height="50" rx="6" fill="rgba(13,115,119,0.1)" stroke="#0d7377" stroke-width="1.5"/>
+  <text x="85" y="121" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">Ch3 — Liquidity</text>
+  <text x="85" y="135" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">LCR · NSFR · ELAR · ASRR</text>
+  <text x="85" y="147" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">Day-31 survival · HQLA</text>
+  <!-- Ch4 Credit -->
+  <rect x="20" y="170" width="130" height="50" rx="6" fill="rgba(192,57,43,0.1)" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="85" y="191" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">Ch4 — Credit</text>
+  <text x="85" y="205" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">NPL · Coverage · CoR</text>
+  <text x="85" y="217" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">LTV · LDR · Stage 2</text>
+  <!-- Ch5 Profit -->
+  <rect x="20" y="240" width="130" height="50" rx="6" fill="rgba(39,174,96,0.1)" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="85" y="261" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">Ch5 — Profitability</text>
+  <text x="85" y="275" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">ROE · ROA · NIM · CIR</text>
+  <text x="85" y="287" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#555" text-anchor="middle">PPP/RWA · IRRBB</text>
+
+  <!-- Arrows to stress engine -->
+  <line x1="150" y1="55" x2="235" y2="130" stroke="#888" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ac8)"/>
+  <line x1="150" y1="125" x2="235" y2="145" stroke="#888" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ac8)"/>
+  <line x1="150" y1="195" x2="235" y2="160" stroke="#888" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ac8)"/>
+  <line x1="150" y1="265" x2="235" y2="175" stroke="#888" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#ac8)"/>
+
+  <!-- Ch6 Flags -->
+  <rect x="20" y="305" width="130" height="28" rx="5" fill="rgba(230,126,34,0.1)" stroke="#e67e22" stroke-width="1"/>
+  <text x="85" y="319" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#1a1a2e" text-anchor="middle" font-weight="700">Ch6 Flags · Ch7 Detection</text>
+  <text x="85" y="330" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#555" text-anchor="middle">Cross-ratio consistency check</text>
+  <line x1="150" y1="319" x2="235" y2="200" stroke="#e67e22" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#ac8)"/>
+
+  <!-- STRESS ENGINE (centre) -->
+  <rect x="238" y="100" width="160" height="120" rx="8" fill="rgba(26,110,168,0.1)" stroke="#1a6ea8" stroke-width="2"/>
+  <text x="318" y="126" font-family="'Lora',serif" font-size="12" fill="#1a6ea8" text-anchor="middle" font-weight="700">STRESS ENGINE</text>
+  <text x="318" y="142" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">3-year P&amp;L projection</text>
+  <text x="318" y="156" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">CET1 trajectory</text>
+  <text x="318" y="170" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Liquidity survival test</text>
+  <text x="318" y="184" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">PPP vs cost of risk</text>
+  <text x="318" y="198" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Management actions</text>
+
+  <!-- Arrow stress → outputs -->
+  <line x1="398" y1="160" x2="455" y2="120" stroke="#27ae60" stroke-width="1.5" marker-end="url(#ac8g)"/>
+  <line x1="398" y1="160" x2="455" y2="175" stroke="#27ae60" stroke-width="1.5" marker-end="url(#ac8g)"/>
+  <line x1="398" y1="160" x2="455" y2="230" stroke="#27ae60" stroke-width="1.5" marker-end="url(#ac8g)"/>
+
+  <!-- OUTPUTS (right) -->
+  <rect x="458" y="90" width="150" height="44" rx="6" fill="rgba(39,174,96,0.15)" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="533" y="108" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">ICG — Internal Capital</text>
+  <text x="533" y="122" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Target (% of RWA)</text>
+
+  <rect x="458" y="152" width="150" height="44" rx="6" fill="rgba(39,174,96,0.15)" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="533" y="170" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">Capital Adequacy</text>
+  <text x="533" y="184" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Conclusion (Pass/Action)</text>
+
+  <rect x="458" y="214" width="150" height="44" rx="6" fill="rgba(39,174,96,0.15)" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="533" y="232" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a1a2e" text-anchor="middle" font-weight="700">P2R Estimation</text>
+  <text x="533" y="246" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Regulator sets from SREP</text>
+
+  <!-- Arrow outputs → submission -->
+  <line x1="608" y1="175" x2="650" y2="175" stroke="#b8860b" stroke-width="1.5" marker-end="url(#ac8)"/>
+
+  <!-- SUBMISSION (far right) -->
+  <rect x="655" y="140" width="55" height="72" rx="6" fill="rgba(184,134,11,0.1)" stroke="#b8860b" stroke-width="1.5"/>
+  <text x="682" y="165" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#b8860b" text-anchor="middle" font-weight="700">CBUAE</text>
+  <text x="682" y="178" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Annual</text>
+  <text x="682" y="191" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">Submission</text>
+
+  <text x="360" y="328" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Figure 8.1 — Every ratio from every chapter feeds the stress engine. The stress engine produces the ICG, conclusion, and regulatory dialogue.</text>
+</svg>
+<div class="cartoon-caption">The ICAAP is not a sum of its parts. It is a system where every ratio interacts with every other through the stress scenarios.</div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Ratio Category</th><th>Feeds Into ICAAP Section</th><th>Primary Output</th><th>Chapter</th></tr></thead>
+<tbody>
+  <tr><td>CET1, Tier 1, Total Capital, Leverage</td><td>Section 4 — Capital Adequacy</td><td>Pillar 1 RWA requirement; starting capital position for stress</td><td class="th">Ch 2</td></tr>
+  <tr><td>LCR, NSFR, ELAR, ASRR</td><td>Section 7 — Liquidity (ILAAP)</td><td>Liquidity survival horizon; GRE stress; ILAAP conclusion</td><td class="th">Ch 3</td></tr>
+  <tr><td>NPL, Coverage, Cost of Risk, LTV, LDR</td><td>Section 5 — Stress Scenarios</td><td>Stressed impairment charge; capital consumption rate per year</td><td class="th">Ch 4</td></tr>
+  <tr><td>ROE, ROA, NIM, CIR, PPP/RWA</td><td>Section 5 — Stress Scenarios</td><td>PPP absorption buffer; earnings firewall; capital self-repair rate</td><td class="th">Ch 5</td></tr>
+  <tr><td>Four Inconsistency Flags</td><td>Sections 3+5 — Risk assessment + scenarios</td><td>Identifies where simple ratio analysis misses compound risk</td><td class="th">Ch 6</td></tr>
+  <tr><td>Window Dressing Detection</td><td>All sections — challenge mechanism</td><td>Validates that each section reflects honest assumptions, not back-filled targets</td><td class="th">Ch 7</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- 8.4 CAPITAL ADEQUACY CONCLUSION -->
+<div class="sm">8.4 — Capital Conclusion</div>
+<h2>The Capital Adequacy Conclusion — How to Write It Honestly</h2>
+
+<p>The capital adequacy conclusion is the most important paragraph in the ICAAP. It must make a clear, evidence-backed statement about whether the bank is adequately capitalised, identify any shortfalls, and present specific plans to address them. The key principle: <strong>the conclusion must follow from the evidence — not the other way around.</strong></p>
+
+<div class="formula-box">
+  <div class="fl">Structure of the Capital Adequacy Conclusion</div>
+  Part 1 — The ICG derivation:
+    "The bank's Internal Capital Guidance is [X]%, comprising:
+     Pillar 1 minimum: 4.5%, Conservation buffer: 2.5%, D-SIB surcharge: [X]%,
+     Concentration risk (P2): [X]%, IRRBB (P2): [X]%, Other P2 risks: [X]%,
+     Management buffer: [X]%, P2R (regulatory): [X]%
+     Total ICG: [X]%"
+
+  Part 2 — The current position:
+    "Against this ICG of [X]%, the bank's current CET1 ratio is [Y]%.
+     This represents a headroom of [Y−X]pp ([AED Z]m of surplus capital)."
+     OR:
+    "This represents a shortfall of [X−Y]pp ([AED Z]m). The capital plan below
+     closes this shortfall within [N] months."
+
+  Part 3 — The stress test conclusion:
+    "Under the severe stress scenario (property −[X]%, GRE defaults, wholesale closure),
+     the bank's CET1 ratio reaches a trough of [Y]% in Year [N], which is [Z]pp
+     above the 7% regulatory floor. Capital runway under severe stress: [N] years."
+
+  Part 4 — The honest acknowledgement:
+    "The following vulnerabilities are identified and monitored:
+     [List each vulnerability with quantification and management plan]"
+  <div class="fn">The honest acknowledgement in Part 4 is what distinguishes a credible ICAAP from a window-dressed one. A bank that lists no vulnerabilities is not credible — every real bank has some.</div>
+</div>
+
+<!-- 8.5 CBUAE REQUIREMENTS -->
+<div class="sm">8.5 — CBUAE Requirements</div>
+<div class="uae-section">
+  <div class="uae-flag-stripe"></div>
+  <div>
+    <div class="uae-badge">🇦🇪 UAE Specific — Standalone Section</div>
+    <h3>CBUAE ICAAP Submission Requirements</h3>
+
+    <h4>Submission Timeline and Format</h4>
+    <p>The CBUAE requires all licensed banks to submit an annual ICAAP. Key requirements under the CBUAE's ICAAP Supervisory Guidance (2022):<sup><a href="#ref1">[1]</a></sup></p>
+
+    <div class="table-wrap">
+    <table>
+    <thead><tr><th>Requirement</th><th>CBUAE Standard</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Submission deadline</td><td>Within 4 months of financial year-end</td><td>30 April for December year-end banks</td></tr>
+      <tr><td>Board approval</td><td>Required — board resolution must be included</td><td>Board cannot delegate to management committee</td></tr>
+      <tr><td>Stress scenario severity</td><td>Mild, Moderate, Severe — three scenarios minimum</td><td>Severe must include simultaneous shocks calibrated to UAE 2008–2009</td></tr>
+      <tr><td>Stress horizon</td><td>Minimum 3 years forward-looking</td><td>5 years recommended for banks with elevated risks</td></tr>
+      <tr><td>Liquidity stress</td><td>ILAAP must be integrated, not separate appendix</td><td>Capital and liquidity stress must be modelled simultaneously</td></tr>
+      <tr><td>Management actions</td><td>Board-approved; with specific timeline and feasibility analysis</td><td>Market feasibility in stress environment must be assessed</td></tr>
+      <tr><td>Pillar 2 risks</td><td>All material risks must be quantified, not just described</td><td>CBUAE rejects ICAAP where P2 risks are described qualitatively only</td></tr>
+      <tr><td>Historical accuracy</td><td>Year N ICAAP must compare prior year projections vs actuals</td><td>Systematic optimism bias triggers P2G add-on</td></tr>
+      <tr><td>D-SIB requirements</td><td>FAB, ENBD, ADCB, DIB, Mashreq: enhanced ICAAP with systemic risk assessment</td><td>Recovery plan must be annexed to ICAAP</td></tr>
+    </tbody>
+    </table>
+    </div>
+
+    <h4>The CBUAE SREP Process — What Happens After Submission</h4>
+    <p>The Supervisory Review and Evaluation Process (SREP) is the CBUAE's structured review of the ICAAP. It proceeds in four stages:</p>
+
+    <div class="table-wrap">
+    <table>
+    <thead><tr><th>SREP Stage</th><th>Activity</th><th>Timing</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>Stage 1 — Completeness check</td><td>CBUAE verifies all sections present, all Pillar 2 risks addressed, scenarios adequate</td><td>4–6 weeks post-submission</td><td>Completeness letter; may request resubmission</td></tr>
+      <tr><td>Stage 2 — Technical challenge</td><td>CBUAE runs independent stress tests; compares assumptions against CBUAE models; cross-ratio consistency check (Chapters 6–7)</td><td>8–12 weeks</td><td>Technical queries letter; bank must respond within 4 weeks</td></tr>
+      <tr><td>Stage 3 — Supervisory dialogue</td><td>Meeting with bank management; CBUAE presents challenge findings; bank defends or revises</td><td>3–4 months post-submission</td><td>Agreement on adjusted ICG; preliminary P2R indication</td></tr>
+      <tr><td>Stage 4 — P2R/P2G setting</td><td>CBUAE sets formal Pillar 2 Requirement and communicates guidance; bank incorporates in capital planning</td><td>5–6 months post-submission</td><td>CBUAE supervisory letter confirming P2R and P2G</td></tr>
+    </tbody>
+    </table>
+    </div>
+
+    <div class="alert a-uae" style="margin-top:16px">
+      <div class="ai">🇦🇪</div>
+      <div class="ab">
+        <h5>What the CBUAE Focuses On in SREP — UAE-Specific Priorities</h5>
+        <p>Based on publicly available CBUAE communications and IMF FSAP findings, the CBUAE's SREP challenge focus areas for UAE banks include: (1) real estate concentration capital adequacy — are P2 add-ons sufficient for the specific UAE property cycle risk? (2) GRE single-name concentration — is the bank using sector-level or name-level methodology? (3) IRRBB following the 2022–2024 rate cycle — has the ICAAP been updated for the fixed-rate mortgage book sensitivity? (4) ELAR daily compliance vs quarter-end reporting — are banks genuinely meeting the 10% minimum intraday? (5) Management action credibility — equity issuance assumptions under UAE market stress conditions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8.6 MANAGEMENT ACTIONS -->
+<div class="sm">8.6 — Management Actions</div>
+<h2>Management Actions — Credibility Standards</h2>
+
+<p>Management actions are the mechanism by which a bank demonstrates it can close a capital shortfall during a stress. They are the most scrutinised section of any ICAAP because they are the most commonly window-dressed. Here are the four credibility tests every management action must pass.</p>
+
+<div class="action-card" style="border-left-color:var(--green)">
+  <div class="ac-title" style="color:var(--green)">✅ Credibility Test 1 — Is the Action Genuinely Available in the Stress?</div>
+  <div class="ac-body">Equity issuance requires open markets and investor appetite. Covered bond issuance requires functioning covered bond markets. Asset disposals require buyers at reasonable prices. All of these conditions are typically absent in a severe stress scenario. The ICAAP must explicitly test whether each action is achievable under the stress conditions stated, not under current benign conditions.</div>
+  <div class="ac-nums">Example: "In Year 2 of the severe stress scenario, the bank will issue AED 1,500m of new equity."
+Test: Are UAE equity markets likely to be open to a distressed bank in Year 2 of a severe credit stress?
+  2009 UAE experience: equity market closed to distressed banks; capital raises required sovereign support
+Credible version: "In Year 1 (before stress deepens), the bank maintains a shelf registration
+  for AED 1,500m rights issue executable within 60 days. Board has approved exercise of this
+  shelf if CET1 falls below 11%. Under Year 2 severe stress conditions, this action is not assumed —
+  instead, dividend suspension and RWA reduction are the primary levers."</div>
+</div>
+
+<div class="action-card" style="border-left-color:var(--green)">
+  <div class="ac-title" style="color:var(--green)">✅ Credibility Test 2 — Is the Timeline Realistic?</div>
+  <div class="ac-body">Every capital action has a minimum execution time. Dividend suspension: immediate. Cost reduction: 12–18 months to deliver full savings. Equity issuance: 4–6 months minimum from board resolution to settlement. Asset sales: 3–12 months depending on asset type and market conditions. Loan book reduction: 6–18 months (cannot repay existing loans early). If the ICAAP assumes actions are completed in half the realistic minimum time, the timeline is not credible.</div>
+  <div class="ac-nums">Minimum realistic execution times (UAE market, stress environment):
+  Dividend suspension:                 Immediate (next dividend declaration)
+  Staff cost reduction (5–10%):        12–18 months (notice periods, restructuring)
+  Branch network rationalisation:       18–24 months (regulatory notice, lease breaks)
+  Equity issuance (rights issue):       4–6 months (board, regulator, market)
+  Covered bond / sukuk issuance:        3–5 months (structuring, rating, roadshow)
+  Asset disposal (liquid securities):   2–4 weeks
+  Asset disposal (loan book sale):      6–18 months (due diligence, SPA, approval)</div>
+</div>
+
+<div class="action-card" style="border-left-color:var(--green)">
+  <div class="ac-title" style="color:var(--green)">✅ Credibility Test 3 — Is the Board Genuinely Pre-Committed?</div>
+  <div class="ac-body">Management intent is not board commitment. The ICAAP must demonstrate board pre-approval of each action — either a formal resolution or a documented commitment to exercise a specific action if specified triggers are reached. "Management has the ability to suspend dividends" is not credible. "The board resolved at its September 2024 meeting to suspend dividends if CET1 falls below 11.0% in any reporting period" is credible.</div>
+</div>
+
+<div class="action-card" style="border-left-color:var(--green)">
+  <div class="ac-title" style="color:var(--green)">✅ Credibility Test 4 — Are the Management Actions Shown Pre- and Post-Actions?</div>
+  <div class="ac-body">The ICAAP must present the stressed CET1 trajectory <em>without</em> management actions (the "pre-actions" trajectory) and then the trajectory <em>with</em> management actions (the "post-actions" trajectory). Showing only the post-actions trajectory — where everything is always fine — is the primary ICAAP process window dressing technique. The pre-actions trajectory may breach the regulatory floor — that is acceptable and honest if the management actions credibly restore the position above the floor within a reasonable timeline.</div>
+  <div class="ac-nums">Correct presentation structure:
+  Pre-actions stressed CET1:  Year 1: 13.2% | Year 2: 10.8% | Year 3: 8.4% | Year 4: 6.2% ← BREACH
+  Management actions:
+    Year 1: Dividend suspension saves AED 380m → +1.4% CET1 in Year 2
+    Year 2: RWA reduction programme (AED 1.5bn reduction) → +0.7% Year 2/3
+    Year 3: Targeted cost reduction → +0.6% PPP improvement from Year 3
+  Post-actions stressed CET1: Year 1: 13.2% | Year 2: 12.2% | Year 3: 11.4% | Year 4: 10.8% ✓
+  This presentation is CREDIBLE because it shows: (1) the honest pre-action breach,
+  (2) specific actionable plans, and (3) the restoration of capital adequacy.</div>
+</div>
+
+<!-- 8.7 FULL WORKED EXAMPLE -->
+<div class="sm">8.7 — Full Worked Example</div>
+<h2>The Full Worked Example — One Bank, All Eight Chapters</h2>
+
+<p>This is the synthesis: a single UAE commercial bank assessed using every analytical tool from every chapter of this book. We start with the bank's profile, apply each chapter's framework, and arrive at a complete ICAAP conclusion.</p>
+
+<h3>The Bank — Starting Position</h3>
+
+<div class="full-profile">
+  <div class="fp-card">
+    <div class="fp-category">Balance Sheet</div>
+    <div class="fp-row"><span class="fp-label">Total assets</span><span class="fp-value th">AED 45bn</span></div>
+    <div class="fp-row"><span class="fp-label">Gross loans</span><span class="fp-value th">AED 28bn</span></div>
+    <div class="fp-row"><span class="fp-label">RE &amp; construction</span><span class="fp-value th">42% of loans</span></div>
+    <div class="fp-row"><span class="fp-label">Customer deposits</span><span class="fp-value th">AED 24bn</span></div>
+    <div class="fp-row"><span class="fp-label">GRE deposits</span><span class="fp-value tw">38% of deposits</span></div>
+    <div class="fp-row"><span class="fp-label">RWA (Pillar 1)</span><span class="fp-value th">AED 28bn</span></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-category">Capital Ratios (Ch2)</div>
+    <div class="fp-row"><span class="fp-label">CET1 ratio</span><span class="fp-value tp">13.5%</span></div>
+    <div class="fp-row"><span class="fp-label">Tier 1 ratio</span><span class="fp-value tp">15.0%</span></div>
+    <div class="fp-row"><span class="fp-label">Total Capital</span><span class="fp-value tp">17.2%</span></div>
+    <div class="fp-row"><span class="fp-label">Leverage ratio</span><span class="fp-value tp">4.1%</span></div>
+    <div class="fp-row"><span class="fp-label">RWA density</span><span class="fp-value tw">62%</span></div>
+    <div class="fp-row"><span class="fp-label">P2 add-ons</span><span class="fp-value tw">2.3% (est.)</span></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-category">Liquidity Ratios (Ch3)</div>
+    <div class="fp-row"><span class="fp-label">ELAR (reported)</span><span class="fp-value tp">14.2%</span></div>
+    <div class="fp-row"><span class="fp-label">ELAR (daily avg)</span><span class="fp-value tw">10.4%</span></div>
+    <div class="fp-row"><span class="fp-label">ASRR</span><span class="fp-value tf">108% (fail)</span></div>
+    <div class="fp-row"><span class="fp-label">LCR (illustrative)</span><span class="fp-value tf">72% (fail)</span></div>
+    <div class="fp-row"><span class="fp-label">NSFR (est.)</span><span class="fp-value tf">85% (fail)</span></div>
+    <div class="fp-row"><span class="fp-label">LDR</span><span class="fp-value tw">117%</span></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-category">Credit Quality (Ch4)</div>
+    <div class="fp-row"><span class="fp-label">NPL ratio</span><span class="fp-value tw">5.8%</span></div>
+    <div class="fp-row"><span class="fp-label">Stage 2 ratio</span><span class="fp-value tw">14.2%</span></div>
+    <div class="fp-row"><span class="fp-label">Narrow coverage</span><span class="fp-value tw">68%</span></div>
+    <div class="fp-row"><span class="fp-label">Broad coverage</span><span class="fp-value tp">104%</span></div>
+    <div class="fp-row"><span class="fp-label">Cost of risk</span><span class="fp-value tw">1.1%</span></div>
+    <div class="fp-row"><span class="fp-label">Avg LTV (RE)</span><span class="fp-value tw">71%</span></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-category">Profitability (Ch5)</div>
+    <div class="fp-row"><span class="fp-label">NIM</span><span class="fp-value tp">3.42%</span></div>
+    <div class="fp-row"><span class="fp-label">CIR</span><span class="fp-value tp">44%</span></div>
+    <div class="fp-row"><span class="fp-label">PPP/RWA</span><span class="fp-value tp">2.64%</span></div>
+    <div class="fp-row"><span class="fp-label">ROA</span><span class="fp-value tp">1.42%</span></div>
+    <div class="fp-row"><span class="fp-label">ROE</span><span class="fp-value tp">14.8%</span></div>
+    <div class="fp-row"><span class="fp-label">CIT impact (9%)</span><span class="fp-value tw">−AED 56m</span></div>
+  </div>
+  <div class="fp-card">
+    <div class="fp-category">Flags &amp; Detection (Ch6-7)</div>
+    <div class="fp-row"><span class="fp-label">Flag 1 (Stage 2/NPL)</span><span class="fp-value tw">Moderate</span></div>
+    <div class="fp-row"><span class="fp-label">Flag 2 (NIM/ROE)</span><span class="fp-value tp">Clean</span></div>
+    <div class="fp-row"><span class="fp-label">Flag 3 (ELAR/ASRR)</span><span class="fp-value tf">Active</span></div>
+    <div class="fp-row"><span class="fp-label">Flag 4 (CET1/PPP)</span><span class="fp-value tp">Clean</span></div>
+    <div class="fp-row"><span class="fp-label">WD Score</span><span class="fp-value tw">5/20</span></div>
+    <div class="fp-row"><span class="fp-label">Overall signal</span><span class="fp-value tw">Monitor</span></div>
+  </div>
+</div>
+
+<h3>ICAAP Capital Adequacy Assessment</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Capital Layer</th><th>Basis</th><th>% RWA</th><th>AED m</th></tr></thead>
+<tbody>
+  <tr><td>P1 CET1 minimum</td><td>CBUAE Capital Standards Art. 5</td><td class="tf">4.50%</td><td>1,260</td></tr>
+  <tr><td>Conservation Buffer</td><td>Basel III — fully phased</td><td class="tw">2.50%</td><td>700</td></tr>
+  <tr><td>Concentration Risk (P2)</td><td>Name-level: RE 42%, top 5 GRE developers</td><td class="tw">1.60%</td><td>448</td></tr>
+  <tr><td>IRRBB Capital (P2)</td><td>+200bp shock on fixed-rate mortgage book</td><td class="tw">0.75%</td><td>210</td></tr>
+  <tr><td>Liquidity/Funding Risk (P2)</td><td>GRE deposit concentration run-off stress</td><td class="tw">0.40%</td><td>112</td></tr>
+  <tr><td>Operational/Model Risk (P2)</td><td>Above P1 BIA — data and model risk add-on</td><td>0.25%</td><td>70</td></tr>
+  <tr><td>P2R (CBUAE estimate)</td><td>Based on SREP challenge of above</td><td class="tw">1.30%</td><td>364</td></tr>
+  <tr><td>Management Buffer</td><td>Strategic flexibility + stressed headroom</td><td class="tp">1.20%</td><td>336</td></tr>
+  <tr><td><strong>Total ICG</strong></td><td><strong>Internal Capital Guidance</strong></td><td class="th"><strong>12.50%</strong></td><td class="th"><strong>3,500</strong></td></tr>
+  <tr><td><strong>Actual CET1</strong></td><td><strong>Current position</strong></td><td class="tp"><strong>13.5%</strong></td><td class="tp"><strong>3,780</strong></td></tr>
+  <tr><td><strong>Surplus above ICG</strong></td><td><strong>Capital headroom</strong></td><td class="tp"><strong>+1.0%</strong></td><td class="tp"><strong>+280</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Three-Year Severe Stress Projection</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>Base</th><th>Year 1</th><th>Year 2</th><th>Year 3</th></tr></thead>
+<tbody>
+  <tr><td>Property price shock (cumulative)</td><td>—</td><td>−15%</td><td>−30%</td><td>−35%</td></tr>
+  <tr><td>NPL ratio</td><td class="tw">5.8%</td><td class="tw">8.4%</td><td class="tf">12.1%</td><td class="tf">13.9%</td></tr>
+  <tr><td>Stage 2 ratio</td><td class="tw">14.2%</td><td class="tw">10.5%</td><td class="tw">7.2%</td><td class="tw">5.1%</td></tr>
+  <tr><td>Cost of risk</td><td class="tw">1.10%</td><td class="tw">2.20%</td><td class="tf">3.80%</td><td class="tf">3.10%</td></tr>
+  <tr><td>NIM</td><td class="tp">3.42%</td><td class="tw">2.90%</td><td class="tw">2.35%</td><td class="tw">2.10%</td></tr>
+  <tr><td>CIR</td><td class="tp">44%</td><td class="tw">50%</td><td class="tw">58%</td><td class="tf">64%</td></tr>
+  <tr><td>PPP/RWA</td><td class="tp">2.64%</td><td class="tw">1.76%</td><td class="tw">1.05%</td><td class="tw">0.74%</td></tr>
+  <tr><td>Annual impairment (AED m)</td><td>308</td><td class="tw">616</td><td class="tf">1,064</td><td class="tf">868</td></tr>
+  <tr><td>Net profit/(loss) (AED m)</td><td class="tp">614</td><td class="tw">246</td><td class="tf">(310)</td><td class="tf">(349)</td></tr>
+  <tr><td>ELAR (stressed)</td><td class="tp">14.2%</td><td class="tw">11.8%</td><td class="tw">10.2%</td><td class="tw">9.4%</td></tr>
+  <tr><td>ASRR (stressed)</td><td class="tf">108%</td><td class="tf">116%</td><td class="tf">122%</td><td class="tf">118%</td></tr>
+  <tr><td>RWA (stressed)</td><td>28,000</td><td>30,800</td><td>34,400</td><td>35,600</td></tr>
+  <tr><td><strong>CET1 ratio</strong></td><td class="tp"><strong>13.5%</strong></td><td class="tw"><strong>12.8%</strong></td><td class="tw"><strong>11.4%</strong></td><td class="tw"><strong>10.1%</strong></td></tr>
+  <tr><td>Headroom above 7% floor</td><td class="tp">+6.5%</td><td class="tp">+5.8%</td><td class="tp">+4.4%</td><td class="tw">+3.1%</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="chart-box">
+  <div class="ct">Full ICAAP Dashboard — Base to Year 3 Severe Stress</div>
+  <div class="cs">All key ratios across the three-year severe scenario. CET1 maintains headroom throughout. ASRR deteriorates as GRE deposits flee under stress.</div>
+  <canvas id="fullDashChart" height="130"></canvas>
+</div>
+
+<div class="alert a-good">
+  <div class="ai">✅</div>
+  <div class="ab">
+    <h5>ICAAP Conclusion — This Bank Passes With Conditions</h5>
+    <p>The bank maintains CET1 above the 7% regulatory floor throughout the severe stress, with a Year 3 trough of 10.1% and 3.1% headroom. The ICAAP conclusion is: <strong>capital adequacy confirmed under all three scenarios with no management actions required for CET1.</strong> However, three specific vulnerabilities require monitoring and disclosure: (1) ASRR deteriorates significantly under GRE stress — a structural funding plan to reduce GRE concentration is required within 18 months; (2) Stage 2 ratio of 14.2% at base warrants monitoring — shadow NPL estimate of 8.7% vs reported 5.8% suggests provision sensitivity; (3) ELAR daily average of 10.4% (near minimum of 10%) leaves limited liquidity buffer — consider targeting 12%+ for day-to-day compliance comfort. None of these require a P2R capital add-on, but each warrants a P2G guidance buffer of 0.5–1.0%.</p>
+  </div>
+</div>
+
+<!-- 8.8 FINAL RADAR -->
+<div class="sm">8.8 — Final Radar</div>
+<h2>The Final Radar — All Chapters Combined</h2>
+
+<div class="chart-box">
+  <div class="ct">Complete Bank Risk Profile — All Ratio Categories</div>
+  <div class="cs">Base position vs stressed Year 3. Strong capital and profitability; structural liquidity weakness (ASRR) visible. Window dressing score 5/20 — clean.</div>
+  <canvas id="finalRadar" height="220"></canvas>
+</div>
+
+<!-- 8.9 SREP DIALOGUE -->
+<div class="sm">8.9 — Regulatory Dialogue</div>
+<h2>The SREP Dialogue — What the CBUAE Will Challenge</h2>
+
+<p>Based on the worked example above, here is what the CBUAE SREP challenge is most likely to focus on during the supervisory dialogue, and how a well-prepared bank should respond:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>CBUAE Challenge Area</th><th>Likely Question</th><th>Strong Bank Response</th></tr></thead>
+<tbody>
+  <tr><td>Real estate concentration</td><td>"Your P2 add-on of 1.6% uses name-level analysis — show us the individual developer exposures and justify each LGD assumption"</td><td>Provide exposure per developer, independent valuation dates, and LGD sensitivity at −30%, −40%, −50% property price. Show LGD increases are built into the stress scenario.</td></tr>
+  <tr><td>GRE deposit reliance</td><td>"ASRR of 108% reflects that 38% of your deposits are GRE-funded. What is your structural funding plan?"</td><td>Present a 3-year plan to reduce GRE deposits from 38% to below 25% of total funding through retail deposit growth and long-term issuance. Show ASRR trajectory under the plan.</td></tr>
+  <tr><td>Stage 2 shadow NPL</td><td>"Your Stage 2 ratio of 14.2% implies a shadow NPL of approximately 8.7% using historical migration rates. Why is your base case NPL only 5.8%?"</td><td>Provide the forbearance ratio (should be below 5%). Show the Stage 2 provision rate (should be 8%+). Demonstrate that Stage 2 provisions are adequate for the expected migration. Show sensitivity: if migration rate is 35% vs 25%, what is the additional capital impact?</td></tr>
+  <tr><td>IRRBB post-rate cycle</td><td>"Your IRRBB add-on of 0.75% was calibrated before the 2022–2024 rate cycle. Has the fixed-rate mortgage book sensitivity been re-quantified?"</td><td>Show the updated repricing gap analysis reflecting current portfolio. Demonstrate NII sensitivity to −200bp (EIBOR cutting cycle) scenario. If sensitivity has increased, show updated P2 add-on.</td></tr>
+  <tr><td>Management action credibility</td><td>"In Year 2 of your severe stress, you assume AED 600m of covered sukuk issuance. Show us the board resolution and the feasibility assessment."</td><td>Provide: (1) board resolution specifically authorising sukuk shelf registration; (2) timeline analysis showing 4-month execution is achievable; (3) investor demand analysis from the bank's DCM team; (4) alternative if market is closed — show pre-actions vs post-actions CET1 trajectory.</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- 8.10 WHAT THIS BOOK TAUGHT -->
+<div class="sm">8.10 — The Book's Lessons</div>
+<h2>What This Book Taught You — A Summary</h2>
+
+<p>Eight chapters, twenty-five ratios, forty numerical examples, sixty window dressing techniques catalogued, and one central insight:</p>
+
+<div class="formula-box">
+  <div class="fl">The Central Insight of This Book</div>
+  A bank is not its CET1 ratio.
+  A bank is not its NPL ratio.
+  A bank is not its LCR.
+
+  A bank is the INTERACTION between all of these — simultaneously, over time,
+  under stress, in the specific context of its own business model and the
+  specific market in which it operates (in our case: the UAE).
+
+  The ICAAP is the document that captures that interaction honestly.
+  Financial ratios are the language in which that interaction is described.
+  Window dressing is the art of making that language lie.
+  Detection is the art of making the language tell the truth again.
+
+  The analyst who understands all three — ratios, ICAAP, and detection —
+  is the analyst who can answer the only question that ultimately matters:
+  "Can this bank survive what is coming — and do the numbers actually say so?"
+  <div class="fn">Every ratio in this book is a lens. The ICAAP is the camera. A skilled photographer uses all lenses together.</div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Chapter</th><th>Core Lesson</th><th>Key Ratio/Tool</th><th>Primary UAE Application</th></tr></thead>
+<tbody>
+  <tr><td>1 — Foundations</td><td>ICAAP is the bank's honest survival declaration, not a regulatory form</td><td>ICG vs CET1 buffer stack</td><td>CBUAE Circular 163/2018; Board accountability</td></tr>
+  <tr><td>2 — Capital Adequacy</td><td>CET1 is history; PPP/RWA is the future; RWA density is the honesty test</td><td>CET1, Leverage, P2 RWA</td><td>D-SIB surcharges; IRB output floor (Basel IV)</td></tr>
+  <tr><td>3 — Liquidity</td><td>ELAR/ASRR exist because UAE is not a generic Basel market</td><td>ELAR, ASRR, LCR paradox</td><td>5 reasons; GRE deposits; Wakalah; USD peg</td></tr>
+  <tr><td>4 — Credit Quality</td><td>The Stage 2 book is the shadow: what it contains is tomorrow's NPL</td><td>Shadow NPL, narrow coverage</td><td>CBUAE 5-tier classification; RE cycle; UTP</td></tr>
+  <tr><td>5 — Profitability</td><td>PPP/RWA is the firewall between credit losses and CET1</td><td>PPP/RWA, capital runway</td><td>UAE CIT 9%; EIBOR/NIM sensitivity; D-SIB benchmarks</td></tr>
+  <tr><td>6 — Inconsistency Flags</td><td>Risk cannot be destroyed — only relocated. Find where it went.</td><td>Four cross-ratio flags</td><td>2009 GRE crisis as compound flag example</td></tr>
+  <tr><td>7 — Detection Framework</td><td>Window dressing always leaves a crime scene. The detective finds it.</td><td>20-point scoring methodology</td><td>UAE composite bank case study</td></tr>
+  <tr><td>8 — ICAAP Narrative</td><td>The building is not the beams. The ICAAP is not the ratios.</td><td>Complete ICAAP architecture</td><td>CBUAE SREP; submission requirements; management actions</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- 8.11 BOOK CLOSE -->
+<div class="book-close">
+  <div class="bc-title">Closing Thought</div>
+  <div class="bc-quote">"The purpose of banking regulation is not to eliminate risk — it is to ensure that the people bearing the risk are the banks' shareholders, not the banks' depositors. ICAAP is the mechanism by which every bank, every year, must demonstrate in writing that this promise is kept. The analyst who can read an ICAAP honestly — through the numbers, through the narrative, and through the window dressing — is the analyst standing between a bank's shareholders and the public who trusted it with their savings."</div>
+  <div class="bc-attr">— UAE Banking Regulatory Framework: ICAAP &amp; Financial Ratios</div>
+</div>
+
+<!-- REFERENCES -->
+<div class="sm">8.11 — References</div>
+<div class="ref-section">
+  <div class="ref-title">Regulatory References &amp; Sources</div>
+  <ul class="ref-list">
+    <li id="ref1">[1] Central Bank of the UAE (CBUAE). <em>ICAAP Supervisory Guidance.</em> 2022. Annual submission requirements, Board approval, SREP process. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[2] BCBS. <em>Basel III: A global regulatory framework for more resilient banks and banking systems.</em> BIS, June 2011. Complete Basel III framework. <a href="https://www.bis.org/publ/bcbs189.htm" target="_blank">https://www.bis.org/publ/bcbs189.htm</a></li>
+    <li>[3] EBA. <em>Guidelines on ICAAP and ILAAP information collected for SREP purposes.</em> EBA/GL/2016/10. Complete SREP methodology. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li>[4] EBA. <em>Guidelines on common procedures and methodologies for the supervisory review and evaluation process (SREP).</em> EBA/GL/2014/13 (updated 2018). SREP capital add-on methodology. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li>[5] PRA (Bank of England). <em>SS31/15 — Internal Capital Adequacy Assessment Process (ICAAP) and the Supervisory Review and Evaluation Process (SREP).</em> 2018 update. Management action credibility standards. <a href="https://www.bankofengland.co.uk" target="_blank">https://www.bankofengland.co.uk</a></li>
+    <li>[6] IMF. <em>UAE: Financial System Stability Assessment.</em> Country Report No. 22/66, March 2022. CBUAE supervisory standards assessment. <a href="https://www.imf.org" target="_blank">https://www.imf.org</a></li>
+    <li>[7] CBUAE. <em>Standards re Capital Adequacy of Banks in the UAE.</em> Circular 163/2018 (updated 2021). <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[8] CBUAE. <em>Liquidity Regulations for Banks in the UAE.</em> 2015 (updated 2023). <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[9] CBUAE. <em>Domestic Systemically Important Banks (D-SIBs) Framework.</em> 2020. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[10] BCBS. <em>Supervisory guidance for assessing banks' financial instrument fair value practices.</em> April 2009. <a href="https://www.bis.org/publ/bcbs153.htm" target="_blank">https://www.bis.org/bcbs153.htm</a></li>
+    <li>[11] BCBS. <em>Basel III: Finalising post-crisis reforms (Basel IV).</em> December 2017. Output floor and IRB constraints. <a href="https://www.bis.org/bcbs/publ/d424.htm" target="_blank">https://www.bis.org/bcbs/publ/d424.htm</a></li>
+    <li>[12] UAE Ministry of Finance. <em>Federal Decree-Law No. 47 of 2022 on the Taxation of Corporations and Businesses.</em> 9% CIT from June 2023. <a href="https://mof.gov.ae" target="_blank">https://mof.gov.ae</a></li>
+  </ul>
+</div>
+
+<div class="chapter-nav">
+  <a class="nav-btn" href="chapter_07_window_dressing_framework.html">← Chapter 7 — Detection Framework</a>
+  <span style="font-size:13px;color:var(--text-light)">Chapter 8 of 8 — The ICAAP Narrative</span>
+  <a class="nav-btn disabled">Book Complete ✓</a>
+</div>
+</div>
+
+<script>
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#555';
+const gc = 'rgba(0,0,0,0.05)';
+
+// FULL DASHBOARD CHART
+new Chart(document.getElementById('fullDashChart'), {
+  type: 'line',
+  data: {
+    labels: ['Base', 'Year 1', 'Year 2', 'Year 3'],
+    datasets: [
+      {label: 'CET1 ratio %', data: [13.5, 12.8, 11.4, 10.1],
+       borderColor: '#0d7377', tension: 0.3, fill: false, pointRadius: 6, borderWidth: 2.5, yAxisID: 'y'},
+      {label: 'NPL ratio %', data: [5.8, 8.4, 12.1, 13.9],
+       borderColor: '#c0392b', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2,
+       borderDash: [6,3], yAxisID: 'y'},
+      {label: 'PPP/RWA %', data: [2.64, 1.76, 1.05, 0.74],
+       borderColor: '#27ae60', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2,
+       borderDash: [3,3], yAxisID: 'y2'},
+      {label: 'Cost of Risk %', data: [1.10, 2.20, 3.80, 3.10],
+       borderColor: '#e67e22', tension: 0.3, fill: false, pointRadius: 4, borderWidth: 1.5,
+       borderDash: [2,4], yAxisID: 'y2'},
+      {label: '7% CET1 Floor', data: [7,7,7,7],
+       borderColor: '#b8860b', borderWidth: 1, borderDash: [4,4], pointRadius: 0, fill: false, yAxisID: 'y'}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {min: 0, max: 16, title: {display: true, text: 'CET1 / NPL %'}, grid: {color: gc}},
+      y2: {position: 'right', min: 0, max: 6, title: {display: true, text: 'PPP/RWA / CoR %'},
+           grid: {display: false}},
+      x: {grid: {color: gc}}
+    }
+  }
+});
+
+// FINAL RADAR
+new Chart(document.getElementById('finalRadar'), {
+  type: 'radar',
+  data: {
+    labels: ['CET1 Capital','Capital Runway','LCR / ELAR','NSFR / ASRR','NPL Coverage','Credit Quality','Profitability PPP/RWA','Cost Efficiency (CIR)','NIM Quality','No Window Dressing'],
+    datasets: [
+      {label: 'Base Position', 
+       data: [80, 72, 70, 42, 68, 64, 72, 75, 78, 88],
+       backgroundColor: 'rgba(13,115,119,0.15)', borderColor: '#0d7377',
+       pointBackgroundColor: '#0d7377', borderWidth: 2},
+      {label: 'Year 3 Stressed Position',
+       data: [65, 52, 58, 30, 45, 38, 48, 52, 55, 88],
+       backgroundColor: 'rgba(230,126,34,0.12)', borderColor: '#e67e22',
+       pointBackgroundColor: '#e67e22', borderWidth: 2, borderDash: [5,3]}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {r: {
+      min: 0, max: 100,
+      ticks: {stepSize: 20, color: '#888', backdropColor: 'transparent'},
+      grid: {color: 'rgba(0,0,0,0.07)'},
+      angleLines: {color: 'rgba(0,0,0,0.07)'},
+      pointLabels: {color: '#555', font: {size: 11}}
+    }}
+  }
+});
+</script>
+</body>
+</html>

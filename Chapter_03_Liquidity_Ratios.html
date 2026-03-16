@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 3 — Liquidity Ratios | LCR, NSFR, ELAR &amp; ASRR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1a1a2e;--ink-mid:#2d2d4e;
+  --gold:#b8860b;--gold-light:#daa520;--gold-pale:#fff8dc;
+  --teal:#0d7377;--teal-light:#14a085;--teal-pale:#e8f8f7;
+  --red:#c0392b;--red-pale:#fdf0ee;
+  --amber:#e67e22;--amber-pale:#fef9f0;
+  --blue:#1a6ea8;--blue-pale:#eef6fb;
+  --green:#27ae60;--green-pale:#edfaf3;
+  --purple:#6c3483;--purple-pale:#f5eef8;
+  --page:#fafaf7;--paper:#ffffff;
+  --border:#e8e4d8;--border-strong:#c8c0a8;
+  --text:#2c2c2c;--text-mid:#555;--text-light:#888;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--page);color:var(--text);line-height:1.75;font-size:16px;}
+.book-header{background:var(--ink);color:white;position:relative;overflow:hidden;}
+.book-header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal-light),var(--gold));}
+.book-header-inner{max-width:880px;margin:0 auto;padding:56px 40px;position:relative;z-index:2;}
+.book-series{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:10px;}
+.chapter-num{font-family:'Lora',serif;font-size:90px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;position:absolute;right:40px;top:30px;font-style:italic;}
+.book-title{font-family:'Lora',serif;font-size:38px;font-weight:700;line-height:1.2;margin-bottom:14px;color:white;}
+.book-title span{color:var(--gold-light);font-style:italic;}
+.book-subtitle{font-size:16px;color:rgba(255,255,255,0.6);max-width:600px;line-height:1.6;margin-bottom:26px;}
+.chapter-meta{display:flex;gap:18px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.45);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
+.page-wrap{max-width:880px;margin:0 auto;padding:0 40px 80px;}
+.toc-box{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:22px 26px;margin:32px 0;box-shadow:var(--shadow);}
+.toc-title{font-family:'Lora',serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.toc-list{list-style:none;columns:2;column-gap:28px;}
+.toc-list li{font-size:13px;color:var(--text-mid);padding:3px 0;}
+.toc-list li span{color:var(--gold);font-weight:600;margin-right:6px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;margin-top:50px;display:flex;align-items:center;gap:10px;}
+.sm::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3;}
+h3{font-family:'Lora',serif;font-size:21px;font-weight:600;color:var(--ink-mid);margin:30px 0 10px;line-height:1.3;}
+h4{font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 7px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:14px;color:var(--text);}
+strong{color:var(--ink);}
+sup a{color:var(--blue);font-size:10px;}
+ul,ol{padding-left:22px;margin-bottom:14px;}
+li{font-size:15px;color:var(--text-mid);line-height:2;}
+.story-box{background:linear-gradient(135deg,#fffbf0,#fff8e7);border:2px solid var(--gold-light);border-radius:14px;padding:22px 26px;margin:26px 0;position:relative;overflow:hidden;}
+.story-box::before{content:'💧';position:absolute;top:-6px;right:16px;font-size:26px;transform:rotate(10deg);}
+.story-label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.story-box p{font-family:'Lora',serif;font-size:14.5px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;}
+.story-box p:last-child{margin-bottom:0;}
+.beginner{background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:17px 21px;margin:16px 0;}
+.bl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.beginner p{font-size:14px;color:var(--ink-mid);margin-bottom:0;}
+.formula-box{background:var(--ink);border-radius:10px;padding:17px 21px;margin:17px 0;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--gold-light);}
+.fl{font-family:'Source Sans 3',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;}
+.fn{font-family:'Source Sans 3',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.42);margin-top:6px;font-style:italic;}
+.alert{border-radius:8px;padding:15px 19px;margin:17px 0;border-left:4px solid;display:flex;gap:11px;align-items:flex-start;}
+.ai{font-size:18px;flex-shrink:0;margin-top:2px;}
+.ab h5{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ab p{font-size:14px;margin-bottom:0;}
+.a-key{background:#fffbf0;border-color:var(--gold);} .a-key .ab h5{color:var(--gold);}
+.a-uae{background:var(--teal-pale);border-color:var(--teal);} .a-uae .ab h5{color:var(--teal);}
+.a-warn{background:var(--amber-pale);border-color:var(--amber);} .a-warn .ab h5{color:var(--amber);}
+.a-danger{background:var(--red-pale);border-color:var(--red);} .a-danger .ab h5{color:var(--red);}
+.a-good{background:var(--green-pale);border-color:var(--green);} .a-good .ab h5{color:var(--green);}
+.table-wrap{overflow-x:auto;margin:17px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;box-shadow:var(--shadow);border-radius:8px;overflow:hidden;}
+thead th{background:var(--ink);color:white;padding:10px 13px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.4px;}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,0,0,0.018);}
+tbody tr:hover td{background:var(--gold-pale);}
+.tp{color:var(--green);font-weight:600;} .tf{color:var(--red);font-weight:600;} .tw{color:var(--amber);font-weight:600;} .th{color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;}
+.uae-section{background:linear-gradient(135deg,#e8f8f7,#d4f1ee);border:1px solid var(--teal);border-radius:12px;padding:24px 26px 24px 40px;margin:34px 0;position:relative;}
+.uae-flag-stripe{position:absolute;left:0;top:0;bottom:0;width:8px;border-radius:12px 0 0 12px;background:linear-gradient(to bottom,#00732f 25%,#ffffff 25%,#ffffff 50%,#000000 50%,#000000 75%,#ff0000 75%);}
+.uae-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:white;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.uae-section h3{color:var(--teal);margin-top:0;}
+.reason-card{background:var(--paper);border:1px solid var(--border);border-top:3px solid var(--teal);border-radius:0 0 10px 10px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);}
+.reason-card .rc-num{font-family:'Lora',serif;font-size:32px;font-weight:700;color:var(--teal);opacity:0.3;line-height:1;float:right;margin-top:-4px;}
+.reason-card .rc-title{font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:8px;}
+.reason-card p{font-size:13px;color:var(--text-mid);margin-bottom:8px;}
+.reason-card .rc-lcr{font-size:12px;color:var(--red);background:var(--red-pale);border-radius:4px;padding:3px 8px;display:inline-block;margin-right:4px;margin-top:4px;}
+.reason-card .rc-elar{font-size:12px;color:var(--teal);background:var(--teal-pale);border-radius:4px;padding:3px 8px;display:inline-block;margin-right:4px;margin-top:4px;}
+.wd-section{background:var(--paper);border:1px solid #e0b4b4;border-radius:12px;padding:24px 26px;margin:34px 0;box-shadow:var(--shadow);}
+.wd-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:13px;border-bottom:1px solid #f0d0d0;}
+.wd-title{font-family:'Lora',serif;font-size:19px;font-weight:700;color:var(--red);}
+.wd-sub{font-size:13px;color:var(--text-light);margin-top:2px;}
+.wd-item{margin-bottom:22px;padding-bottom:22px;border-bottom:1px dashed #f0d0d0;}
+.wd-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.wd-ih{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.wd-n{background:var(--red);color:white;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.wd-item h5{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--red);}
+.wd-item p{font-size:14px;color:var(--text-mid);margin-bottom:6px;}
+.wl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:2px;}
+.wl-m{color:var(--amber);} .wl-e{color:var(--blue);} .wl-d{color:var(--green);}
+.wnums{background:rgba(26,110,168,0.06);border-left:3px solid var(--blue);padding:10px 13px;border-radius:0 6px 6px 0;margin:8px 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--ink-mid);line-height:1.75;}
+.sherlock{background:linear-gradient(135deg,#1a1a2e,#2d2d4e);border-radius:12px;padding:24px 26px;margin:34px 0;color:white;}
+.sh-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.sh-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:18px;}
+.clue{display:flex;gap:11px;margin-bottom:13px;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.clue:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.cn{background:var(--gold);color:var(--ink);min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.clue p{font-size:13px;color:rgba(255,255,255,0.82);margin-bottom:0;line-height:1.65;}
+.clue strong{color:var(--gold-light);}
+.cnums{background:rgba(201,168,76,0.1);border-left:2px solid var(--gold);padding:8px 11px;margin-top:6px;border-radius:0 4px 4px 0;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.72);line-height:1.65;}
+.chart-box{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;box-shadow:var(--shadow);}
+.ct{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.cs{font-size:12px;color:var(--text-light);margin-bottom:13px;font-style:italic;}
+.cartoon-wrap{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:20px;margin:22px 0;text-align:center;box-shadow:var(--shadow);}
+.cartoon-caption{font-size:12px;color:var(--text-light);font-style:italic;margin-top:10px;}
+.metric-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0;}
+.metric-tile{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:13px;text-align:center;box-shadow:var(--shadow);}
+.mv{font-family:'Lora',serif;font-size:23px;font-weight:700;margin-bottom:3px;}
+.ml{font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;}
+.ms{font-size:11px;color:var(--text-light);margin-top:3px;}
+.ref-section{background:var(--blue-pale);border:1px solid #c0d8f0;border-radius:8px;padding:17px 21px;margin:34px 0 16px;}
+.ref-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ref-list{list-style:none;}
+.ref-list li{font-size:12px;color:var(--text-mid);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.ref-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+.ref-list a{color:var(--blue);text-decoration:none;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin:42px 0;}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid var(--border);margin-top:34px;}
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 17px;background:var(--ink);color:white;border:none;border-radius:6px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:var(--ink-mid);}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0;}
+.compare-card{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;box-shadow:var(--shadow);}
+.cc-header{font-family:'Lora',serif;font-size:16px;font-weight:700;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.cc-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:13px;}
+.cc-row:last-child{border-bottom:none;}
+.cc-label{color:var(--text-light);font-size:12px;}
+.cc-val{color:var(--text);font-weight:500;text-align:right;max-width:55%;}
+@media(max-width:768px){.page-wrap{padding:0 16px 60px;}.book-title{font-size:26px;}.metric-strip{grid-template-columns:1fr 1fr;}.toc-list{columns:1;}.chapter-num{display:none;}.compare-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="book-header">
+  <div class="book-header-inner">
+    <div class="book-series">ICAAP &amp; Financial Ratios in UAE Banking · Chapter Three</div>
+    <div class="chapter-num">03</div>
+    <h1 class="book-title">Liquidity Ratios — <span>Basel &amp; UAE</span></h1>
+    <p class="book-subtitle">LCR, NSFR, ELAR and ASRR — what they measure, why the UAE created its own framework, what small UAE banks include and exclude, and the complete numerical story from balance sheet to ICAAP liquidity stress.</p>
+    <div class="chapter-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Basel III · BIS 2010/2014</div>
+      <div class="meta-item"><div class="meta-dot"></div>CBUAE Liquidity Regs 2015/2023</div>
+      <div class="meta-item"><div class="meta-dot"></div>ELAR · ASRR · ILAAP</div>
+      <div class="meta-item"><div class="meta-dot"></div>Beginner → Advanced</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<div class="toc-box">
+  <div class="toc-title">In This Chapter</div>
+  <ul class="toc-list">
+    <li><span>3.1</span> The Desert Traveller Parable</li>
+    <li><span>3.2</span> Why Liquidity Ratios Exist</li>
+    <li><span>3.3</span> LCR — Formula, HQLA &amp; Outflows</li>
+    <li><span>3.4</span> NSFR — ASF, RSF &amp; Structural Funding</li>
+    <li><span>3.5</span> The LCR/NSFR Paradox</li>
+    <li><span>3.6</span> UAE Framework — Why Different?</li>
+    <li><span>3.7</span> The 5 Reasons — Small Bank View</li>
+    <li><span>3.8</span> ELAR — Deep Dive</li>
+    <li><span>3.9</span> ASRR — Deep Dive</li>
+    <li><span>3.10</span> Master Comparison Table</li>
+    <li><span>3.11</span> Numerical Examples — Small UAE Bank</li>
+    <li><span>3.12</span> How Window Dressers Hide</li>
+    <li><span>3.13</span> Sherlock Holmes Detection</li>
+    <li><span>3.14</span> References</li>
+  </ul>
+</div>
+
+<!-- ═══ 3.1 NARRATIVE ═══ -->
+<div class="sm">3.1 — The Story</div>
+<h2>The Desert Traveller and the Water Canteen</h2>
+
+<div class="story-box">
+  <div class="story-label">A Beginner's Parable</div>
+  <p>A traveller sets off across the UAE desert. A wise sheikh offers two pieces of advice. First: "You must carry enough water to survive for at least two days if you find no oasis." That is your LCR — a minimum 30-day liquid buffer for a crisis. Second: "Your water supply must come from reliable deep wells, not seasonal streams that dry up in summer." That is your NSFR — stable funding matched to your journey length.</p>
+  <p>Now a different traveller — a local Bedouin who knows every oasis, every reliable water source, and every seasonal stream — does not need the same rules. His Bedouin council has its own standard: "You must always carry water from the three permanent deep wells near Al Ain" (ELAR — only the most reliable sources count). And: "You cannot use more water than your reliable wells can produce each day" (ASRR — advances must not exceed stable resources).</p>
+  <p>The global rules assume you are crossing an unknown desert. The UAE rules recognise who is making the journey and what water sources actually exist here. <strong>Same destination — stay alive. Different maps. Both valid.</strong></p>
+</div>
+
+<div class="cartoon-wrap">
+<svg width="100%" viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" style="max-width:720px">
+  <rect width="720" height="260" fill="#fafaf7" rx="8"/>
+  <defs>
+    <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M2 2L8 5L2 8" fill="none" stroke="#888" stroke-width="1.5"/>
+    </marker>
+  </defs>
+  <!-- Two travellers -->
+  <!-- International bank traveller (left) -->
+  <circle cx="120" cy="100" r="18" fill="#fdbcb4"/>
+  <rect x="108" y="118" width="24" height="34" fill="#1a6ea8" rx="2"/>
+  <text x="120" y="170" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#555" text-anchor="middle" font-style="italic">Category 1 bank</text>
+  <text x="120" y="183" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#555" text-anchor="middle" font-style="italic">(international)</text>
+  <!-- Canteen -->
+  <rect x="96" y="126" width="14" height="20" rx="3" fill="#378add" stroke="#1a6ea8" stroke-width="1"/>
+  <text x="103" y="140" font-family="'Source Sans 3',sans-serif" font-size="8" fill="white" text-anchor="middle">LCR</text>
+  <rect x="112" y="130" width="14" height="16" rx="3" fill="#6c3483" stroke="#5b2875" stroke-width="1"/>
+  <text x="119" y="141" font-family="'Source Sans 3',sans-serif" font-size="7" fill="white" text-anchor="middle">NSFR</text>
+  <!-- Small UAE bank traveller (right) -->
+  <circle cx="310" cy="100" r="18" fill="#fdbcb4"/>
+  <rect x="298" y="118" width="24" height="34" fill="#0d7377" rx="2"/>
+  <!-- Keffiyeh indicator -->
+  <ellipse cx="310" cy="86" rx="20" ry="8" fill="#c8c0a8" opacity="0.5"/>
+  <text x="310" y="170" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#555" text-anchor="middle" font-style="italic">Category 2 bank</text>
+  <text x="310" y="183" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#555" text-anchor="middle" font-style="italic">(small UAE)</text>
+  <!-- UAE canteens -->
+  <rect x="286" y="126" width="14" height="20" rx="3" fill="#0d7377" stroke="#0a5f63" stroke-width="1"/>
+  <text x="293" y="140" font-family="'Source Sans 3',sans-serif" font-size="7" fill="white" text-anchor="middle">ELAR</text>
+  <rect x="302" y="130" width="14" height="16" rx="3" fill="#e67e22" stroke="#c96a1a" stroke-width="1"/>
+  <text x="309" y="141" font-family="'Source Sans 3',sans-serif" font-size="7" fill="white" text-anchor="middle">ASRR</text>
+  <!-- Desert background -->
+  <path d="M60 200 Q180 185 300 195 Q420 205 540 192 Q620 186 670 198 L670 235 L60 235 Z" fill="#e8d8b0" opacity="0.4"/>
+  <!-- Rules boxes -->
+  <rect x="400" y="50" width="165" height="80" rx="8" fill="rgba(26,110,168,0.08)" stroke="rgba(26,110,168,0.3)" stroke-width="1"/>
+  <text x="482" y="70" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#1a6ea8" text-anchor="middle" font-weight="700">Basel Framework</text>
+  <text x="482" y="86" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">LCR: HQLA ÷ 30-day outflows ≥100%</text>
+  <text x="482" y="100" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">NSFR: ASF ÷ RSF ≥ 100%</text>
+  <text x="482" y="114" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#888" text-anchor="middle">Requires deep markets + complex data</text>
+
+  <rect x="400" y="145" width="165" height="80" rx="8" fill="rgba(13,115,119,0.08)" stroke="rgba(13,115,119,0.3)" stroke-width="1"/>
+  <text x="482" y="165" font-family="'Source Sans 3',sans-serif" font-size="10" fill="#0d7377" text-anchor="middle" font-weight="700">CBUAE Framework</text>
+  <text x="482" y="181" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">ELAR: Eligible LAs ÷ Total liabilities ≥10%</text>
+  <text x="482" y="195" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#555" text-anchor="middle">ASRR: Advances ÷ Stable resources ≤100%</text>
+  <text x="482" y="209" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#888" text-anchor="middle">Simple data, Islamic-compatible, GRE-aware</text>
+
+  <!-- Arrows -->
+  <line x1="340" y1="120" x2="395" y2="100" stroke="#c8c0a8" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr3)"/>
+  <line x1="145" y1="120" x2="395" y2="90" stroke="#c8c0a8" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr3)"/>
+
+  <text x="360" y="248" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Figure 3.1 — Same destination (stay liquid), different rulebook. Category 1 banks use Basel. Category 2 banks use CBUAE's own ratios.</text>
+</svg>
+<div class="cartoon-caption">The rulebook changes based on who is making the journey — but the destination is identical: survive a severe liquidity stress without central bank support.</div>
+</div>
+
+<!-- ═══ 3.2 WHY LIQUIDITY RATIOS EXIST ═══ -->
+<div class="sm">3.2 — Why They Exist</div>
+<h2>Why Liquidity Ratios Exist</h2>
+
+<div class="beginner">
+  <div class="bl">🟢 Simple Version — The Bank Run</div>
+  <p>A bank can be perfectly solvent — owning valuable assets worth more than its debts — and still fail in 48 hours if enough depositors all try to withdraw at once. The assets (long-term loans, property) cannot be turned into cash quickly enough to pay everyone. Liquidity ratios measure whether the bank holds enough instantly-cashable assets to survive a mass withdrawal, and whether its funding structure is stable enough that the mass withdrawal is less likely to happen in the first place.</p>
+</div>
+
+<p><strong>Technical explanation:</strong> Banks are structurally illiquid by design — they borrow short (deposits, overnight repo) and lend long (mortgages, project finance). This maturity transformation is how banks add economic value, but it creates inherent vulnerability. A sudden loss of confidence — even in a solvent bank — can trigger a funding run that turns a liquidity problem into a solvency problem as asset fire sales at distressed prices crystallise losses.</p>
+
+<p>Northern Rock (2007) was solvent when depositors queued outside its branches. It failed because its wholesale funding model could not survive market closure. Basel III's LCR and NSFR were designed specifically to prevent this. The UAE's ELAR and ASRR were designed to prevent the same outcome in the specific context of UAE banking structure.</p>
+
+<div class="alert a-key">
+  <div class="ai">💡</div>
+  <div class="ab">
+    <h5>The Two Dimensions of Liquidity Risk</h5>
+    <p><strong>Short-term (30-day) survival:</strong> Can the bank survive a sudden market stress — wholesale market closure, mass retail deposit run — using only its pre-positioned liquid asset buffer? This is what LCR and ELAR measure. <strong>Structural funding stability (1-year):</strong> Is the bank's funding structure sound enough that a short-term disruption cannot become a long-term crisis? This is what NSFR and ASRR measure. Both dimensions are required in ICAAP/ILAAP.</p>
+  </div>
+</div>
+
+<!-- ═══ 3.3 LCR ═══ -->
+<div class="sm">3.3 — LCR</div>
+<h2>LCR — Liquidity Coverage Ratio</h2>
+
+<div class="formula-box">
+  <div class="fl">LCR Formula — Basel III</div>
+  LCR = High Quality Liquid Assets (HQLA) ÷ Net Cash Outflows (30 days) × 100
+
+  Minimum requirement: 100% (fully phased since 2019)
+  Net cash outflows = Stressed gross outflows − Stressed inflows (capped at 75% of outflows)
+  <div class="fn">Source: BCBS, "Basel III: The Liquidity Coverage Ratio and liquidity risk monitoring tools," January 2013. BIS.</div>
+</div>
+
+<h3>What Counts as HQLA — The Asset Quality Ladder</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>HQLA Level</th><th>Asset Examples</th><th>Haircut Applied</th><th>Cap Within HQLA</th><th>Key Eligibility Criteria</th></tr></thead>
+<tbody>
+  <tr><td class="tp">Level 1 (L1)</td><td>Cash; central bank reserves; sovereign bonds with 0% risk weight (e.g. US Treasuries, UAE federal bonds rated AA− and above)</td><td class="tp">0%</td><td class="tp">No cap</td><td>Zero risk weight; highly liquid in stressed markets; major index inclusion</td></tr>
+  <tr><td class="tw">Level 2A (L2A)</td><td>Sovereign/central bank bonds (20% risk weight); agency bonds (e.g. Fannie Mae); high-grade covered bonds (AA− or above)</td><td class="tw">15%</td><td class="tw">Max 40% of total HQLA</td><td>Max 15% decline in 30-day stressed market; low correlation with risky assets</td></tr>
+  <tr><td class="tf">Level 2B (L2B)</td><td>High-quality RMBS (AA or above); listed equities in major indices; non-financial corporate bonds (BBB− to A+)</td><td class="tf">25–50%</td><td class="tf">Max 15% of total HQLA</td><td>Eligible only if jurisdiction allows; max 40% price decline in 30-day stress</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Stressed Outflow Rates — What Basel Assumes Leaves in 30 Days</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Liability Type</th><th>Outflow Rate</th><th>Rationale</th><th>UAE Relevance</th></tr></thead>
+<tbody>
+  <tr><td>Stable retail deposits (insured, relationship)</td><td class="tp">3–5%</td><td>Deposit insurance + relationship reduce run risk</td><td>UAE DCCI-insured deposits (up to AED 500k)</td></tr>
+  <tr><td>Less stable retail deposits</td><td class="tw">10%</td><td>Online-only, high-value, less sticky</td><td>Expat deposits with no local ties — higher sensitivity</td></tr>
+  <tr><td>Operational wholesale deposits</td><td class="tw">25%</td><td>Needed for clearing/payments — partially sticky</td><td>UAE corporate current accounts for payroll/trade</td></tr>
+  <tr><td>Non-operational wholesale (corporate)</td><td class="tf">40%</td><td>Purely investment — will flee fast</td><td>UAE corporate term deposits not for operations</td></tr>
+  <tr><td>Non-operational wholesale (financial institution)</td><td class="tf">100%</td><td>Professional treasury mgmt — exits immediately</td><td>Interbank deposits from regional banks</td></tr>
+  <tr><td>GRE / Government deposits (non-operational)</td><td class="tf">40%</td><td>Treated as non-operational wholesale under Basel</td><td>Key UAE-specific — CBUAE treats differently in ASRR</td></tr>
+  <tr><td>Secured funding (L1 collateral)</td><td class="tp">0%</td><td>L1 collateral can be reruns easily</td><td>Repos against UAE sovereign bonds</td></tr>
+  <tr><td>Committed credit lines undrawn</td><td class="tw">10–30%</td><td>Partial drawdown assumption under stress</td><td>UAE project finance commitments — higher end</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>LCR Worked Example — UAE Category 1 Bank</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>Balance (AED m)</th><th>Factor</th><th>HQLA / Outflow (AED m)</th></tr></thead>
+<tbody>
+  <tr><td colspan="4" style="background:rgba(13,115,119,0.08);font-weight:700;color:var(--teal);padding:8px 13px">HQLA (Numerator)</td></tr>
+  <tr><td>Cash + CBUAE reserves</td><td>800</td><td>0% haircut</td><td class="tp">800</td></tr>
+  <tr><td>UAE federal sovereign bonds</td><td>1,200</td><td>0% haircut (L1)</td><td class="tp">1,200</td></tr>
+  <tr><td>GCC sovereign bonds (L2A — 20% RW)</td><td>600</td><td>15% haircut → eligible 510</td><td class="tw">510</td></tr>
+  <tr><td>High-grade corporate bonds (L2B)</td><td>300</td><td>50% haircut → eligible 150; but L2B cap binds at 90 (15% of 2,510 total)</td><td class="tf">90</td></tr>
+  <tr><td><strong>Total HQLA</strong></td><td></td><td></td><td class="th"><strong>2,600</strong></td></tr>
+  <tr><td colspan="4" style="background:rgba(192,57,43,0.05);font-weight:700;color:var(--red);padding:8px 13px">Stressed Outflows (Denominator)</td></tr>
+  <tr><td>Stable retail deposits</td><td>5,000</td><td>5%</td><td>250</td></tr>
+  <tr><td>Less stable retail deposits</td><td>2,000</td><td>10%</td><td>200</td></tr>
+  <tr><td>Non-operational wholesale (corporate)</td><td>3,500</td><td>40%</td><td>1,400</td></tr>
+  <tr><td>GRE / Govt deposits (non-operational)</td><td>2,000</td><td>40%</td><td>800</td></tr>
+  <tr><td>Financial institution deposits</td><td>800</td><td>100%</td><td>800</td></tr>
+  <tr><td>Undrawn committed facilities</td><td>1,200</td><td>20%</td><td>240</td></tr>
+  <tr><td>Gross outflows</td><td></td><td></td><td>3,690</td></tr>
+  <tr><td>Less: Stressed inflows (capped at 75% of outflows = 2,768)</td><td></td><td></td><td>(480)</td></tr>
+  <tr><td><strong>Net Cash Outflows</strong></td><td></td><td></td><td class="th"><strong>3,210</strong></td></tr>
+  <tr><td colspan="3"><strong>LCR = 2,600 ÷ 3,210 × 100</strong></td><td class="tp"><strong>81.0% ← BELOW 100% minimum</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-danger">
+  <div class="ai">🚨</div>
+  <div class="ab">
+    <h5>Why This Bank Fails LCR</h5>
+    <p>The GRE and government deposit base (AED 2,000m at 40% outflow = AED 800m stressed outflow) is the critical driver. This is the UAE structural problem — if these deposits were classified as stable (as their long-term nature might suggest), the outflow would be only AED 100m and LCR would pass at 127%. But Basel treats them as non-operational wholesale. This is one of the primary reasons the CBUAE designed ELAR differently — it does not stress-test outflows at all, using total liabilities instead.</p>
+  </div>
+</div>
+
+<!-- ═══ 3.4 NSFR ═══ -->
+<div class="sm">3.4 — NSFR</div>
+<h2>NSFR — Net Stable Funding Ratio</h2>
+
+<div class="formula-box">
+  <div class="fl">NSFR Formula — Basel III</div>
+  NSFR = Available Stable Funding (ASF) ÷ Required Stable Funding (RSF) × 100
+
+  Minimum requirement: 100% — HIGHER is safer (opposite direction to ASRR)
+  ASF = sum of (liability × ASF factor) — liability side stability
+  RSF = sum of (asset × RSF factor) — asset side funding need
+  <div class="fn">Source: BCBS, "Basel III: the net stable funding ratio," October 2014. BIS.</div>
+</div>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="cc-header" style="color:var(--teal)">ASF Factors — Liability Stability</div>
+    <div class="cc-row"><span class="cc-label">Equity + LT debt &gt;1yr</span><span class="cc-val tp">100% stable</span></div>
+    <div class="cc-row"><span class="cc-label">Stable retail deposits</span><span class="cc-val tp">95% stable</span></div>
+    <div class="cc-row"><span class="cc-label">Less stable retail</span><span class="cc-val tw">50% stable</span></div>
+    <div class="cc-row"><span class="cc-label">Non-operational wholesale corp/govt (&lt;1yr)</span><span class="cc-val tw">20–50% stable</span></div>
+    <div class="cc-row"><span class="cc-label">Non-operational wholesale FI (&lt;6m)</span><span class="cc-val tf">0% stable</span></div>
+    <div class="cc-row"><span class="cc-label">Short-term wholesale (&lt;6m, all types)</span><span class="cc-val tf">0% stable</span></div>
+  </div>
+  <div class="compare-card">
+    <div class="cc-header" style="color:var(--blue)">RSF Factors — Asset Funding Need</div>
+    <div class="cc-row"><span class="cc-label">Level 1 HQLA (unencumbered)</span><span class="cc-val tp">0% — needs no stable funding</span></div>
+    <div class="cc-row"><span class="cc-label">Level 2A HQLA</span><span class="cc-val tw">15% — needs small stable funding</span></div>
+    <div class="cc-row"><span class="cc-label">Retail loans &gt;1yr (residential mortgage)</span><span class="cc-val tw">65–85% — substantial funding need</span></div>
+    <div class="cc-row"><span class="cc-label">Corporate loans &gt;1yr</span><span class="cc-val tf">100% — full stable funding need</span></div>
+    <div class="cc-row"><span class="cc-label">Loans maturing &lt;6 months</span><span class="cc-val tw">50% — partial stable funding need</span></div>
+    <div class="cc-row"><span class="cc-label">Illiquid assets, NPLs, fixed assets</span><span class="cc-val tf">100% — full stable funding need</span></div>
+  </div>
+</div>
+
+<!-- ═══ 3.5 LCR/NSFR PARADOX ═══ -->
+<div class="sm">3.5 — The Paradox</div>
+<h2>The LCR/NSFR Paradox — How a Bank Can Pass LCR but Fail NSFR</h2>
+
+<p>This is one of the most analytically important insights in liquidity analysis, and one that trips up even experienced practitioners. A bank can have a strong LCR while simultaneously failing NSFR — and the reason reveals a fundamental design difference between the two ratios.</p>
+
+<h4>The Mechanism: Buying HQLA With Short-Term Wholesale Funding</h4>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Scenario</th><th>HQLA</th><th>Short-Term Wholesale</th><th>Long-Term Loans</th><th>LCR</th><th>NSFR</th><th>What Is Hidden</th></tr></thead>
+<tbody>
+  <tr><td><strong>Starting position</strong></td><td>400</td><td>600</td><td>500</td><td class="tf">76% fail</td><td class="tf">76% fail</td><td>Both fail — mismatch visible</td></tr>
+  <tr><td><strong>Option A — Buy HQLA with wholesale</strong></td><td>600 (+200)</td><td>800 (+200)</td><td>500</td><td class="tp">180% pass ↑</td><td class="tf">91% fail ↑</td><td>LCR fixed cosmetically; NSFR partially improved but structural mismatch remains</td></tr>
+  <tr><td><strong>Option B — Issue long-term debt</strong></td><td>600 (+200)</td><td>600 (unchanged)</td><td>500</td><td class="tp">175% pass ↑</td><td class="tp">138% pass ↑</td><td>Genuine fix — both ratios improve</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>Why Option A Improves LCR But Not NSFR</h4>
+
+<div class="formula-box">
+  <div class="fl">The Arithmetic of the Paradox (Option A)</div>
+  Borrow AED 200 additional short-term wholesale → Buy AED 200 Level 1 HQLA
+
+  LCR impact:
+    Numerator +200 (HQLA added at full value)
+    Denominator +80 (200 wholesale × 40% outflow rate — only partial)
+    → LCR rises from 158% to 180% ← looks better!
+
+  NSFR impact:
+    ASF: new wholesale 200 × 0% ASF factor = +0 (zero stable funding added)
+    RSF: new HQLA 200 × 0% RSF factor = −85 (old "other assets" 85% RSF replaced)
+    → NSFR rises from 76% to 91% ← improved but still failing
+
+  The structural problem: AED 500 long-term loans still funded by volatile short-term money.
+  LCR asks: "Can we survive 30 days?" → Yes, we have more HQLA now.
+  NSFR asks: "Is our year-long funding structure sound?" → No, it is worse (more wholesale).
+  <div class="fn">Key insight: The 40% LCR outflow rate on wholesale is less than 100%, so adding HQLA funded by wholesale always mechanically improves LCR regardless of whether it addresses the structural mismatch.</div>
+</div>
+
+<div class="alert a-warn">
+  <div class="ai">⚠️</div>
+  <div class="ab">
+    <h5>What Happens on Day 31?</h5>
+    <p>After Option A, the bank's LCR looks excellent at 180%. But on day 31, the bank must roll AED 800m of short-term wholesale debt. If the market is closed — as wholesale markets were for weaker UAE names in 2009 — the bank has no mechanism to refinance. The HQLA buffer was consumed meeting day 1–30 outflows. The long-term loan book cannot be sold. The bank fails at exactly the moment LCR predicted it would survive. NSFR was designed to catch this cliff edge.</p>
+  </div>
+</div>
+
+<!-- ═══ 3.6 UAE FRAMEWORK ═══ -->
+<div class="sm">3.6 — UAE Framework Overview</div>
+<h2>UAE Framework — Why the CBUAE Created Different Ratios</h2>
+
+<p>The CBUAE operates a two-tier liquidity framework. <strong>Category 1 banks</strong> (large, internationally active) must comply with Basel LCR and NSFR. <strong>Category 2 banks</strong> (smaller, domestic-focused) use ELAR and ASRR instead. Category 1 banks must also report ELAR as a supplementary metric.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Bank Category</th><th>Primary Liquidity Ratios</th><th>Supplementary</th><th>Typical Profile</th></tr></thead>
+<tbody>
+  <tr><td class="tp">Category 1</td><td>LCR (≥100%) + NSFR (≥100%)</td><td>ELAR (≥10%) as supplementary</td><td>FAB, ENBD, ADCB, DIB, Mashreq, large foreign branches</td></tr>
+  <tr><td class="tw">Category 2</td><td>ELAR (≥10%) + ASRR (≤100%)</td><td>Voluntary NSFR encouraged by CBUAE</td><td>Smaller domestic banks, Islamic banks, specialist lenders</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══ 3.7 THE 5 REASONS — SMALL BANK VIEW ═══ -->
+<div class="sm">3.7 — The 5 Reasons (Small Bank View)</div>
+<h2>The 5 Reasons — Why LCR/NSFR Are Not Suitable for Small UAE Banks</h2>
+
+<p>This is the most important section of this chapter for UAE practitioners. Each of the five reasons is explained first in simple terms, then technically, then from the perspective of a small UAE Category 2 bank — showing exactly what LCR/NSFR would require and why ELAR/ASRR solves the problem differently.</p>
+
+<div class="reason-card">
+  <div class="rc-num">1</div>
+  <div class="rc-title">Reason 1 — Data &amp; Operational Complexity</div>
+  <p><strong>Simple:</strong> LCR requires a small bank to build expensive computer systems to track every deposit by type, counterparty, and maturity daily. ELAR requires knowing your total liabilities — a number already on every bank's balance sheet.</p>
+  <p><strong>Technical:</strong> LCR's denominator (stressed net cash outflows) requires: daily 30-day cash flow projection; behavioural outflow rate per product type; counterparty classification per deposit; off-balance sheet drawdown assumptions; intraday liquidity tracking; and a 75% inflow cap calculation. This demands a dedicated treasury data warehouse, sophisticated product tagging, and daily treasury operations. For a small UAE bank with AED 8bn in assets and a 20-person treasury team, this infrastructure costs AED 30–50m to build and AED 8–12m per year to maintain.</p>
+  <p><strong>Small UAE bank reality:</strong> A Category 2 bank with 15 branches, 45,000 retail customers, and 800 SME clients must — under full LCR — classify each SME deposit as operational vs non-operational, determine counterparty type, track contractual vs behavioural maturity, and recalculate daily. ELAR replaces all of this with: Eligible Liquid Assets ÷ Total Liabilities. One number. Already in the general ledger.</p>
+  <div style="margin-top:10px">
+    <span class="rc-lcr">LCR problem: AED 40m+ infrastructure investment required</span>
+    <span class="rc-elar">ELAR solution: Uses existing GL data — zero new infrastructure</span>
+  </div>
+</div>
+
+<div class="reason-card">
+  <div class="rc-num">2</div>
+  <div class="rc-title">Reason 2 — GRE and Government Deposit Concentration</div>
+  <p><strong>Simple:</strong> UAE small banks are often funded significantly by government-related deposits — municipality accounts, utility company accounts, local authority treasuries. Basel treats these as risky (40% outflow rate). But in practice, these deposits are often semi-permanent — they stay for years. ASRR addresses this by simply giving government deposits low stability weighting rather than assigning a daily cash flow stress.</p>
+  <p><strong>Technical:</strong> Under Basel LCR, non-operational government and GRE deposits receive a 40% outflow rate. For a small UAE bank with 35% of its funding from government-related entities, this creates an enormous 30-day stressed outflow that requires a proportionally enormous HQLA buffer. ASRR instead assigns a 0–20% stability weight to GRE deposits in the stable resources denominator — it acknowledges they are not fully reliable without forcing the bank to hold 40% of them in liquid assets.</p>
+  <p><strong>Small UAE bank reality — numerical illustration:</strong></p>
+  <div class="wnums">Small Category 2 bank balance sheet:
+  Total assets:        AED 8,000m
+  GRE/govt deposits:   AED 2,800m (35% of funding)
+  Retail deposits:     AED 2,200m
+  Interbank:           AED 1,000m
+
+LCR treatment of GRE deposits:
+  2,800 × 40% outflow = AED 1,120m stressed outflow in 30 days
+  HQLA required just for GRE outflow: AED 1,120m
+  As % of total assets: 14% — very high for small bank
+  Cost of holding this liquidity: ~AED 28m p.a. (yield differential on HQLA vs loans)
+
+ELAR treatment:
+  GRE deposits counted at face value in total liabilities denominator
+  No special outflow rate — just contributes to the 10% ELAR requirement
+  HQLA needed for GRE portion: 2,800 × 10% = AED 280m (vs AED 1,120m under LCR)
+  Cost saving vs LCR: AED 840m less HQLA needed = ~AED 21m p.a. in opportunity cost</div>
+  <div style="margin-top:10px">
+    <span class="rc-lcr">LCR problem: 40% outflow rate makes GRE-funded banks hold 4× more HQLA</span>
+    <span class="rc-elar">ELAR solution: Treats GRE deposits proportionally via 10% overall buffer</span>
+  </div>
+</div>
+
+<div class="reason-card">
+  <div class="rc-num">3</div>
+  <div class="rc-title">Reason 3 — Islamic Banking and Sharia-Compliant HQLA</div>
+  <p><strong>Simple:</strong> Islamic banks cannot hold conventional interest-bearing bonds. But Basel's HQLA consists mostly of interest-bearing government bonds. For an Islamic bank, the HQLA universe under Basel is tiny. ELAR's eligible assets include CBUAE-issued wakalah certificates — Sharia-compliant equivalents — making the ratio achievable.</p>
+  <p><strong>Technical:</strong> Level 1 HQLA under Basel includes conventional sovereign bonds, agency bonds, and central bank deposits. Islamic banks cannot hold conventional coupon-bearing bonds — they earn and pay interest (riba), which is prohibited. The UAE sovereign sukuk market, while growing, is insufficient in supply for all Islamic banks to hold enough Level 1 HQLA simultaneously. Forcing Islamic banks to comply with full Basel LCR would either force Sharia violations or make LCR compliance mathematically impossible given the supply constraint.</p>
+  <p><strong>The wakalah solution:</strong></p>
+  <div class="wnums">Standard Basel Level 1 HQLA: conventional treasury bonds, CDs, reserves
+Islamic bank constraint: CANNOT hold conventional coupon bonds (riba prohibition)
+
+CBUAE wakalah certificate (Islamic CD):
+  Structure: Bank places funds with CBUAE as wakeel (agent)
+  CBUAE invests in Sharia-compliant asset pool
+  Bank receives profit rate (not interest) — fully Sharia-compliant
+  Maturity: Short-term (overnight to 3 months) — highly liquid
+  Issuer: CBUAE — sovereign equivalent credit risk
+  Supply: CBUAE controls issuance to ensure sufficient supply for all Islamic banks
+
+Under ELAR: wakalah certificates count as eligible liquid assets at full value
+Under LCR: would count as Level 1 equivalent — BUT supply has historically been insufficient
+
+UAE Islamic bank market share: ~25% of total banking assets
+If all Islamic banks needed to hold Basel LCR HQLA, UAE sukuk supply would need to
+be ~3× current outstanding issuance — practically impossible without CBUAE-issued instruments</div>
+  <div style="margin-top:10px">
+    <span class="rc-lcr">LCR problem: Insufficient Sharia-compliant HQLA supply in UAE market</span>
+    <span class="rc-elar">ELAR solution: Wakalah CDs explicitly included; supply guaranteed by CBUAE</span>
+  </div>
+</div>
+
+<div class="reason-card">
+  <div class="rc-num">4</div>
+  <div class="rc-title">Reason 4 — USD Peg and Limited Lender of Last Resort</div>
+  <p><strong>Simple:</strong> The CBUAE cannot print unlimited AED to rescue banks the way the Bank of England can print sterling — because every AED must be backed by USD reserves to maintain the peg. This makes self-sufficiency in liquidity more important, and ELAR's mandatory pre-positioned buffer more critical than Basel's assumption of central bank backstop.</p>
+  <p><strong>Technical:</strong> Under the impossible trinity, the UAE chose a fixed exchange rate (peg to USD at 3.6725) and free capital flows, sacrificing independent monetary policy. A central bank with independent monetary policy can create unlimited domestic currency in a crisis — the Fed can print dollars to backstop US banks. The CBUAE can provide AED liquidity but each AED created must be backed by USD reserves. In a severe banking crisis requiring emergency liquidity of AED 20bn, the CBUAE would need to deploy USD 5.4bn of reserves — a significant constraint on the lender of last resort function.</p>
+  <p><strong>Small UAE bank implication:</strong></p>
+  <div class="wnums">In a free-floating currency country (e.g. UK):
+  Bank runs short of GBP liquidity → Bank of England creates GBP → provides ELA
+  (Emergency Liquidity Assistance) → crisis contained
+  Cost to central bank: essentially zero (can create its own currency)
+  Pre-positioned bank buffer: important but central bank is a reliable backstop
+
+In UAE (pegged currency):
+  Bank runs short of AED liquidity → CBUAE must deploy USD reserves to create AED
+  USD reserves as of 2024: ~USD 185bn (CBUAE + ADIA combined)
+  If 3 medium-sized banks need emergency AED simultaneously:
+    AED 15bn each = AED 45bn total = USD 12.2bn of reserves deployed
+    This is ~6.6% of total reserves — significant constraint
+
+ELAR implication: Small UAE banks MUST hold sufficient HQLA independently.
+The CBUAE backstop is available but not unlimited. ELAR ensures each bank
+maintains a self-sufficient 30-day buffer regardless of central bank support.
+ELAR minimum of 10% is calibrated to this constraint — not to Basel's
+assumption of unlimited domestic currency creation.</div>
+  <div style="margin-top:10px">
+    <span class="rc-lcr">LCR problem: Assumes unlimited central bank backstop — not true for pegged currency</span>
+    <span class="rc-elar">ELAR solution: Mandates self-sufficient pre-positioned buffer; calibrated to peg constraint</span>
+  </div>
+</div>
+
+<div class="reason-card">
+  <div class="rc-num">5</div>
+  <div class="rc-title">Reason 5 — Thin/Developing Capital Markets</div>
+  <p><strong>Simple:</strong> Basel HQLA assumes you can sell assets quickly in a crisis without moving the price. In UAE's developing capital markets, there may simply not be enough buyers when all banks sell at once — making an asset technically classified as HQLA practically illiquid in a stress.</p>
+  <p><strong>Technical:</strong> Basel's HQLA classification assumes active secondary markets with sufficient depth that large sales do not significantly move prices. For Level 2A and 2B assets specifically, Basel assumes price declines of no more than 15–40% in a 30-day stress. These assumptions were calibrated to US treasuries, German bunds, and covered bond markets — markets with daily volumes of hundreds of billions. UAE capital markets, while growing, have daily secondary trading volumes orders of magnitude smaller.</p>
+  <p><strong>Market depth comparison — numerical:</strong></p>
+  <div class="wnums">Asset class liquidity comparison (approximate 2023 data):
+  US treasury market:         Daily secondary volume ~USD 650bn → Deep
+  German bunds:               Daily secondary volume ~USD 25bn  → Deep
+  UK gilts:                   Daily secondary volume ~USD 18bn  → Deep
+
+  UAE sovereign bonds/sukuk:  Daily secondary volume ~USD 40m   → Very thin
+  UAE corporate bonds:        Daily secondary volume ~USD 8m    → Almost illiquid
+  UAE covered bonds:          DO NOT EXIST in UAE market
+  UAE RMBS:                   Embryonic — occasional issuance only
+
+  If UAE bank needs to sell AED 500m of UAE sovereign bonds in 30-day stress:
+  That represents ~13× daily UAE secondary market volume
+  Price impact: potentially 15–25% (far exceeding Basel's 0% Level 1 assumption)
+  Effective recovery: AED 375–425m, not AED 500m
+
+ELAR solution: Restricts eligible assets to CBUAE-redeemable instruments only.
+Bank does NOT sell in the secondary market — it redeems directly with CBUAE.
+No market depth required. No price impact. Liquidity is guaranteed by the central bank,
+not by an assumption about market depth that does not exist in the UAE.</div>
+  <div style="margin-top:10px">
+    <span class="rc-lcr">LCR problem: L1/L2 eligibility assumes market depth that UAE does not have</span>
+    <span class="rc-elar">ELAR solution: Eligible assets are central-bank-redeemable — no market depth needed</span>
+  </div>
+</div>
+
+<!-- ═══ 3.8 ELAR ═══ -->
+<div class="sm">3.8 — ELAR Deep Dive</div>
+<h2>ELAR — Eligible Liquid Assets Ratio</h2>
+
+<div class="formula-box">
+  <div class="fl">ELAR Formula — CBUAE</div>
+  ELAR = Eligible Liquid Assets ÷ Total Liabilities × 100
+
+  Minimum: 10% for conventional banks | 9% for Islamic banks
+  Pass direction: HIGHER is safer (like LCR)
+  <div class="fn">Source: CBUAE Liquidity Regulations for Banks in the UAE, 2015 (updated 2023). Circular to all licensed banks.</div>
+</div>
+
+<h3>What Counts as Eligible Liquid Assets — The ELAR Universe</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Asset</th><th>Islamic Equivalent</th><th>ELAR Eligible?</th><th>Basel LCR Equivalent</th><th>Why Different</th></tr></thead>
+<tbody>
+  <tr><td>Cash held at CBUAE</td><td>Same — no interest issue</td><td class="tp">Yes ✓</td><td class="tp">Level 1</td><td>Both agree — zero liquidity risk</td></tr>
+  <tr><td>CBUAE conventional certificates of deposit</td><td>CBUAE wakalah certificates</td><td class="tp">Yes ✓ (both)</td><td class="tp">Level 1 equivalent</td><td>CBUAE-redeemable — no market depth needed</td></tr>
+  <tr><td>UAE federal govt bonds/T-bills</td><td>UAE federal sovereign sukuk</td><td class="tp">Yes ✓</td><td class="tp">Level 1</td><td>Both agree — sovereign issuer</td></tr>
+  <tr><td>UAE local govt bonds (0% risk weight)</td><td>Emirate-level sukuk (0% RW)</td><td class="tp">Yes ✓</td><td class="tw">Level 2A equivalent</td><td>ELAR more generous — acknowledges UAE sovereign backing of emirates</td></tr>
+  <tr><td>Qualifying foreign sovereign bonds</td><td>Foreign sovereign sukuk (limited)</td><td class="tp">Yes ✓ (limited)</td><td class="tp">Level 1/2A</td><td>Both allow — but ELAR has stricter eligibility list</td></tr>
+  <tr><td>Agency bonds (Fannie Mae, etc.)</td><td>N/A</td><td class="tf">No ✗</td><td class="tw">Level 2A in Basel</td><td>Not relevant to UAE market — excluded for simplicity</td></tr>
+  <tr><td>Covered bonds</td><td>N/A</td><td class="tf">No ✗</td><td class="tw">Level 2A in Basel</td><td>Covered bond market does not exist in UAE</td></tr>
+  <tr><td>RMBS / ABS</td><td>N/A</td><td class="tf">No ✗</td><td class="tf">Level 2B in Basel</td><td>UAE market embryonic — cannot assume liquidity</td></tr>
+  <tr><td>Listed equities</td><td>Sharia-compliant equities</td><td class="tf">No ✗</td><td class="tf">Level 2B in Basel</td><td>UAE equity market too thin for liquidity credit</td></tr>
+  <tr><td>Non-financial corporate bonds</td><td>Corporate sukuk</td><td class="tf">No ✗</td><td class="tf">Level 2B in Basel</td><td>UAE corporate bond market illiquid</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-uae">
+  <div class="ai">🇦🇪</div>
+  <div class="ab">
+    <h5>Why ELAR's Asset Universe Is Narrower Than Basel HQLA</h5>
+    <p>ELAR deliberately restricts eligible assets to instruments where <strong>liquidity is guaranteed by the CBUAE itself</strong> — not by secondary market depth. A bank holding ELAR-eligible assets does not need to find a buyer in a stress — it redeems directly with the CBUAE. This is a fundamentally more reliable form of liquidity in a market where secondary trading volumes are thin. ELAR trades breadth of eligible assets for certainty of liquidity — which is exactly the right trade-off for the UAE's developing capital market context.</p>
+  </div>
+</div>
+
+<!-- ═══ 3.9 ASRR ═══ -->
+<div class="sm">3.9 — ASRR Deep Dive</div>
+<h2>ASRR — Advances to Stable Resources Ratio</h2>
+
+<div class="formula-box">
+  <div class="fl">ASRR Formula — CBUAE</div>
+  ASRR = Total Advances ÷ Stable Resources × 100
+
+  Maximum: 100% — LOWER is safer (opposite direction to NSFR!)
+  Advances = all loans and customer financing (Islamic or conventional)
+  Stable Resources = equity + long-term debt + weighted deposits
+  <div class="fn">Source: CBUAE Liquidity Regulations for Banks in the UAE, 2015 (updated 2023).</div>
+</div>
+
+<h3>ASRR vs NSFR — They Are Structural Inverses</h3>
+
+<div class="formula-box">
+  <div class="fl">The Inverse Relationship</div>
+  NSFR = Stable Funding I HAVE ÷ Stable Funding I NEED  → want &gt; 1 (HIGHER safer)
+  ASRR = What I Have LENT ÷ Stable Funding I HAVE       → want &lt; 1 (LOWER safer)
+
+  If you strip away weighting differences, ASRR ≈ 1 ÷ NSFR (approximately)
+  NSFR 125% ≈ ASRR 80% — same underlying message: stable funding exceeds lending
+  NSFR  80% ≈ ASRR 125% — same problem: lending exceeds stable funding
+  <div class="fn">They are NOT perfect reciprocals because: (1) NSFR covers the entire balance sheet while ASRR covers only advances; (2) RSF factors in NSFR are more granular than ASRR stability weights; (3) NSFR captures investment securities mismatch that ASRR misses entirely.</div>
+</div>
+
+<h3>ASRR Stability Weights — How Different Funding Sources Are Treated</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Funding Source</th><th>ASRR Stability Weight</th><th>NSFR ASF Factor</th><th>Why Different?</th></tr></thead>
+<tbody>
+  <tr><td>Equity (paid-up capital + reserves)</td><td class="tp">100%</td><td class="tp">100%</td><td>Both agree — equity is permanent</td></tr>
+  <tr><td>Long-term debt (&gt;6 months)</td><td class="tp">100%</td><td class="tp">100%</td><td>Both agree — term-locked</td></tr>
+  <tr><td>Retail deposits (all)</td><td class="tp">100%</td><td class="tw">50–95%</td><td>ASRR simpler — no stable/less-stable distinction</td></tr>
+  <tr><td>Corporate deposits (non-GRE)</td><td class="tp">100%</td><td class="tw">20–50%</td><td>ASRR more generous — treats corporates as stable</td></tr>
+  <tr><td>Government / GRE deposits</td><td class="tf">0–20%</td><td class="tf">20%</td><td>Both recognise GRE instability; ASRR may be stricter</td></tr>
+  <tr><td>Short-term interbank (&lt;6 months)</td><td class="tf">0%</td><td class="tf">0%</td><td>Both agree — hot money</td></tr>
+  <tr><td>Subordinated debt (&gt;6 months)</td><td class="tp">100%</td><td class="tp">100%</td><td>Both agree — term capital</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>What ASRR Includes and Excludes as Advances</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>In ASRR Numerator?</th><th>In NSFR RSF?</th><th>Implication</th></tr></thead>
+<tbody>
+  <tr><td>Retail mortgage loans</td><td class="tp">Yes</td><td class="tp">Yes (65–85%)</td><td>Both capture — key lending product</td></tr>
+  <tr><td>Corporate term loans</td><td class="tp">Yes</td><td class="tp">Yes (100%)</td><td>Both capture</td></tr>
+  <tr><td>Islamic financing (murabaha, ijara)</td><td class="tp">Yes — regardless of structure</td><td class="tp">Yes — same RSF as equivalent loan</td><td>Both treat Islamic financing equivalently</td></tr>
+  <tr><td>UAE sovereign bond portfolio</td><td class="tf">No — NOT advances</td><td class="tp">Yes (0% RSF as L1 HQLA)</td><td><strong>ASRR blind spot</strong> — investment portfolio mismatch not captured</td></tr>
+  <tr><td>GCC corporate sukuk portfolio</td><td class="tf">No</td><td class="tw">Yes (15–85% RSF depending on tenor)</td><td><strong>ASRR blind spot</strong> — bond portfolio funded by short-term wholesale not captured</td></tr>
+  <tr><td>Interbank placements (&gt;3 months)</td><td class="tp">Yes</td><td class="tp">Yes (50–100%)</td><td>Both capture</td></tr>
+  <tr><td>Off-balance sheet commitments</td><td class="tp">Yes (at prescribed CCF)</td><td class="tp">Yes (at prescribed CCF)</td><td>Both capture</td></tr>
+  <tr><td>Fixed assets and intangibles</td><td class="tf">No</td><td class="tf">Yes (100% RSF)</td><td>ASRR misses; NSFR captures</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-warn">
+  <div class="ai">⚠️</div>
+  <div class="ab">
+    <h5>The ASRR Blind Spot — Investment Securities</h5>
+    <p>ASRR only captures advances (loans) in the numerator. A small UAE bank could borrow AED 500m short-term wholesale and invest it in a sovereign bond portfolio — completely invisible to ASRR. ASRR would show the bank passing (loans are funded by stable resources) while NSFR would flag the mismatch (securities funded by short-term wholesale). This is why CBUAE encourages larger Category 2 banks to voluntarily report NSFR — to catch exactly this gap. See Chapter 7 for the detailed flag analysis.</p>
+  </div>
+</div>
+
+<!-- ═══ 3.10 MASTER COMPARISON TABLE ═══ -->
+<div class="sm">3.10 — Master Comparison</div>
+<h2>Master Comparison Table — All Four Ratios</h2>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Dimension</th><th>LCR (Basel)</th><th>ELAR (CBUAE)</th><th>NSFR (Basel)</th><th>ASRR (CBUAE)</th></tr></thead>
+<tbody>
+  <tr><td><strong>Framework</strong></td><td>Basel III — BIS 2013</td><td>CBUAE Liquidity Regs</td><td>Basel III — BIS 2014</td><td>CBUAE Liquidity Regs</td></tr>
+  <tr><td><strong>Who uses it (UAE)</strong></td><td>Category 1 banks</td><td>ALL UAE banks (mandatory)</td><td>Category 1 banks</td><td>Category 2 banks</td></tr>
+  <tr><td><strong>Time horizon</strong></td><td>30-day survival stress</td><td>Point-in-time static</td><td>1-year structural funding</td><td>Point-in-time static</td></tr>
+  <tr><td><strong>Pass direction</strong></td><td class="tp">≥ 100% (higher safer)</td><td class="tp">≥ 10% (higher safer)</td><td class="tp">≥ 100% (higher safer)</td><td class="tf">≤ 100% (LOWER safer)</td></tr>
+  <tr><td><strong>Numerator</strong></td><td>HQLA — tiered L1/2A/2B with haircuts</td><td>Eligible liquid assets (CBUAE list)</td><td>Available Stable Funding (liability-side)</td><td>Total advances (loans only)</td></tr>
+  <tr><td><strong>Denominator</strong></td><td>Stressed 30-day net cash outflows</td><td>Total liabilities (all)</td><td>Required Stable Funding (asset-side)</td><td>Stable resources (weighted liabilities)</td></tr>
+  <tr><td><strong>Asset side scope</strong></td><td>HQLA only — specific list</td><td>CBUAE-eligible list only</td><td>ENTIRE balance sheet (all assets)</td><td>Advances only (NOT securities)</td></tr>
+  <tr><td><strong>Liability treatment</strong></td><td>Behavioural outflow rates by product</td><td>Face value — no outflow rate</td><td>Granular ASF factors</td><td>Broad stability buckets</td></tr>
+  <tr><td><strong>GRE deposit treatment</strong></td><td class="tf">40% outflow rate — harsh</td><td>Full face value in denominator</td><td class="tf">20% ASF factor — low stability</td><td class="tf">0–20% stability — near exclusion</td></tr>
+  <tr><td><strong>Islamic banking compatible?</strong></td><td class="tw">Partially — sukuk accepted but supply thin</td><td class="tp">Yes — wakalah explicitly included</td><td class="tw">Partially</td><td class="tp">Yes — all Islamic financing included</td></tr>
+  <tr><td><strong>Stress scenarios applied?</strong></td><td class="tp">Yes — prescribed outflow rates</td><td class="tf">No — static snapshot</td><td class="tw">Implicit via ASF/RSF factors</td><td class="tf">No — static snapshot</td></tr>
+  <tr><td><strong>Data infrastructure needed</strong></td><td class="tf">Very high — treasury data warehouse</td><td class="tp">Low — basic GL data</td><td class="tf">High — maturity ladder + collateral tracking</td><td class="tw">Medium — counterparty classification</td></tr>
+  <tr><td><strong>Investment securities captured?</strong></td><td class="tp">In HQLA numerator</td><td class="tp">In HQLA numerator</td><td class="tp">In RSF denominator</td><td class="tf">NOT captured — blind spot</td></tr>
+  <tr><td><strong>Captures day-31 cliff risk?</strong></td><td class="tf">No — only 30 days</td><td class="tf">No — static</td><td class="tp">Yes — 1-year funding stability</td><td class="tw">Partially — via stable resources</td></tr>
+  <tr><td><strong>Market depth assumption</strong></td><td class="tf">Deep markets required for L2 assets</td><td class="tp">None — CBUAE-redeemable only</td><td class="tw">Implicit in ASF/RSF factors</td><td class="tp">None — uses balance sheet data</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══ 3.11 NUMERICAL EXAMPLES ═══ -->
+<div class="sm">3.11 — Numerical Examples</div>
+<h2>Full Numerical Examples — Small UAE Category 2 Bank</h2>
+
+<h3>The Bank Profile</h3>
+<p>A mid-sized UAE Category 2 conventional bank. 22 branches. Primarily serving UAE corporates and residents. Significant GRE deposit relationships inherited from historical government ties.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Balance Sheet Item</th><th>Amount (AED m)</th><th>Notes</th></tr></thead>
+<tbody>
+  <tr><td colspan="3" style="background:rgba(13,115,119,0.08);font-weight:700;color:var(--teal);padding:8px 13px">Assets</td></tr>
+  <tr><td>Cash + CBUAE reserves</td><td class="th">320</td><td>Counts for ELAR and LCR L1</td></tr>
+  <tr><td>CBUAE wakalah / CD holdings</td><td class="th">480</td><td>ELAR eligible; LCR L1 equivalent</td></tr>
+  <tr><td>UAE federal sovereign bonds</td><td class="th">350</td><td>ELAR eligible; LCR L1</td></tr>
+  <tr><td>GCC sovereign bonds</td><td class="th">200</td><td>LCR L2A (15% haircut); not ELAR eligible</td></tr>
+  <tr><td>Retail mortgage loans (&gt;1yr)</td><td class="th">2,800</td><td>ASRR advances; NSFR RSF 65%</td></tr>
+  <tr><td>Corporate term loans (&gt;1yr)</td><td class="th">1,900</td><td>ASRR advances; NSFR RSF 100%</td></tr>
+  <tr><td>SME loans (mix of tenors)</td><td class="th">800</td><td>ASRR advances; NSFR RSF ~75%</td></tr>
+  <tr><td>Trade finance (&lt;6m)</td><td class="th">400</td><td>ASRR advances; NSFR RSF 50%</td></tr>
+  <tr><td>Interbank placements (&gt;3m)</td><td class="th">200</td><td>ASRR advances; NSFR RSF 50%</td></tr>
+  <tr><td>Fixed assets + other</td><td class="th">550</td><td>Not in ASRR; NSFR RSF 100%</td></tr>
+  <tr><td><strong>Total Assets</strong></td><td class="tp"><strong>8,000</strong></td><td></td></tr>
+  <tr><td colspan="3" style="background:rgba(192,57,43,0.05);font-weight:700;color:var(--red);padding:8px 13px">Liabilities + Equity</td></tr>
+  <tr><td>Stable retail deposits</td><td class="th">2,200</td><td>ASRR 100%; NSFR ASF 95%</td></tr>
+  <tr><td>GRE / Govt deposits</td><td class="th">2,800</td><td>ASRR 10%; NSFR ASF 20%; LCR 40% outflow</td></tr>
+  <tr><td>Corporate deposits (non-GRE)</td><td class="th">1,200</td><td>ASRR 100%; NSFR ASF 50%</td></tr>
+  <tr><td>Short-term interbank (&lt;3m)</td><td class="th">500</td><td>ASRR 0%; NSFR ASF 0%</td></tr>
+  <tr><td>Long-term debt (&gt;1yr)</td><td class="th">300</td><td>ASRR 100%; NSFR ASF 100%</td></tr>
+  <tr><td>Equity (CET1 + AT1)</td><td class="th">1,000</td><td>ASRR 100%; NSFR ASF 100%</td></tr>
+  <tr><td><strong>Total Liabilities + Equity</strong></td><td class="tp"><strong>8,000</strong></td><td></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Calculation 1 — ELAR</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>Amount</th><th>ELAR Eligible?</th><th>Eligible Amount</th></tr></thead>
+<tbody>
+  <tr><td>Cash + CBUAE reserves</td><td>320</td><td class="tp">Yes — CBUAE-held</td><td class="tp">320</td></tr>
+  <tr><td>CBUAE wakalah / CD</td><td>480</td><td class="tp">Yes — CBUAE-issued</td><td class="tp">480</td></tr>
+  <tr><td>UAE federal sovereign bonds</td><td>350</td><td class="tp">Yes — UAE federal govt</td><td class="tp">350</td></tr>
+  <tr><td>GCC sovereign bonds</td><td>200</td><td class="tf">No — not on CBUAE ELAR list</td><td class="tf">0</td></tr>
+  <tr><td><strong>Total Eligible Liquid Assets</strong></td><td></td><td></td><td class="th"><strong>1,150</strong></td></tr>
+  <tr><td><strong>Total Liabilities</strong></td><td></td><td></td><td class="th"><strong>7,000</strong></td></tr>
+  <tr><td colspan="3"><strong>ELAR = 1,150 ÷ 7,000 × 100</strong></td><td class="tp"><strong>16.4% ✓ (min 10%)</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Calculation 2 — ASRR</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>Amount</th><th>In Advances?</th><th>Stability Weight</th><th>Stable Resources</th></tr></thead>
+<tbody>
+  <tr><td colspan="5" style="background:rgba(192,57,43,0.05);font-weight:600;padding:7px 13px">Advances (Numerator)</td></tr>
+  <tr><td>Retail mortgages</td><td>2,800</td><td class="tp">Yes</td><td>—</td><td>—</td></tr>
+  <tr><td>Corporate term loans</td><td>1,900</td><td class="tp">Yes</td><td>—</td><td>—</td></tr>
+  <tr><td>SME loans</td><td>800</td><td class="tp">Yes</td><td>—</td><td>—</td></tr>
+  <tr><td>Trade finance (&lt;6m)</td><td>400</td><td class="tp">Yes</td><td>—</td><td>—</td></tr>
+  <tr><td>Interbank placements (&gt;3m)</td><td>200</td><td class="tp">Yes</td><td>—</td><td>—</td></tr>
+  <tr><td><strong>Total Advances</strong></td><td class="th"><strong>6,100</strong></td><td></td><td></td><td></td></tr>
+  <tr><td colspan="5" style="background:rgba(13,115,119,0.05);font-weight:600;padding:7px 13px">Stable Resources (Denominator)</td></tr>
+  <tr><td>Stable retail deposits</td><td>2,200</td><td>—</td><td class="tp">100%</td><td class="tp">2,200</td></tr>
+  <tr><td>GRE / Govt deposits</td><td>2,800</td><td>—</td><td class="tf">10%</td><td class="tf">280</td></tr>
+  <tr><td>Corporate deposits (non-GRE)</td><td>1,200</td><td>—</td><td class="tp">100%</td><td class="tp">1,200</td></tr>
+  <tr><td>Short-term interbank (&lt;3m)</td><td>500</td><td>—</td><td class="tf">0%</td><td class="tf">0</td></tr>
+  <tr><td>Long-term debt (&gt;1yr)</td><td>300</td><td>—</td><td class="tp">100%</td><td class="tp">300</td></tr>
+  <tr><td>Equity</td><td>1,000</td><td>—</td><td class="tp">100%</td><td class="tp">1,000</td></tr>
+  <tr><td><strong>Total Stable Resources</strong></td><td></td><td></td><td></td><td class="th"><strong>4,980</strong></td></tr>
+  <tr><td colspan="4"><strong>ASRR = 6,100 ÷ 4,980 × 100</strong></td><td class="tf"><strong>122.5% ✗ (max 100%)</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-danger">
+  <div class="ai">🚨</div>
+  <div class="ab">
+    <h5>ASRR Failing — Why and What the Bank Must Do</h5>
+    <p>The bank fails ASRR at 122.5% because AED 2,800m of GRE deposits — 35% of total funding — contributes only AED 280m (10%) to stable resources, yet the entire lending book of AED 6,100m must be funded by those resources. The GRE deposits are funding AED 1,120m of loans (the 22.5% excess) with no stable resource backing. Options: reduce the loan book by AED 1,120m; raise AED 1,120m of retail deposits or long-term debt; or reduce GRE deposit reliance and replace with stable retail funding. The CBUAE will scrutinise this bank closely — ASRR breaches in the UAE context signal exactly the 2009-type structural vulnerability.</p>
+  </div>
+</div>
+
+<h3>Calculation 3 — What LCR Would Show (If Applied)</h3>
+<p>This illustrates why LCR is even more demanding for this bank than ASRR.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Item</th><th>Amount</th><th>Outflow Rate</th><th>Stressed Outflow</th></tr></thead>
+<tbody>
+  <tr><td>Stable retail deposits</td><td>2,200</td><td>5%</td><td>110</td></tr>
+  <tr><td>GRE/Govt deposits</td><td>2,800</td><td class="tf">40%</td><td class="tf">1,120</td></tr>
+  <tr><td>Corporate deposits (non-GRE)</td><td>1,200</td><td>40%</td><td>480</td></tr>
+  <tr><td>Short-term interbank</td><td>500</td><td>100%</td><td>500</td></tr>
+  <tr><td>Gross outflows</td><td></td><td></td><td>2,210</td></tr>
+  <tr><td>Inflows (capped at 75% of 2,210 = 1,658)</td><td></td><td></td><td>(320)</td></tr>
+  <tr><td><strong>Net outflows</strong></td><td></td><td></td><td class="th"><strong>1,890</strong></td></tr>
+  <tr><td>HQLA available</td><td></td><td></td><td>1,150</td></tr>
+  <tr><td colspan="3"><strong>LCR = 1,150 ÷ 1,890 × 100</strong></td><td class="tf"><strong>60.8% ✗ (min 100%)</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-key">
+  <div class="ai">💡</div>
+  <div class="ab">
+    <h5>Why LCR Would Be Even Harder — The GRE Outflow Effect</h5>
+    <p>Under LCR, AED 2,800m of GRE deposits generate AED 1,120m of stressed outflows — more than the entire HQLA buffer of AED 1,150m. To pass LCR at 100%, this bank would need to more than double its HQLA to AED 1,890m — requiring an additional AED 740m of liquid assets that would otherwise be deployed as loans. At a 4% yield differential (loan yield minus HQLA yield), this represents AED 29.6m of annual income foregone — equivalent to 44% of this bank's estimated net profit. This is operationally and commercially unsustainable for a small bank, which is precisely why CBUAE created ELAR.</p>
+  </div>
+</div>
+
+<div class="chart-box">
+  <div class="ct">ELAR, ASRR, LCR, NSFR — Small UAE Bank Position vs Thresholds</div>
+  <div class="cs">Showing passing/failing status and gap to threshold for each ratio</div>
+  <canvas id="ratioCompChart" height="110"></canvas>
+</div>
+
+<div class="chart-box">
+  <div class="ct">ASRR Decomposition — Advances vs Stable Resources by Funding Source</div>
+  <div class="cs">Visualising the GRE deposit problem — how 35% of funding contributes only 5.6% of stable resources</div>
+  <canvas id="asrrChart" height="110"></canvas>
+</div>
+
+<div class="metric-strip">
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--teal)">16.4%</div>
+    <div class="ml">ELAR</div>
+    <div class="ms">Passes (min 10%)</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--red)">122.5%</div>
+    <div class="ml">ASRR</div>
+    <div class="ms">Fails (max 100%)</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--red)">60.8%</div>
+    <div class="ml">LCR (illustrative)</div>
+    <div class="ms">Would fail (min 100%)</div>
+  </div>
+  <div class="metric-tile">
+    <div class="mv" style="color:var(--amber)">~82%</div>
+    <div class="ml">NSFR (estimated)</div>
+    <div class="ms">Would fail (min 100%)</div>
+  </div>
+</div>
+
+<!-- ═══ 3.12 WINDOW DRESSING ═══ -->
+<div class="sm">3.12 — Window Dressing</div>
+<h2>How Window Dressers Hide — Liquidity Ratios</h2>
+
+<div class="wd-section">
+  <div class="wd-hdr">
+    <div style="font-size:30px">🎭</div>
+    <div>
+      <div class="wd-title">How Window Dressers Hide in Liquidity Ratios</div>
+      <div class="wd-sub">Four techniques for making ELAR, ASRR, LCR and NSFR look better than true liquidity position — and the footprints they leave</div>
+    </div>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">1</div><h5>Period-End Repo Dressing — Making ELAR and LCR Flash Green at Quarter-End</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> In the days before quarter-end reporting, the bank borrows short-term in the repo market (using its existing bond portfolio as collateral) and deposits the cash proceeds at the CBUAE. This temporarily increases eligible liquid assets, boosting ELAR. The repo is unwound the day after reporting. The bank's daily ELAR for the quarter may average 7.8% — well below the 10% minimum — but reports 11.2% at quarter-end.</p>
+    <div class="wnums">Bank's true daily ELAR average (Jan–Mar): 7.8% (below 10% minimum)
+Quarter-end window dressing:
+  Mar 28: Repo AED 280m (30-day overnight repo, collateral = UAE bonds held)
+  Mar 28: Cash proceeds deposited at CBUAE → eligible liquid assets +280m
+  March 31 reported ELAR: (1,150 + 280) ÷ 7,000 = 20.4% ← looks excellent!
+  April 2: Repo matures, proceeds returned, ELAR falls back to 11.6% (bonds now "pledged")
+  True daily ELAR (non-window-dressed): 7.8%
+
+Regulatory impact: Bank reports passing ELAR — but has been non-compliant all quarter</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Regulators with daily LCR/ELAR reporting requirements (increasingly standard) will see the spike on quarter-end dates vs daily averages. Compare the 90-day average ELAR to the quarter-end ELAR. A pattern of quarter-end spikes followed by immediate decline is a clear signal. Also check: does the repo book spike at quarter-end? Does the CBUAE reserve balance jump at quarter-end?</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">2</div><h5>ASRR Numerator Suppression — Reclassifying Loans to Reduce Advances</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Moving loans out of the "advances" classification and into "investment securities" or "treasury assets" categories to reduce the ASRR numerator. Commodity murabaha transactions, reverse repos structured as financing, and certain trade finance products sit in a grey zone between "advances" and "investments." Banks may classify them as investments — correctly in legal form — to exclude them from the ASRR numerator, even though economically they represent customer credit exposure.</p>
+    <div class="wnums">Bank ASRR failing at 122.5%:
+  Advances: 6,100m | Stable resources: 4,980m → 122.5% (breach)
+
+Window dressing: reclassify AED 1,200m commodity murabaha as "treasury investments"
+  New reported advances: 4,900m
+  Stable resources: 4,980m (unchanged)
+  New reported ASRR: 4,900 ÷ 4,980 = 98.4% ← just passing!
+
+Economic reality unchanged:
+  AED 1,200m is customer financing — credit risk exposure to corporate counterparties
+  Economic ASRR: 6,100 ÷ 4,980 = 122.5% ← still breaching
+
+Regulatory test: Is this financing extended to a customer for their operational/investment need?
+  If yes → it is an advance regardless of legal form → must be in numerator</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Compare ASRR advances to total credit RWA from the capital calculation. Credit RWA captures all customer financing regardless of accounting classification. If ASRR advances are materially lower than credit RWA-implied loan volume, reclassification may have occurred. Request a reconciliation between ASRR advances and credit RWA exposures.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">3</div><h5>GRE Deposit Misclassification — Calling Unstable Deposits Stable</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> GRE deposits in ASRR receive 0–20% stability weight. But if the bank reclassifies a large GRE deposit as a "retail deposit" (because the GRE entity has a retail account number) or a "long-term deposit" (because it has a nominal 7-month term, despite having a break clause), it receives 100% stability weight instead. A AED 500m GRE deposit reclassified from 10% to 100% stability boosts stable resources by AED 450m — worth ~9 percentage points of ASRR improvement.</p>
+    <div class="wnums">Current ASRR: 6,100 ÷ 4,980 = 122.5% (breach)
+GRE deposit: AED 500m held by Abu Dhabi municipality treasury
+  Correct classification: GRE deposit → 10% stability = AED 50m stable resources
+  Window dressing: classify as "long-term deposit" due to 7-month nominal term
+  (despite break clause allowing withdrawal in 48 hours)
+  New stability weight: 100% = AED 500m stable resources
+
+Stable resources with reclassification: 4,980 + 450 = 5,430m
+New ASRR: 6,100 ÷ 5,430 = 112.3% ← still breaching but looks better
+If 3 such deposits reclassified: stable resources = 6,330m → ASRR = 96.4% ← passing!
+
+Reality: These deposits can leave in 48 hours. The "stable resource" is illusory.</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Review the counterparty classification of the top-20 deposits. Any deposit from a government ministry, municipality, sovereign wealth fund, or state-owned enterprise should be classified as GRE regardless of account type. Request a breakdown of deposits classified as "long-term" by counterparty type — GRE deposits with nominal long-term structures but break clauses should be reclassified at the effective demand rate.</p>
+  </div>
+
+  <div class="wd-item">
+    <div class="wd-ih"><div class="wd-n">4</div><h5>ELAR Asset Eligibility Overstatement — Including Ineligible Assets</h5></div>
+    <p><span class="wl wl-m">How They Hide:</span> Including assets in ELAR eligible liquid assets that do not meet the CBUAE's strict eligibility criteria — typically GRE bonds with non-zero risk weights, or foreign sovereign bonds from issuers not on the CBUAE's approved list. A GRE sukuk that carries a 20% risk weight (not zero) is not ELAR-eligible — but its exclusion may not be noticed in a cursory regulatory review.</p>
+    <div class="wnums">Bank's actual ELAR position:
+  Cash + CBUAE instruments: 800m  → eligible ✓
+  UAE federal sovereign bonds: 350m → eligible ✓
+  TOTAL ELIGIBLE: 1,150m
+  ELAR = 1,150 ÷ 7,000 = 16.4% ← passing
+
+Incorrect inclusion (window dressing):
+  Add: Abu Dhabi GRE sukuk (20% risk weight): 400m → NOT eligible (not 0% RW)
+  Add: Bahrain sovereign bonds (not on CBUAE approved list): 150m → NOT eligible
+  Window-dressed ELAR: (1,150 + 550) ÷ 7,000 = 24.3% ← inflated
+
+Impact of correction:
+  True ELAR stays at 16.4% — still passing in this case
+  But if true HQLA were only 680m: window-dressed ELAR = (680+550)÷7,000 = 17.6% (pass)
+                                   Correct ELAR = 680÷7,000 = 9.7% (FAIL)</div>
+    <p><span class="wl wl-d">Footprint &amp; Detection:</span> Request a security-level breakdown of every asset claimed as ELAR-eligible. For each: verify the issuer, verify the risk weight assignment (should be 0% for sovereign/federal, check for GRE bonds specifically), verify the issuer is on the CBUAE's published approved list. GRE bonds with 20% risk weights are a common incorrect inclusion.</p>
+  </div>
+</div>
+
+<!-- ═══ 3.13 SHERLOCK ═══ -->
+<div class="sm">3.13 — Detection</div>
+<div class="sherlock">
+  <div class="sh-title">🔍 Be Sherlock Holmes — Detecting Liquidity Window Dressing</div>
+  <div class="sh-sub">"The world is full of obvious things which nobody by any chance ever observes." — The liquidity clues are always visible to those who know where to look.</div>
+
+  <div class="clue">
+    <div class="cn">1</div>
+    <p><strong>The Quarter-End Spike Clue:</strong> Compare the 90-day moving average of ELAR/LCR to the quarter-end reported figure. A bank with genuine liquidity maintains consistent ratios throughout the quarter. A window dresser's ratio spikes on reporting dates and falls immediately after.
+    <div class="cnums">Test: Request daily ELAR for each month of the quarter.
+Red flag: Quarter-end ELAR > 90-day average by more than 300bp
+Also check: Repo book size at quarter-end vs mid-quarter
+          CBUAE reserve balance at quarter-end vs daily average
+Formula: Window dressing indicator = (Quarter-end ELAR − Average ELAR) ÷ Average ELAR
+If this ratio &gt; 20%, investigate quarter-end repo activity.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">2</div>
+    <p><strong>The Advances Reconciliation Clue:</strong> Compare total ASRR advances to total credit risk RWA. Credit RWA is calculated on all customer financing — it cannot be reduced by reclassification the way ASRR advances can. If ASRR advances are significantly lower than what credit RWA implies, financing has been reclassified out of the numerator.
+    <div class="cnums">Test: Implied advances from credit RWA = Credit RWA ÷ average risk weight (typically 60–80%)
+Example: Credit RWA = AED 5,800m, avg risk weight = 75% → Implied advances = AED 7,733m
+If ASRR reports advances of AED 5,400m → gap = AED 2,333m likely reclassified
+Threshold: ASRR advances should be within 15% of credit-RWA-implied advances
+Larger gap: investigate treasury/investment vs advances classification boundary</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">3</div>
+    <p><strong>The GRE Classification Clue:</strong> For any deposit above AED 100m in the "retail" or "long-term" stable category, request the counterparty name. Government ministries, municipality treasuries, sovereign wealth funds, and state-owned enterprises should never be classified as retail deposits or treated as 100% stable regardless of account structure.
+    <div class="cnums">Test: Request top-50 deposits by counterparty name and classification
+For each deposit in stable/retail category &gt; AED 50m:
+  - Is the counterparty a government entity? → reclassify as GRE (0–20% stable)
+  - Does the deposit have a break clause? → treat as demand deposit for ASRR
+  - Has the counterparty historically broken deposits early? → apply lower stability
+Red flag: Any single deposit &gt; AED 200m classified as "stable retail"</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">4</div>
+    <p><strong>The ELAR Asset Audit Clue:</strong> Request a security-by-security listing of every asset in the ELAR eligible pool. For each, verify: (1) the issuer is on the CBUAE's published eligible list; (2) the risk weight is 0% (for UAE sovereign/federal) or as specified; (3) the asset is unencumbered (not pledged as collateral elsewhere).
+    <div class="cnums">Common incorrect inclusions in UAE banks' ELAR:
+  — GRE sukuk with 20% risk weight (should be excluded)
+  — Bahrain/Oman sovereign bonds not on CBUAE approved list
+  — Encumbered bonds (pledged as repo collateral — not freely available)
+  — Bonds with maturity &lt;30 days that have already matured but not been removed
+Test: ELAR eligible assets should be ≤ (cash + CBUAE instruments + UAE federal bonds + approved foreign sovereign)
+Any ELAR figure significantly higher than this benchmark warrants detailed audit</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">5</div>
+    <p><strong>The Cross-Ratio Consistency Clue:</strong> ELAR, ASRR, LCR and NSFR should tell a consistent story. A bank passing ELAR comfortably while failing ASRR badly has a structural mismatch — it has enough liquid assets for a 30-day snapshot but has funded its loans with unstable money. A bank passing LCR while failing NSFR is using HQLA purchased with wholesale funding to game the short-term metric. When ratios diverge, the more structural ratio (NSFR, ASRR) is usually telling the truth.
+    <div class="cnums">Consistency test matrix:
+If ELAR passing AND ASRR failing: GRE deposit structural mismatch — serious
+If LCR passing AND NSFR failing:  HQLA gaming with wholesale — investigate
+If ASRR passing AND NSFR failing:  Bond portfolio mismatch — ASRR blind spot
+If all passing:                    Verify each ratio independently for window dressing
+The most dangerous position: ELAR comfortable (16%+) but ASRR failing (120%+)
+This means the bank has enough cash for 30 days but its loan book has no stable funding.</div></p>
+  </div>
+</div>
+
+<!-- ═══ 3.14 REFERENCES ═══ -->
+<div class="sm">3.14 — References</div>
+<div class="ref-section">
+  <div class="ref-title">Regulatory References &amp; Sources</div>
+  <ul class="ref-list">
+    <li>[1] BCBS. <em>Basel III: The Liquidity Coverage Ratio and liquidity risk monitoring tools.</em> BIS, January 2013. <a href="https://www.bis.org/publ/bcbs238.htm" target="_blank">https://www.bis.org/publ/bcbs238.htm</a></li>
+    <li>[2] BCBS. <em>Basel III: the net stable funding ratio.</em> BIS, October 2014. <a href="https://www.bis.org/bcbs/publ/d295.htm" target="_blank">https://www.bis.org/bcbs/publ/d295.htm</a></li>
+    <li>[3] Central Bank of the UAE (CBUAE). <em>Liquidity Regulations for Banks in the UAE.</em> CBUAE, 2015 (updated 2023). Covers ELAR and ASRR requirements, Category 1/2 classification. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[4] CBUAE. <em>Standards for Capital Adequacy of Islamic Banks in the UAE.</em> 2018. Wakalah certificate eligibility for ELAR. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[5] IFSB. <em>Guidance Note on Quantitative Measures for Liquidity Risk Management in Institutions Offering Islamic Financial Services.</em> IFSB-12, March 2012. Islamic HQLA framework. <a href="https://www.ifsb.org" target="_blank">https://www.ifsb.org</a></li>
+    <li>[6] BCBS. <em>Monitoring tools for intraday liquidity management.</em> BIS, April 2013. <a href="https://www.bis.org/publ/bcbs248.htm" target="_blank">https://www.bis.org/publ/bcbs248.htm</a></li>
+    <li>[7] IMF. <em>UAE: Financial System Stability Assessment.</em> IMF Country Report No. 22/66, March 2022. UAE liquidity framework assessment. <a href="https://www.imf.org" target="_blank">https://www.imf.org</a></li>
+    <li>[8] Bank for International Settlements. <em>Report on the liquidity coverage ratio during the Covid-19 crisis.</em> BCBS, October 2022. LCR practical experience. <a href="https://www.bis.org/bcbs/publ/d543.htm" target="_blank">https://www.bis.org/bcbs/publ/d543.htm</a></li>
+    <li>[9] BCBS. <em>Principles for Sound Liquidity Risk Management and Supervision.</em> BIS, September 2008. Foundation for LCR/NSFR design post-Northern Rock. <a href="https://www.bis.org/publ/bcbs144.htm" target="_blank">https://www.bis.org/publ/bcbs144.htm</a></li>
+  </ul>
+</div>
+
+<div class="chapter-nav">
+  <a class="nav-btn" href="chapter_02_capital_adequacy.html">← Chapter 2 — Capital Adequacy</a>
+  <span style="font-size:13px;color:var(--text-light)">Chapter 3 of 8 — Liquidity Ratios</span>
+  <a class="nav-btn" href="chapter_04_credit_quality.html">Chapter 4 — Credit Quality →</a>
+</div>
+</div>
+
+<script>
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#555';
+const gc = 'rgba(0,0,0,0.05)';
+
+// RATIO COMPARISON CHART
+new Chart(document.getElementById('ratioCompChart'), {
+  type: 'bar',
+  data: {
+    labels: ['ELAR (min 10%)', 'ASRR (max 100%)', 'LCR illustrative (min 100%)', 'NSFR estimated (min 100%)'],
+    datasets: [
+      {label: 'Bank position', data: [16.4, 122.5, 60.8, 82],
+       backgroundColor: ['rgba(39,174,96,0.7)','rgba(192,57,43,0.7)','rgba(192,57,43,0.7)','rgba(230,126,34,0.7)'],
+       borderColor: ['#27ae60','#c0392b','#c0392b','#e67e22'], borderWidth: 1},
+      {label: 'Threshold', data: [10, 100, 100, 100],
+       backgroundColor: 'rgba(26,110,168,0.2)', borderColor: '#1a6ea8', borderWidth: 1}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'},
+      tooltip: {callbacks: {label: c => `${c.dataset.label}: ${c.raw}%`}}},
+    scales: {y: {min: 0, max: 140, title: {display: true, text: '%'}, grid: {color: gc}}, x: {grid: {display: false}}}
+  }
+});
+
+// ASRR DECOMPOSITION
+new Chart(document.getElementById('asrrChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Retail deposits', 'GRE / Govt deposits', 'Corporate deposits', 'Short-term interbank', 'Long-term debt', 'Equity'],
+    datasets: [
+      {label: 'Deposit balance (AED m)', data: [2200, 2800, 1200, 500, 300, 1000],
+       backgroundColor: 'rgba(26,110,168,0.3)', borderColor: '#1a6ea8', borderWidth: 1},
+      {label: 'Stable resources contribution (AED m)', data: [2200, 280, 1200, 0, 300, 1000],
+       backgroundColor: ['rgba(39,174,96,0.7)','rgba(192,57,43,0.7)','rgba(39,174,96,0.7)','rgba(192,57,43,0.4)','rgba(39,174,96,0.7)','rgba(39,174,96,0.7)'],
+       borderColor: ['#27ae60','#c0392b','#27ae60','#c0392b','#27ae60','#27ae60'], borderWidth: 1}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {legend: {position: 'bottom'}},
+    scales: {
+      y: {title: {display: true, text: 'AED millions'}, grid: {color: gc}},
+      x: {grid: {display: false}, ticks: {font: {size: 11}}}
+    }
+  }
+});
+</script>
+</body>
+</html>

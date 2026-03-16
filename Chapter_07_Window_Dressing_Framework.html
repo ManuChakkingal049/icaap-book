@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 7 — Window Dressing Detection Framework | UAE Banking ICAAP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --ink:#1a1a2e;--ink-mid:#2d2d4e;
+  --gold:#b8860b;--gold-light:#daa520;--gold-pale:#fff8dc;
+  --teal:#0d7377;--teal-light:#14a085;--teal-pale:#e8f8f7;
+  --red:#c0392b;--red-pale:#fdf0ee;
+  --amber:#e67e22;--amber-pale:#fef9f0;
+  --blue:#1a6ea8;--blue-pale:#eef6fb;
+  --green:#27ae60;--green-pale:#edfaf3;
+  --purple:#6c3483;--purple-pale:#f5eef8;
+  --page:#fafaf7;--paper:#ffffff;
+  --border:#e8e4d8;--border-strong:#c8c0a8;
+  --text:#2c2c2c;--text-mid:#555;--text-light:#888;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--page);color:var(--text);line-height:1.75;font-size:16px;}
+.book-header{background:var(--ink);color:white;position:relative;overflow:hidden;}
+.book-header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal-light),var(--gold));}
+.book-header-inner{max-width:880px;margin:0 auto;padding:56px 40px;position:relative;z-index:2;}
+.book-series{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:10px;}
+.chapter-num{font-family:'Lora',serif;font-size:90px;font-weight:700;color:rgba(255,255,255,0.05);line-height:1;position:absolute;right:40px;top:30px;font-style:italic;}
+.book-title{font-family:'Lora',serif;font-size:36px;font-weight:700;line-height:1.2;margin-bottom:14px;color:white;}
+.book-title span{color:var(--gold-light);font-style:italic;}
+.book-subtitle{font-size:15px;color:rgba(255,255,255,0.6);max-width:620px;line-height:1.6;margin-bottom:26px;}
+.chapter-meta{display:flex;gap:18px;flex-wrap:wrap;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.45);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);}
+.page-wrap{max-width:880px;margin:0 auto;padding:0 40px 80px;}
+.toc-box{background:var(--paper);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:22px 26px;margin:32px 0;box-shadow:var(--shadow);}
+.toc-title{font-family:'Lora',serif;font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.toc-list{list-style:none;columns:2;column-gap:28px;}
+.toc-list li{font-size:13px;color:var(--text-mid);padding:3px 0;}
+.toc-list li span{color:var(--gold);font-weight:600;margin-right:6px;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;margin-top:50px;display:flex;align-items:center;gap:10px;}
+.sm::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3;}
+h3{font-family:'Lora',serif;font-size:21px;font-weight:600;color:var(--ink-mid);margin:30px 0 10px;line-height:1.3;}
+h4{font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 7px;text-transform:uppercase;letter-spacing:0.5px;}
+p{margin-bottom:14px;color:var(--text);}
+strong{color:var(--ink);}
+sup a{color:var(--blue);font-size:10px;}
+.story-box{background:linear-gradient(135deg,#fffbf0,#fff8e7);border:2px solid var(--gold-light);border-radius:14px;padding:22px 26px;margin:26px 0;position:relative;overflow:hidden;}
+.story-box::before{content:'🕵️';position:absolute;top:-6px;right:16px;font-size:26px;transform:rotate(5deg);}
+.story-label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.story-box p{font-family:'Lora',serif;font-size:14.5px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:8px;}
+.story-box p:last-child{margin-bottom:0;}
+.beginner{background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:17px 21px;margin:16px 0;}
+.bl{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:6px;}
+.beginner p{font-size:14px;color:var(--ink-mid);margin-bottom:0;}
+.formula-box{background:var(--ink);border-radius:10px;padding:17px 21px;margin:17px 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold-light);line-height:1.7;}
+.fl{font-family:'Source Sans 3',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;font-weight:600;}
+.fn{font-family:'Source Sans 3',sans-serif;font-size:11.5px;color:rgba(255,255,255,0.42);margin-top:6px;font-style:italic;}
+.alert{border-radius:8px;padding:15px 19px;margin:17px 0;border-left:4px solid;display:flex;gap:11px;align-items:flex-start;}
+.ai{font-size:18px;flex-shrink:0;margin-top:2px;}
+.ab h5{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ab p{font-size:14px;margin-bottom:0;}
+.a-key{background:#fffbf0;border-color:var(--gold);} .a-key .ab h5{color:var(--gold);}
+.a-uae{background:var(--teal-pale);border-color:var(--teal);} .a-uae .ab h5{color:var(--teal);}
+.a-warn{background:var(--amber-pale);border-color:var(--amber);} .a-warn .ab h5{color:var(--amber);}
+.a-danger{background:var(--red-pale);border-color:var(--red);} .a-danger .ab h5{color:var(--red);}
+.a-good{background:var(--green-pale);border-color:var(--green);} .a-good .ab h5{color:var(--green);}
+.table-wrap{overflow-x:auto;margin:17px 0;}
+table{width:100%;border-collapse:collapse;font-size:13px;box-shadow:var(--shadow);border-radius:8px;overflow:hidden;}
+thead th{background:var(--ink);color:white;padding:10px 13px;text-align:left;font-size:12px;font-weight:600;letter-spacing:0.4px;}
+tbody td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even) td{background:rgba(0,0,0,0.018);}
+tbody tr:hover td{background:var(--gold-pale);}
+.tp{color:var(--green);font-weight:600;} .tf{color:var(--red);font-weight:600;} .tw{color:var(--amber);font-weight:600;} .th{color:var(--gold);font-weight:600;font-family:'JetBrains Mono',monospace;}
+.uae-section{background:linear-gradient(135deg,#e8f8f7,#d4f1ee);border:1px solid var(--teal);border-radius:12px;padding:24px 26px 24px 40px;margin:34px 0;position:relative;}
+.uae-flag-stripe{position:absolute;left:0;top:0;bottom:0;width:8px;border-radius:12px 0 0 12px;background:linear-gradient(to bottom,#00732f 25%,#ffffff 25%,#ffffff 50%,#000000 50%,#000000 75%,#ff0000 75%);}
+.uae-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:white;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.uae-section h3{color:var(--teal);margin-top:0;}
+/* TECHNIQUE CARDS */
+.technique-card{background:var(--paper);border:1px solid var(--border);border-radius:12px;margin-bottom:28px;overflow:hidden;box-shadow:var(--shadow);}
+.tc-header{display:grid;grid-template-columns:56px 1fr;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border);}
+.tc-icon{font-size:26px;text-align:center;}
+.tc-title{font-family:'Lora',serif;font-size:16px;font-weight:700;}
+.tc-sub{font-size:12px;color:var(--text-light);margin-top:2px;}
+.tc-body{padding:20px 22px;}
+.tc-body p{font-size:14px;color:var(--text-mid);margin-bottom:10px;}
+.wnums{background:rgba(26,110,168,0.06);border-left:3px solid var(--blue);padding:10px 13px;border-radius:0 6px 6px 0;margin:10px 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--ink-mid);line-height:1.75;}
+.wl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:3px;}
+.wl-h{color:var(--red);} .wl-n{color:var(--blue);} .wl-r{color:var(--green);}
+/* RADAR CHART */
+.chart-box{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:20px;margin:20px 0;box-shadow:var(--shadow);}
+.ct{font-family:'Lora',serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.cs{font-size:12px;color:var(--text-light);margin-bottom:13px;font-style:italic;}
+.cartoon-wrap{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:20px;margin:22px 0;text-align:center;box-shadow:var(--shadow);}
+.cartoon-caption{font-size:12px;color:var(--text-light);font-style:italic;margin-top:10px;}
+/* EVIDENCE CHAIN */
+.evidence-chain{display:flex;flex-direction:column;gap:0;margin:20px 0;}
+.ec-step{display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed var(--border);}
+.ec-step:last-child{border-bottom:none;}
+.ec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;margin-top:2px;}
+.ec-content h5{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.ec-content p{font-size:13px;color:var(--text-mid);margin-bottom:4px;}
+/* WATERFALL */
+.waterfall{margin:20px 0;}
+.wf-row{display:grid;grid-template-columns:180px 1fr 100px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.04);}
+.wf-row:last-child{border-bottom:none;}
+.wf-label{font-size:13px;color:var(--text-mid);}
+.wf-bar-wrap{background:rgba(0,0,0,0.04);border-radius:4px;height:18px;overflow:hidden;position:relative;}
+.wf-bar{height:100%;border-radius:4px;transition:width 0.8s ease;}
+.wf-value{font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right;}
+/* SCORECARD */
+.scorecard{background:var(--ink);border-radius:12px;padding:24px 28px;margin:24px 0;color:white;}
+.sc-header{font-family:'Lora',serif;font-size:18px;font-weight:700;color:var(--gold-light);margin-bottom:16px;}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.sc-item{background:rgba(255,255,255,0.06);border-radius:8px;padding:14px;}
+.sc-category{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;}
+.sc-check{font-size:13px;color:rgba(255,255,255,0.82);margin-bottom:4px;display:flex;align-items:flex-start;gap:6px;}
+.sc-check::before{content:'▸';color:var(--gold-light);flex-shrink:0;margin-top:1px;}
+/* SHERLOCK */
+.sherlock{background:linear-gradient(135deg,#1a1a2e,#2d2d4e);border-radius:12px;padding:24px 26px;margin:34px 0;color:white;}
+.sh-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--gold-light);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+.sh-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:18px;}
+.clue{display:flex;gap:11px;margin-bottom:13px;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.clue:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.cn{background:var(--gold);color:var(--ink);min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.clue p{font-size:13px;color:rgba(255,255,255,0.82);margin-bottom:0;line-height:1.65;}
+.clue strong{color:var(--gold-light);}
+.cnums{background:rgba(201,168,76,0.1);border-left:2px solid var(--gold);padding:8px 11px;margin-top:6px;border-radius:0 4px 4px 0;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.72);line-height:1.65;}
+/* VERDICT */
+.verdict-box{border-radius:12px;padding:24px 28px;margin:28px 0;}
+.verdict-box.clean{background:var(--green-pale);border:2px solid var(--green);}
+.verdict-box.suspect{background:var(--amber-pale);border:2px solid var(--amber);}
+.verdict-box.confirmed{background:var(--red-pale);border:2px solid var(--red);}
+.verdict-title{font-family:'Lora',serif;font-size:18px;font-weight:700;margin-bottom:10px;}
+.verdict-box.clean .verdict-title{color:var(--green);}
+.verdict-box.suspect .verdict-title{color:var(--amber);}
+.verdict-box.confirmed .verdict-title{color:var(--red);}
+.verdict-body{font-size:14px;color:var(--text-mid);}
+/* REF */
+.ref-section{background:var(--blue-pale);border:1px solid #c0d8f0;border-radius:8px;padding:17px 21px;margin:34px 0 16px;}
+.ref-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.ref-list{list-style:none;}
+.ref-list li{font-size:12px;color:var(--text-mid);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.ref-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+.ref-list a{color:var(--blue);text-decoration:none;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border-strong),transparent);margin:42px 0;}
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid var(--border);margin-top:34px;}
+.nav-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 17px;background:var(--ink);color:white;border:none;border-radius:6px;font-size:13px;font-family:'Source Sans 3',sans-serif;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-btn:hover{background:var(--ink-mid);}
+@media(max-width:768px){.page-wrap{padding:0 16px 60px;}.book-title{font-size:26px;}.sc-grid{grid-template-columns:1fr;}.toc-list{columns:1;}.chapter-num{display:none;}}
+</style>
+</head>
+<body>
+
+<div class="book-header">
+  <div class="book-header-inner">
+    <div class="book-series">ICAAP &amp; Financial Ratios in UAE Banking · Chapter Seven</div>
+    <div class="chapter-num">07</div>
+    <h1 class="book-title">The <span>Window Dressing</span><br>Detection Framework</h1>
+    <p class="book-subtitle">A complete systematic methodology for identifying, evidencing, and quantifying window dressing across all ratio categories — the Sherlock Holmes chapter. Comprehensive detection techniques, the evidence chain, scoring methodology, case study, and what genuinely credible ICAAP looks like.</p>
+    <div class="chapter-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Comprehensive Detection</div>
+      <div class="meta-item"><div class="meta-dot"></div>Evidence Chain Methodology</div>
+      <div class="meta-item"><div class="meta-dot"></div>UAE Case Study</div>
+      <div class="meta-item"><div class="meta-dot"></div>Advanced</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+<div class="toc-box">
+  <div class="toc-title">In This Chapter</div>
+  <ul class="toc-list">
+    <li><span>7.1</span> The Crime Scene Parable</li>
+    <li><span>7.2</span> The Anatomy of Window Dressing</li>
+    <li><span>7.3</span> Technique 1 — Cross-Ratio Inconsistency</li>
+    <li><span>7.4</span> Technique 2 — Trend Divergence Analysis</li>
+    <li><span>7.5</span> Technique 3 — Sub-Ratio Drilling</li>
+    <li><span>7.6</span> Technique 4 — Stress Reverse Engineering</li>
+    <li><span>7.7</span> Building the Evidence Chain</li>
+    <li><span>7.8</span> The Scoring Methodology</li>
+    <li><span>7.9</span> UAE Case Study — A Complete Investigation</li>
+    <li><span>7.10</span> Radar Chart — Healthy vs Window Dresser</li>
+    <li><span>7.11</span> What a Genuinely Credible ICAAP Looks Like</div>
+    <li><span>7.12</span> Sherlock Holmes — The Final Summary</li>
+    <li><span>7.13</span> References</li>
+  </ul>
+</div>
+
+<!-- 7.1 NARRATIVE -->
+<div class="sm">7.1 — The Story</div>
+<h2>The Immaculate Crime Scene</h2>
+
+<div class="story-box">
+  <div class="story-label">A Beginner's Parable</div>
+  <p>Imagine a detective called to a house where nothing appears to be wrong. The door is locked from the inside. No broken windows. No signs of struggle. The valuables are all in place. The family says everything is fine. By every visible indicator, this is not a crime scene.</p>
+  <p>But the detective notices three things. The ornamental vase has been moved slightly — there is a dust ring where it used to stand. The kitchen calendar shows last Tuesday circled, but the family claims they were away that week. And the lock on the back door, while engaged, shows fresh scratch marks on the cylinder as if it was recently re-keyed.</p>
+  <p>Individually, each observation is meaningless. Together, they tell a story: someone was in this house last Tuesday, moved the vase, and changed the lock afterwards. The crime was not in what was visible — it was in the inconsistency between things that should have been consistent.</p>
+  <p><strong>Window dressing detection in banking is exactly this. The ICAAP document looks immaculate. Every ratio passes. Every narrative is coherent. The crime is in the dust ring around the moved vase — the NPL that is stable while Stage 2 is tripling; the CET1 that improved in a quarter where earnings were negative; the HQLA that grew on exactly March 31st and vanished by April 3rd.</strong></p>
+</div>
+
+<div class="cartoon-wrap">
+<svg width="100%" viewBox="0 0 720 270" xmlns="http://www.w3.org/2000/svg" style="max-width:720px">
+  <rect width="720" height="270" fill="#fafaf7" rx="8"/>
+  <!-- Detective figure -->
+  <circle cx="100" cy="120" r="20" fill="#fdbcb4"/>
+  <rect x="86" y="140" width="28" height="36" fill="#1a1a2e" rx="3"/>
+  <!-- Magnifying glass -->
+  <circle cx="148" cy="130" r="18" fill="none" stroke="#1a1a2e" stroke-width="2.5"/>
+  <circle cx="148" cy="130" r="13" fill="rgba(184,208,240,0.3)"/>
+  <line x1="161" y1="143" x2="172" y2="155" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/>
+  <!-- Hat -->
+  <rect x="82" y="102" width="36" height="8" rx="2" fill="#1a1a2e"/>
+  <rect x="87" y="88" width="26" height="15" rx="3" fill="#1a1a2e"/>
+  <!-- Clue labels under magnifier -->
+  <text x="148" y="126" font-family="'Source Sans 3',sans-serif" font-size="7" fill="#c0392b" text-anchor="middle" font-weight="700">CLUE</text>
+  <text x="148" y="137" font-family="'Source Sans 3',sans-serif" font-size="6" fill="#555" text-anchor="middle">Stage 2 ↑</text>
+
+  <!-- Evidence board -->
+  <rect x="200" y="50" width="480" height="180" rx="8" fill="#1a1a2e"/>
+  <text x="440" y="78" font-family="'Lora',serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">Evidence Board — Window Dressing Investigation</text>
+  <line x1="215" y1="85" x2="665" y2="85" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+
+  <!-- Three columns of evidence -->
+  <!-- Col 1: Clues -->
+  <text x="282" y="102" font-family="'Source Sans 3',sans-serif" font-size="10" fill="rgba(201,168,76,0.8)" text-anchor="middle" font-weight="700">CLUES FOUND</text>
+  <rect x="215" y="108" width="134" height="110" rx="4" fill="rgba(255,255,255,0.04)"/>
+  <text x="282" y="124" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.75)" text-anchor="middle">• NPL 4.2% — stable 6Q</text>
+  <text x="282" y="138" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle">• Stage 2: 21% — rising ↑↑</text>
+  <text x="282" y="152" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.75)" text-anchor="middle">• CET1 13.5% — stable</text>
+  <text x="282" y="166" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle">• PPP/RWA 0.7% — weak ↓</text>
+  <text x="282" y="180" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle">• ELAR Q-end spike: +420bp</text>
+  <text x="282" y="194" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.75)" text-anchor="middle">• Broad coverage: 122%</text>
+  <text x="282" y="208" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle">• Narrow coverage: 52% !</text>
+
+  <!-- Col 2: Cross-links -->
+  <text x="440" y="102" font-family="'Source Sans 3',sans-serif" font-size="10" fill="rgba(201,168,76,0.8)" text-anchor="middle" font-weight="700">INCONSISTENCIES</text>
+  <rect x="360" y="108" width="160" height="110" rx="4" fill="rgba(255,255,255,0.04)"/>
+  <text x="440" y="124" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#e67e22" text-anchor="middle">NPL flat ✗ Stage 2 rising</text>
+  <text x="440" y="138" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#e67e22" text-anchor="middle">CET1 ok ✗ PPP/RWA weak</text>
+  <text x="440" y="152" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#e67e22" text-anchor="middle">Broad ok ✗ Narrow poor</text>
+  <text x="440" y="166" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#e67e22" text-anchor="middle">ELAR ok ✗ Quarter-end spike</text>
+  <text x="440" y="186" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle" font-weight="600">Flag 1: Stage 2 accumulation</text>
+  <text x="440" y="200" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle" font-weight="600">Flag 4: Weak earnings engine</text>
+  <text x="440" y="214" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#c0392b" text-anchor="middle" font-weight="600">Liquidity: period-end gaming</text>
+
+  <!-- Col 3: Verdict -->
+  <text x="598" y="102" font-family="'Source Sans 3',sans-serif" font-size="10" fill="rgba(201,168,76,0.8)" text-anchor="middle" font-weight="700">VERDICT</text>
+  <rect x="531" y="108" width="134" height="110" rx="4" fill="rgba(192,57,43,0.15)" stroke="rgba(192,57,43,0.4)" stroke-width="1"/>
+  <text x="598" y="130" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#ff9999" text-anchor="middle" font-weight="700">WINDOW DRESSING</text>
+  <text x="598" y="144" font-family="'Source Sans 3',sans-serif" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">CONFIRMED</text>
+  <text x="598" y="165" font-family="'Source Sans 3',sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Score: 9/12</text>
+  <text x="598" y="179" font-family="'Source Sans 3',sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Hidden NPL: ~11.4%</text>
+  <text x="598" y="193" font-family="'Source Sans 3',sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">Prov. gap: AED 481m</text>
+  <text x="598" y="207" font-family="'Source Sans 3',sans-serif" font-size="8" fill="rgba(255,255,255,0.6)" text-anchor="middle">CET1 runway: 2.8 yrs</text>
+
+  <text x="440" y="252" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#888" text-anchor="middle" font-style="italic">Figure 7.1 — The detective's evidence board: clues collected, inconsistencies identified, verdict delivered with quantified impact.</text>
+</svg>
+<div class="cartoon-caption">Window dressing always leaves a crime scene. The ICAAP document is the immaculate house. The detective finds the dust ring.</div>
+</div>
+
+<!-- 7.2 ANATOMY -->
+<div class="sm">7.2 — The Anatomy</div>
+<h2>The Anatomy of Window Dressing — What It Is and Is Not</h2>
+
+<div class="beginner">
+  <div class="bl">🟢 Simple: The Three Types of ICAAP Problems</div>
+  <p><strong>Type 1 — Genuine weakness:</strong> The bank's ratios are truly poor and management is honestly disclosing that in the ICAAP. This is good ICAAP practice — uncomfortable to read, but credible. <strong>Type 2 — Innocent error:</strong> Misapplication of methodology, outdated data, or genuine model limitations. Fix it. <strong>Type 3 — Window dressing:</strong> Deliberate construction of an ICAAP narrative to present a passing picture while concealing genuine vulnerabilities. This is the detection target of this chapter.</p>
+</div>
+
+<div class="formula-box">
+  <div class="fl">The Taxonomy of Window Dressing by Risk Type</div>
+  CREDIT QUALITY window dressing:
+    Stage 2 accumulation → flat NPL (Flag 1)
+    Coverage inflation → weak specific provisions masked by general
+    LTV staleness → collateral value overstated
+    Cost of risk smoothing → provision releases inflate earnings
+
+  CAPITAL window dressing:
+    IRB model recalibration → RWA shrinks without portfolio change
+    Disposal gains → one-time CET1 boost, recurring weakness unchanged
+    Dividend suspension → temporary retention, not structural improvement
+    Off-B/S structuring → cosmetic RWA relief with retained economic risk
+
+  LIQUIDITY window dressing:
+    Period-end repo → quarter-end ELAR/LCR spike
+    Numerator suppression → loans reclassified out of ASRR advances
+    GRE misclassification → unstable deposits treated as stable
+    Asset overstatement → ineligible assets in ELAR pool
+
+  PROFITABILITY window dressing:
+    Disposal gain income → non-recurring PPP inflation
+    Leverage compensation → stable ROE hides ROA decline
+    Provision release → loss turned to profit
+    Fee front-loading → current period income stolen from future periods
+
+  ICAAP PROCESS window dressing:
+    Scenario selection → severity calibrated to always pass
+    Management action fantasy → timeline and feasibility not credible
+    Missing risk add-ons → concentration, IRRBB quantified too low
+    Circular target → ICG reverse-engineered from current CET1
+  <div class="fn">Total: 20 distinct window dressing techniques catalogued across this book. Each leaves at least one detectable footprint.</div>
+</div>
+
+<!-- 7.3 TECHNIQUE 1 -->
+<div class="sm">7.3 — Technique 1</div>
+<h2>Detection Technique 1 — Cross-Ratio Inconsistency Screening</h2>
+
+<div class="technique-card">
+  <div class="tc-header" style="background:rgba(192,57,43,0.05)">
+    <div class="tc-icon">🔗</div>
+    <div>
+      <div class="tc-title" style="color:var(--red)">Cross-Ratio Inconsistency — Finding the Relocated Risk</div>
+      <div class="tc-sub">Risk cannot be destroyed. Where it left, it must have gone. These are the pairings to test.</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p><span class="wl wl-h">How Window Dressers Create Inconsistency:</span> Every window dressing technique that improves Ratio A must, by necessity, either worsen Ratio B (in a different risk category) or worsen a sub-component of Ratio A itself. The inconsistency is the footprint.</p>
+    <div class="wnums">CROSS-RATIO INCONSISTENCY MATRIX — 12 CRITICAL PAIRINGS
+
+Pairing                        | If this improves... | Check this for deterioration
+NPL ratio vs Stage 2           | NPL flat/falling    | Stage 2 should also be flat/falling
+Broad vs narrow coverage       | Broad rising        | Narrow should move proportionately
+LCR vs NSFR                    | LCR rising          | NSFR should also be rising
+ELAR vs ASRR                   | ELAR passing        | ASRR should also be passing
+CET1 ratio vs RWA density      | CET1 rising         | RWA density should be stable or rising
+ROE vs ROA                     | ROE stable          | ROA should be stable or rising
+PPP/RWA vs disposal income     | PPP/RWA reported    | Core PPP/RWA should be close
+NIM vs ROE                     | ROE stable          | NIM should not be falling
+Cost of risk vs Stage 2 trend  | CoR smooth          | Should correlate with credit quality
+ICAAP ICG vs current CET1      | ICG reasonable      | Should not exactly equal current CET1
+Stressed CET1 vs scenario sev. | Stressed CET1 ok    | Scenario should be genuinely severe
+Management actions vs market   | Actions restore CET1| Actions must be executable in stress
+
+SCORING: Each inconsistency = 1 point. Score &gt;= 4: Investigate. Score &gt;= 7: Escalate.</div>
+
+    <p><span class="wl wl-n">Numerical Application — UAE Bank Example:</span></p>
+    <div class="wnums">Bank X reported metrics (Q4 2024):
+  NPL: 4.2% (stable 6 quarters)          → Stage 2: 21.0% (rose 13pp in 6Q) ← INCONSISTENT
+  Broad coverage: 122%                    → Narrow coverage: 52% ← INCONSISTENT (gap 70pp)
+  ELAR: 16.4% (passing 10% min)          → ASRR: 112% (failing 100% max) ← INCONSISTENT
+  CET1: 13.5% (above target)             → PPP/RWA: 0.7% (very weak) ← INCONSISTENT
+  ROE: 11.2% (appears adequate)          → ROA: 0.71% + leverage multiplier rising ← INCONSISTENT
+  Reported PPP/RWA: 0.7%                 → Core PPP/RWA (ex disposal): 0.4% ← INCONSISTENT
+  ELAR Q-end: 16.4%                      → ELAR 90-day avg: 9.8% (below minimum!) ← INCONSISTENT
+
+Inconsistency score: 7/12 → ESCALATE for detailed investigation</div>
+  </div>
+</div>
+
+<!-- 7.4 TECHNIQUE 2 -->
+<div class="sm">7.4 — Technique 2</div>
+<h2>Detection Technique 2 — Trend Divergence Analysis</h2>
+
+<div class="technique-card">
+  <div class="tc-header" style="background:rgba(230,126,34,0.05)">
+    <div class="tc-icon">📈</div>
+    <div>
+      <div class="tc-title" style="color:var(--amber)">Trend Divergence — When the Direction of Change Contradicts</div>
+      <div class="tc-sub">Healthy banks' ratios respond to the same economic forces in consistent directions. When they do not — something is being managed.</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p><span class="wl wl-h">How Window Dressers Create Trend Divergence:</span> Economic conditions affect all ratios simultaneously. In a deteriorating credit environment, NPL and Stage 2 should both rise; cost of risk should rise; coverage should be consumed; CET1 should fall. A bank where only some ratios respond to economic conditions while others remain artificially stable has someone actively managing the non-responding ratios.</p>
+    <div class="wnums">TREND CONSISTENCY TEST — Apply to 8-Quarter Dataset
+
+For each ratio pair, test: do they move in the same direction in the same quarter?
+
+Step 1: Identify economic regime (improving / stable / deteriorating) per quarter
+Step 2: For each ratio, note direction of change (up / stable / down)
+Step 3: Flag any ratio that moves opposite to what the economic regime predicts
+
+Expected in deteriorating environment:
+  NPL: ↑ | Stage 2: ↑ | Cost of risk: ↑ | Coverage: ↓ | NIM: ↓ | CET1: ↓
+
+Window dressing signal:
+  NPL: stable ← MANAGED while Stage 2: ↑↑ — inconsistency confirmed
+  Coverage (broad): ↑ ← INFLATED while narrow: ↓ — composition manipulation confirmed
+  CET1: stable ← MAINTAINED via disposal/IRB while PPP/RWA: ↓↓ — endowment not engine
+  ROE: stable ← COMPENSATED while ROA: ↓, leverage: ↑ — treadmill confirmed
+
+Each "goes opposite to expected direction" = 1 trend divergence score
+Score &gt;= 3: Investigate. Score &gt;= 5: Escalate with supporting evidence.</div>
+
+    <div class="chart-box">
+      <div class="ct">Trend Divergence Chart — Bank X Over 8 Quarters</div>
+      <div class="cs">All ratios in a deteriorating environment. Managed ratios (NPL, broad coverage, ROE) stay artificially flat while truthful ratios (Stage 2, narrow coverage, ROA) reveal the stress.</div>
+      <canvas id="trendChart" height="130"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 7.5 TECHNIQUE 3 -->
+<div class="sm">7.5 — Technique 3</div>
+<h2>Detection Technique 3 — Sub-Ratio Drilling</h2>
+
+<div class="technique-card">
+  <div class="tc-header" style="background:rgba(26,110,168,0.05)">
+    <div class="tc-icon">🔬</div>
+    <div>
+      <div class="tc-title" style="color:var(--blue)">Sub-Ratio Drilling — Decomposing Headline Ratios Into Their Components</div>
+      <div class="tc-sub">Every headline ratio is an average of components. Window dressing concentrates the manipulation in one component while leaving others unmolested.</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p><span class="wl wl-h">The Decomposition Principle:</span> No window dresser can manipulate all components of a ratio simultaneously — there are too many interconnections. The technique is to find the component that should have changed but did not, or the component that moved in a way inconsistent with the others.</p>
+    <div class="wnums">SUB-RATIO DRILLING GUIDE — By Headline Ratio
+
+NPL RATIO → Drill to:
+  (a) New NPL inflow rate (new Stage 3 ÷ opening Stage 2) — should correlate with Stage 2 level
+  (b) Write-off rate (write-offs ÷ opening NPL) — high write-offs mask incoming NPL inflows
+  (c) Forbearance ratio (forborne ÷ gross loans) — high forbearance = evergreening suspected
+  (d) Stage 2 provision rate vs historical migration LGD — underprovision?
+
+COVERAGE RATIO → Drill to:
+  (a) Narrow = specific ÷ NPL only
+  (b) Stage 2 ECL rate = Stage 2 provisions ÷ Stage 2 balance (should be 5–15%)
+  (c) Stage 1 ECL rate = Stage 1 provisions ÷ Stage 1 balance (should be 0.2–1.5%)
+
+LCR → Drill to:
+  (a) Level 1 HQLA as % of total HQLA (should be &gt;80%)
+  (b) Day-31 survival: (HQLA − 30-day outflows) ÷ daily wholesale maturity
+  (c) Currency mismatch: USD HQLA ÷ USD outflows
+
+CET1 → Drill to:
+  (a) RWA density = RWA ÷ total assets (should be broadly stable)
+  (b) CET1 source split: organic vs capital raise vs disposal gain
+  (c) IRB shortfall = max(0, EL − provisions) — deducted from CET1?
+
+ROE → Drill to:
+  (a) ROA = net profit ÷ avg assets (pure earning power)
+  (b) Equity multiplier = assets ÷ equity (leverage)
+  (c) Core PPP/RWA = (NII + recurring fees − opex) ÷ RWA</div>
+
+    <p><span class="wl wl-n">Application to Bank X:</span></p>
+    <div class="wnums">NPL drill for Bank X:
+  Reported NPL: 4.2% (stable)
+  New NPL inflow rate Q4: 18% of opening Stage 2 → should produce NPL rise of ~2.5pp
+  Actual NPL rise: 0.0% ← IMPOSSIBLE without massive write-offs or curing
+  Write-off rate: 2.1% of NPL balance → insufficient to offset inflow rate
+  Forbearance ratio: 8.3% ← HIGH — evergreening suspected
+  CONCLUSION: NPL ratio stability is arithmetically impossible without Stage 2 management
+
+Coverage drill for Bank X:
+  Broad coverage: 122%
+  Narrow coverage: 52% ← 70pp gap — massive general provision cushioning
+  Stage 2 ECL rate: 3.2% ← LOW vs historical migration LGD of 35%
+  Implied Stage 2 under-provision: 3,200×(35%−3.2%)×35%migration = AED 357m
+
+CET1 drill for Bank X:
+  Reported CET1: 13.5%
+  RWA density Q4: 58% ← fell from 68% 4 quarters ago
+  No portfolio mix change documented
+  Estimated RWA if density unchanged: 28,000 × 68/58 = AED 32,800m
+  Corrected CET1 at unchanged density: 4,200 ÷ 32,800 = 12.8% (vs reported 13.5%)</div>
+  </div>
+</div>
+
+<!-- 7.6 TECHNIQUE 4 -->
+<div class="sm">7.6 — Technique 4</div>
+<h2>Detection Technique 4 — Stress Reverse Engineering</h2>
+
+<div class="technique-card">
+  <div class="tc-header" style="background:rgba(108,52,131,0.05)">
+    <div class="tc-icon">⚙️</div>
+    <div>
+      <div class="tc-title" style="color:var(--purple)">Stress Reverse Engineering — Working Backwards From Stated Results</div>
+      <div class="tc-sub">The ICAAP stress test conclusion is the output. Work backwards to extract the implied assumptions — then test whether they are plausible.</div>
+    </div>
+  </div>
+  <div class="tc-body">
+    <p><span class="wl wl-h">The Reverse Engineering Method:</span> A window-dressed ICAAP typically cherry-picks optimistic assumptions in each module independently. Individually, each might be defensible. But when you extract all the implied assumptions simultaneously and test whether they are internally consistent and consistent with historical UAE data, the full optimism becomes visible.</p>
+    <div class="wnums">REVERSE ENGINEERING METHODOLOGY — Step by Step
+
+Given: Bank ICAAP shows stressed CET1 of 10.8% in Year 3 (passes 7% floor)
+Starting CET1: 14.1% | RWA: AED 28,000m | Gross loans: AED 20,000m
+
+Step 1: Extract implied cost of risk from CET1 decline
+  CET1 fell from 14.1% to 10.8% = −3.3pp over 3 years
+  At RWA 28,000m: total capital erosion = 3.3% × 28,000 = AED 924m over 3 years
+  Add back: retained earnings in stress (PPP − CoR net) must also be estimated
+  
+  If PPP averages AED 168m/yr (PPP/RWA 0.6%) and CoR produces net losses:
+  Annual net loss estimate: solving backwards → CoR implied ~2.2% annualised
+
+Step 2: Test implied CoR against stated NPL projection
+  Bank states NPL rises to 8% by Year 3 (from 4.2%)
+  Implied additional Stage 3 loans: 3.8% × 20,000 = AED 760m
+  Implied additional specific provisions: 760 × LGD 30% (stated) = AED 228m/yr
+  Does 228m/yr produce 2.2% CoR? 228 ÷ 20,000 = 1.14% CoR — inconsistently LOW
+  
+  Resolution: Either CoR is understated OR NPL projection is understated
+  2.2% CoR on 20,000 loans → requires AED 440m provisions
+  At 30% LGD → implies AED 1,467m additional NPLs → NPL ratio 11.6%, NOT 8%
+  
+  CONCLUSION: Bank's NPL stress projection is inconsistently optimistic vs its CET1 decline
+
+Step 3: Test implied LGD assumption
+  Bank uses 30% LGD. UAE 2009 actual LGD on RE loans: 40–55%.
+  At 45% LGD: implied additional provisions = 760 × 45% = AED 342m/yr
+  This produces CoR of 1.71% → CET1 drain → Year 3 CET1: 9.8%, not 10.8%
+  Difference: 1.0pp of CET1 = AED 280m of hidden capital gap
+
+Step 4: Test simultaneous consistency
+  Apply simultaneously: CoR 2.2% + RWA migration +25% + NIM compression −0.8%
+  Does the ICAAP model apply all three simultaneously? Or sequentially with offsets?
+  If sequential: Year 2 has one shock, Year 3 has another → total stress underestimated
+  If simultaneous: check whether arithmetic holds → usually reveals optimism in at least one
+
+FINDING: At least AED 280m additional capital required. P2R add-on warranted.</div>
+
+    <div class="chart-box">
+      <div class="ct">Reverse Engineering — Implied vs Stated Assumptions in ICAAP Stress</div>
+      <div class="cs">Bank states stressed CET1 passes at 10.8%. Reverse engineering shows the internally consistent outcome is 9.1% — a breach.</div>
+      <canvas id="reverseChart" height="110"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 7.7 EVIDENCE CHAIN -->
+<div class="sm">7.7 — Evidence Chain</div>
+<h2>Building the Evidence Chain — From Clue to Conclusion</h2>
+
+<p>A window dressing finding is not complete until it is expressed as an evidence chain — a logical sequence from observed data point to quantified capital or liquidity impact. Without the chain, the finding is an opinion. With the chain, it is a regulatory case.</p>
+
+<div class="evidence-chain">
+  <div class="ec-step">
+    <div class="ec-num" style="background:var(--red)">1</div>
+    <div class="ec-content">
+      <h5>Observation — The Data Anomaly</h5>
+      <p>State the specific, observable data point that is anomalous. Quantify it. Give the time horizon. Avoid interpretation at this stage.</p>
+      <div class="wnums">Example: "Bank X's Stage 2 ratio rose from 8.0% to 21.0% over 6 quarters (Q1 2023 to Q2 2024) while the NPL ratio remained stable at 4.0–4.2% over the same period. The Stage 2 balance grew from AED 1,600m to AED 4,200m (+AED 2,600m). The NPL balance grew from AED 800m to AED 840m (+AED 40m)."</div>
+    </div>
+  </div>
+
+  <div class="ec-step">
+    <div class="ec-num" style="background:var(--amber)">2</div>
+    <div class="ec-content">
+      <h5>Inconsistency Test — What Should Have Happened</h5>
+      <p>State what relationship between the two data points would be expected in a genuine portfolio, and why the observed relationship violates that expectation.</p>
+      <div class="wnums">Example: "In a genuine portfolio experiencing significant increase in credit risk (as evidenced by Stage 2 growth of AED 2,600m), some proportion of Stage 2 loans would be expected to migrate to Stage 3 (NPL) over the 6-quarter period. The UAE banking industry average Stage 2→3 migration rate for real estate-exposed portfolios is 25–40% per year. At a conservative 25% migration rate, AED 2,600m of Stage 2 growth should have produced at least AED 650m of new Stage 3 loans, raising the NPL ratio by approximately 3.25pp to ~7.45%. The observed NPL stability is arithmetically inconsistent with the observed Stage 2 growth unless: (a) large write-offs removed NPLs from the denominator, (b) large restructurings permanently cured Stage 3 loans back to Stage 2, or (c) Stage 2 classification is being used to defer Stage 3 recognition."</div>
+    </div>
+  </div>
+
+  <div class="ec-step">
+    <div class="ec-num" style="background:var(--blue)">3</div>
+    <div class="ec-content">
+      <h5>Alternative Hypothesis Testing — Ruling Out Innocent Explanations</h5>
+      <p>Test and eliminate each legitimate alternative explanation before concluding window dressing.</p>
+      <div class="wnums">Alternative 1: Large write-offs removed NPLs
+  Write-off rate reported: 2.1% of NPL balance = AED 16.8m/quarter
+  Total write-offs over 6 quarters: ~AED 101m — insufficient to offset AED 650m expected inflows
+
+Alternative 2: Genuine Stage 3 cures back to Stage 2
+  Curing rate from Stage 3 reported: 8% per quarter = AED 67m/quarter
+  Total cures over 6 quarters: ~AED 402m — insufficient to offset inflows
+
+Alternative 3: Portfolio genuinely performing better than market
+  Sector context: UAE real estate prices declined 15% over the same 6 quarters
+  Industry NPL in RE sector: rose 3.5pp over same period (peer data)
+  Bank X's RE portfolio NPL: unchanged — INCONSISTENT WITH SECTOR
+
+CONCLUSION: Alternatives 1 and 2 together explain only AED 503m of the AED 650m+ gap.
+Unexplained gap: AED 150m+ of expected NPL inflows not appearing in reported Stage 3.
+Classification window dressing: probable.</div>
+    </div>
+  </div>
+
+  <div class="ec-step">
+    <div class="ec-num" style="background:var(--purple)">4</div>
+    <div class="ec-content">
+      <h5>Quantification — What Is the Capital Impact</h5>
+      <p>Translate the finding into a specific capital or liquidity impact in AED terms and as a percentage of RWA.</p>
+      <div class="wnums">Shadow NPL estimate:
+  Stage 2 balance: AED 4,200m × 35% historical migration rate = AED 1,470m shadow NPLs
+  Additional specific provision at 45% LGD: AED 1,470m × 45% = AED 662m
+  Less: Stage 2 ECL already raised: AED 4,200m × 3.2% = AED 134m
+  Net additional provision required: AED 528m
+  Post-tax capital impact: AED 528m × (1 − 9%) = AED 481m
+  As % of RWA: AED 481m ÷ AED 28,000m = 1.72% of CET1
+
+Adjusted CET1 ratio: 13.5% − 1.72% = 11.78%
+True headroom above 7% floor: 4.78% (vs reported 6.5%)
+True capital runway: (11.78% − 7%) ÷ 1.73% annual drain (Flag 4) = 2.8 years
+                     vs reported runway of 4.0+ years</div>
+    </div>
+  </div>
+
+  <div class="ec-step">
+    <div class="ec-num" style="background:var(--teal)">5</div>
+    <div class="ec-content">
+      <h5>Regulatory Conclusion — What Action Is Warranted</h5>
+      <p>State the supervisory action implied by the finding and the additional information required to resolve it.</p>
+      <div class="wnums">Findings summary:
+  1. Stage 2 accumulation: provisioning shortfall AED 481m (1.72% of RWA)
+  2. Coverage inflation: narrow coverage 52% vs adequate minimum 70%+
+  3. ELAR quarter-end gaming: daily average 9.8% (below 10% minimum) vs reported 16.4%
+  4. IRB RWA density decline: potential CET1 overstatement of ~0.7%
+  5. PPP/RWA 0.7%: capital runway 2.8 years under severe stress (below 3-year minimum)
+
+Warranted regulatory actions:
+  → P2R add-on: minimum AED 481m (Stage 2 provision gap) + AED 196m (RWA density)
+    = AED 677m additional capital = 2.4% of RWA
+    Adjusted effective CET1 requirement: 7% + 2.4% P2R = 9.4%
+    Against adjusted CET1 of 11.78%: headroom 2.38% — tight
+  → Requirement: raise Stage 2 provision rate to minimum 12% within 2 quarters
+  → Requirement: submit daily ELAR data for 6 months
+  → Management: present credible earnings improvement plan within ICAAP revision</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7.8 SCORING -->
+<div class="sm">7.8 — Scoring Methodology</div>
+<h2>The Window Dressing Scoring Methodology</h2>
+
+<div class="scorecard">
+  <div class="sc-header">🎯 20-Point Window Dressing Score — Bank Assessment Card</div>
+  <div class="sc-grid">
+    <div class="sc-item">
+      <div class="sc-category">Credit Quality (Max 6)</div>
+      <div class="sc-check">NPL vs Stage 2 divergence &gt;5pp/yr (2pts)</div>
+      <div class="sc-check">Narrow coverage &lt;60% (1pt)</div>
+      <div class="sc-check">Broad−narrow gap &gt;40pp (1pt)</div>
+      <div class="sc-check">Forbearance ratio &gt;7% (1pt)</div>
+      <div class="sc-check">Stale valuations (&gt;18 months) (1pt)</div>
+    </div>
+    <div class="sc-item">
+      <div class="sc-category">Capital (Max 5)</div>
+      <div class="sc-check">RWA density fell &gt;5pp in 4Q, no mix change (2pts)</div>
+      <div class="sc-check">CET1 improvement in loss quarter (1pt)</div>
+      <div class="sc-check">Disposal gains &gt;25% of net profit (1pt)</div>
+      <div class="sc-check">Payout ratio &gt; 90% or sudden drop to 0% (1pt)</div>
+    </div>
+    <div class="sc-item">
+      <div class="sc-category">Liquidity (Max 4)</div>
+      <div class="sc-check">Q-end ELAR spike &gt;300bp vs avg (1pt)</div>
+      <div class="sc-check">ELAR/ASRR inconsistency flagged (1pt)</div>
+      <div class="sc-check">LCR rising, NSFR falling, wholesale rising (1pt)</div>
+      <div class="sc-check">ASRR advances &gt;15% below credit RWA (1pt)</div>
+    </div>
+    <div class="sc-item">
+      <div class="sc-category">Profitability (Max 3)</div>
+      <div class="sc-check">Core PPP/RWA &lt;0.5% below reported (1pt)</div>
+      <div class="sc-check">ROE stable, ROA falling &gt;0.2%/yr (1pt)</div>
+      <div class="sc-check">Quarterly CoR std dev &gt;0.5% (1pt)</div>
+    </div>
+    <div class="sc-item">
+      <div class="sc-category">ICAAP Process (Max 2)</div>
+      <div class="sc-check">ICG within 50bp of current CET1 every year (1pt)</div>
+      <div class="sc-check">Stress scenario &lt;30% RE decline for UAE RE bank (1pt)</div>
+    </div>
+    <div class="sc-item" style="background:rgba(201,168,76,0.1)">
+      <div class="sc-category" style="color:var(--gold-light)">Verdict Thresholds</div>
+      <div class="sc-check" style="color:var(--green)">0–4: Clean. Monitor.</div>
+      <div class="sc-check" style="color:var(--amber)">5–9: Suspect. Investigate.</div>
+      <div class="sc-check" style="color:var(--red)">10–14: Probable WD. Escalate.</div>
+      <div class="sc-check" style="color:#ff5555">15–20: Confirmed. Immediate action.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7.9 UAE CASE STUDY -->
+<div class="sm">7.9 — UAE Case Study</div>
+<h2>UAE Case Study — A Complete Investigation</h2>
+
+<p>A composite UAE Category 2 commercial bank. This case study consolidates all detection techniques into one complete investigation workflow. All numbers are illustrative.</p>
+
+<h3>The Bank Profile</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Metric</th><th>Reported</th><th>Adjusted (post-investigation)</th><th>Difference</th></tr></thead>
+<tbody>
+  <tr><td>Total assets</td><td>AED 45,000m</td><td>AED 45,000m</td><td>—</td></tr>
+  <tr><td>CET1 ratio</td><td class="tp">13.5%</td><td class="tw">11.3%</td><td class="tf">−2.2pp</td></tr>
+  <tr><td>NPL ratio</td><td class="tp">4.2%</td><td class="tf">~11.4% (shadow)</td><td class="tf">+7.2pp hidden</td></tr>
+  <tr><td>Narrow coverage</td><td class="tw">52%</td><td class="tf">52% (confirmed inadequate)</td><td>Unchanged — just honest</td></tr>
+  <tr><td>Broad coverage</td><td class="tp">122%</td><td class="tw">75% (ex inflated general provision)</td><td class="tf">−47pp</td></tr>
+  <tr><td>ELAR (reported)</td><td class="tp">16.4%</td><td class="tf">9.8% (daily average)</td><td class="tf">Below 10% minimum</td></tr>
+  <tr><td>ASRR</td><td class="tf">112% (failing)</td><td class="tf">112% (no change)</td><td>Already failing — not managed</td></tr>
+  <tr><td>PPP/RWA (reported)</td><td class="tw">0.7%</td><td class="tf">0.4% (ex disposal)</td><td class="tf">−0.3pp</td></tr>
+  <tr><td>CET1 capital runway</td><td class="tw">4.0 yrs (reported)</td><td class="tf">1.9 yrs (adjusted)</td><td class="tf">Below 3-year minimum</td></tr>
+  <tr><td>Window dressing score</td><td></td><td class="tf">13/20</td><td>Probable window dressing — escalate</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Investigation Summary — What Each Technique Found</h3>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Technique</th><th>Finding</th><th>Capital/Liquidity Impact</th><th>Score</th></tr></thead>
+<tbody>
+  <tr><td>Cross-ratio inconsistency</td><td>7 of 12 pairings inconsistent</td><td>Confirms multiple issues — not isolated</td><td class="tf">3pts</td></tr>
+  <tr><td>Stage 2 / NPL divergence</td><td>Stage 2 +13pp, NPL flat over 6Q</td><td>AED 481m hidden provision gap = 1.72% CET1</td><td class="tf">2pts</td></tr>
+  <tr><td>Narrow vs broad coverage</td><td>70pp gap — massive general provision inflation</td><td>Specific provisions AED 120m short of 70% floor</td><td class="tf">2pts</td></tr>
+  <tr><td>ELAR quarter-end gaming</td><td>Reported 16.4% vs daily avg 9.8%</td><td>Bank below ELAR minimum all quarter — regulatory breach</td><td class="tf">1pt</td></tr>
+  <tr><td>RWA density decline</td><td>Density fell 68% to 58% in 4Q, no mix change</td><td>AED 196m additional CET1 if density normalised</td><td class="tf">2pts</td></tr>
+  <tr><td>Core PPP/RWA</td><td>Reported 0.7%, core 0.4% (disposal gains excluded)</td><td>Capital runway: 1.9yr vs reported 4.0yr</td><td class="tf">1pt</td></tr>
+  <tr><td>Reverse engineering</td><td>Stressed CET1 10.8% implied optimistic assumptions in ALL modules</td><td>Internally consistent outcome: ~9.1% — breach</td><td class="tf">2pts</td></tr>
+  <tr><td><strong>Total</strong></td><td></td><td><strong>Aggregate hidden capital gap: ~AED 900m (3.2% of RWA)</strong></td><td class="tf"><strong>13/20</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="verdict-box confirmed">
+  <div class="verdict-title">🚨 Verdict — Probable Window Dressing Confirmed</div>
+  <div class="verdict-body">Window dressing score 13/20 — above the 10-point escalation threshold. Seven independent inconsistencies identified across credit quality, capital, and liquidity ratio categories. Aggregate hidden capital impact of approximately AED 900m (3.2% of RWA). The bank's ICAAP internal capital target of 12.5% should be compared against the adjusted CET1 of 11.3% — creating an actual shortfall of 1.2% (AED 336m) rather than the reported headroom of 1.0%. Regulatory action: P2R add-on, requirement to restate ICAAP with honest assumptions, daily ELAR reporting for 6 months.</div>
+</div>
+
+<!-- 7.10 RADAR CHART -->
+<div class="sm">7.10 — Radar Chart</div>
+<h2>Radar Chart — Healthy vs Window Dresser vs Post-Stress</h2>
+
+<div class="chart-box">
+  <div class="ct">Bank Risk Profile — Three States Compared</div>
+  <div class="cs">Outer = stronger position. The window dressing bank looks similar to healthy on most axes — the gaps appear on earnings quality (PPP/RWA) and structural ratios (ASRR, NSFR)</div>
+  <canvas id="radarChart" height="200"></canvas>
+</div>
+
+<div class="beginner">
+  <div class="bl">🟢 Reading the Radar Chart</div>
+  <p>Each axis represents a ratio category scored 0–100 (higher = stronger). A healthy bank should show a large, broadly balanced shape. A window dressing bank shows a characteristic pattern: strong on easily-managed individual ratios (CET1, broad coverage, LCR) but weak on structural/flow ratios (PPP/RWA, NSFR/ASRR, narrow coverage). The post-stress bank shows what the window dresser looks like after the cliff edge is reached — collapsed across almost all dimensions simultaneously.</p>
+</div>
+
+<!-- 7.11 CREDIBLE ICAAP -->
+<div class="sm">7.11 — What Good Looks Like</div>
+<h2>What a Genuinely Credible ICAAP Looks Like</h2>
+
+<p>Having spent this entire chapter identifying what bad looks like, it is equally important to define the positive standard. A credible ICAAP does not hide vulnerabilities — it acknowledges them, quantifies them, and demonstrates adequate response. The hallmarks:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Dimension</th><th>Window-Dressed ICAAP</th><th>Genuinely Credible ICAAP</th></tr></thead>
+<tbody>
+  <tr><td>Stress scenarios</td><td class="tf">Calibrated to always pass. Property stress 15–20% for UAE RE bank.</td><td class="tp">Calibrated to historical severity. Includes 2009-equivalent simultaneous shocks. Shows Year where CET1 floor is breached and management actions to prevent it.</td></tr>
+  <tr><td>NPL/Stage 2 relationship</td><td class="tf">Low NPL, high Stage 2. No explanation. No shadow NPL calculation.</td><td class="tp">Explains Stage 2 build-up explicitly. Provides migration rate analysis. Shows shadow NPL and provision sensitivity.</td></tr>
+  <tr><td>Coverage ratio</td><td class="tf">Reports only broad coverage. Specific provision adequacy not discussed.</td><td class="tp">Reports both narrow and broad. Explains gap. Validates specific provisions against LGD data. Shows sensitivity to LGD assumption.</td></tr>
+  <tr><td>Capital target</td><td class="tf">ICG = current CET1 ± 50bp. No year in which bank concluded it needed more capital.</td><td class="tp">ICG derived independently from risk assessment. Contains year in history where ICG exceeded CET1 and a capital raise or RWA reduction followed.</td></tr>
+  <tr><td>Management actions</td><td class="tf">Equity issuance in 3 months, asset sales in 2 months. Timeline not tested.</td><td class="tp">Each action with a realistic execution timeline. Demonstrates feasibility under the stated stress conditions. Board resolution exists, not just management intent.</td></tr>
+  <tr><td>Profitability</td><td class="tf">PPP/RWA calculated on reported (including disposal gains). No sensitivity to NIM compression.</td><td class="tp">Core PPP/RWA calculated explicitly. NIM sensitivity to −150bp and −300bp tested. PPP/RWA earnings firewall vs stressed cost of risk shown explicitly.</td></tr>
+  <tr><td>Pillar 2 add-ons</td><td class="tf">Concentration add-on at sector-level HHI. Very low absolute amount. Never challenged.</td><td class="tp">Name-level concentration analysis. IRRBB measured with +200bp and −200bp scenarios. Model risk quantified. Each add-on tested against regulator's independent methodology.</td></tr>
+  <tr><td>Consistency</td><td class="tf">Each section modelled independently. Cherry-picked assumptions. Reverse engineering reveals implausible Year 3 result.</td><td class="tp">All sections modelled simultaneously. Internally consistent: if NPL rises X%, cost of risk and coverage assumptions are calibrated accordingly. Reverse engineering produces same result as stated.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert a-good">
+  <div class="ai">✅</div>
+  <div class="ab">
+    <h5>The Paradox of the Credible ICAAP</h5>
+    <p>The most credible ICAAP is often the one that shows the most vulnerabilities — because it demonstrates that the bank's management has genuinely looked in the dark corners and reported what they found. An ICAAP that acknowledges a Stage 2 build-up with a plan to address it, shows a capital runway of 3.5 years under severe stress with specific management actions, and honestly states that PPP/RWA needs to improve from 0.7% to 1.5% over 18 months — that ICAAP is more credible than one showing perfect ratios across every dimension. Banks with honest ICAPs typically receive lower P2R add-ons because regulators trust the self-assessment.</p>
+  </div>
+</div>
+
+<!-- 7.12 SHERLOCK FINAL -->
+<div class="sm">7.12 — The Final Sherlock</div>
+<div class="sherlock">
+  <div class="sh-title">🔍 Be Sherlock Holmes — The Complete Detection Summary</div>
+  <div class="sh-sub">"You have been in Afghanistan, I perceive." — Everything about the ICAAP tells a story. The question is whether you know how to read it.</div>
+
+  <div class="clue">
+    <div class="cn">1</div>
+    <p><strong>The Seven-Second Screen:</strong> Before reading a single page of an ICAAP, run the seven-second quantitative screen: CET1 ratio; PPP/RWA; Stage 2 as % of loans; narrow coverage; ELAR daily average; ASRR; RWA density trend. Any of these outside expected ranges is a flag before you have read a single word of narrative.
+    <div class="cnums">Seven-second screen thresholds:
+  CET1 &gt;14% but PPP/RWA &lt;1%: Flag 4 candidate
+  Stage 2 &gt;15% with NPL &lt;5%: Flag 1 candidate
+  Broad coverage &gt;100% but narrow &lt;60%: coverage inflation candidate
+  ELAR reported vs daily average gap &gt;300bp: period-end gaming candidate
+  RWA density fell &gt;5pp in 4 quarters: model recalibration candidate
+  If 3+ of these trigger: full investigation before reading narrative</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">2</div>
+    <p><strong>The Narrative Consistency Test:</strong> Read the credit risk section of the ICAAP narrative and extract the implied NPL trajectory. Read the capital section and extract the implied CET1 trajectory. Multiply the NPL projection × LGD assumption × provision coverage to get implied impairment charges. Check whether those charges are consistent with the CET1 trajectory. If the capital section and credit section use different implied LGDs or provision rates — even if each section is internally consistent — the overall ICAAP is not.
+    <div class="cnums">Test: Credit section states NPL rises to 9%, LGD 28%, coverage falls to 85%.
+Capital section shows CET1 falls from 14.1% to 11.2%.
+Implied additional provisions from credit section: (9%−4.2%)×20,000×28% = AED 269m
+CET1 decline of 2.9% on 28,000 RWA = AED 812m total erosion
+Over 3 years at AED 269m/yr provisions = AED 807m — checks out approximately.
+If they DON'T check out: one section is using different (hidden) assumptions.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">3</div>
+    <p><strong>The Footnote Detective:</strong> Window dressing is almost never in the headline section — it is in the footnotes, the methodology appendix, and the model assumption tables. The most dangerous footnote is: "Provision rates have been revised to reflect updated economic forecasts." This single sentence can conceal AED 300m+ of provision releases. The footnote detective reads every note and asks: does this change the headline by more than 50bp on any key ratio?
+    <div class="cnums">Footnotes that always warrant investigation:
+  "ECL model recalibrated based on updated macro scenarios" → what changed? by how much?
+  "Collateral valuations updated using management estimates" → independent valuations?
+  "Classification revised following legal review" → are specific loans now Stage 2 instead of 3?
+  "ELAR calculation methodology clarified" → did the eligible asset list change?
+  "RWA calculated using revised probability of default estimates" → by how much? direction?
+  Each of these, individually, is legitimate disclosure. Together, in the same document = pattern.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">4</div>
+    <p><strong>The Historical Track Record Test:</strong> Request ICAAP documents for three consecutive years. For Year N, extract the stressed NPL, stressed CET1, and stressed cost of risk as projected in the Year N−2 ICAAP. Compare against actual outcomes in Year N. A bank that consistently over-estimates recovery speed and under-estimates stress severity in its ICAAP is not doing a genuine forward-looking assessment — it is producing a document designed to pass rather than to predict.
+    <div class="cnums">Historical accuracy score:
+  For each metric: |actual − projected at N−2| ÷ projected range = accuracy error
+  NPL accuracy error &gt;30%: projection calibration poor
+  CET1 accuracy error &gt;150bp: stress assumptions too mild
+  A bank with systematic optimism bias (actual always worse than projected by similar margin)
+  has a calibration problem that should directly increase P2G.</div></p>
+  </div>
+
+  <div class="clue">
+    <div class="cn">5</div>
+    <p><strong>The "Where Did the Risk Go?" Final Test:</strong> After running all four detection techniques, ask one final question: the bank improved its CET1 by X bp, improved its LCR by Y pp, and maintained a stable NPL ratio. Where did the risk that should have manifested in those ratios actually go? It went somewhere. The job is to find it — in the Stage 2 book, in the ASRR breach, in the PPP/RWA weakness, in the IRB shortfall, or in the ICAAP stress assumptions themselves. The risk conservation principle guarantees it is there. The detective's job is to find it before it finds the bank.
+    <div class="cnums">Final test framework:
+  Total risk improvement claimed (in ratio terms): ΣΔ(positive changes)
+  Total risk deterioration found (in other ratios): ΣΔ(negative changes)
+  Conservation check: are these approximately equal?
+  If claimed improvements >> observed deteriorations: unobserved risk likely remains
+  Location candidates: Stage 2 book, ASRR advances, IRB provision shortfall,
+                       ICAAP scenario optimism, off-balance sheet exposures
+  The gap between what improved and what deteriorated = the hidden risk quantum</div></p>
+  </div>
+</div>
+
+<!-- 7.13 REFERENCES -->
+<div class="sm">7.13 — References</div>
+<div class="ref-section">
+  <div class="ref-title">Regulatory References &amp; Sources</div>
+  <ul class="ref-list">
+    <li>[1] EBA. <em>Guidelines on ICAAP and ILAAP information collected for SREP purposes.</em> EBA/GL/2016/10. Cross-consistency requirements in ICAAP review. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li>[2] BCBS. <em>Supervisory guidance for assessing banks' financial instrument fair value practices.</em> BIS, April 2009. Evidence standards for supervisory challenge. <a href="https://www.bis.org/publ/bcbs153.htm" target="_blank">https://www.bis.org/publ/bcbs153.htm</a></li>
+    <li>[3] EBA. <em>EBA Report on the convergence of supervisory practices.</em> 2021. SREP methodology — cross-ratio analysis. <a href="https://www.eba.europa.eu" target="_blank">https://www.eba.europa.eu</a></li>
+    <li>[4] BCBS. <em>Guidelines for computing capital for incremental risk in the trading book.</em> BIS, July 2009. Reverse engineering methodology in stress testing. <a href="https://www.bis.org/publ/bcbs159.htm" target="_blank">https://www.bis.org/bcbs159.htm</a></li>
+    <li>[5] CBUAE. <em>ICAAP Supervisory Guidance.</em> 2022. SREP challenge process — UAE specific. <a href="https://www.centralbank.ae" target="_blank">https://www.centralbank.ae</a></li>
+    <li>[6] IMF. <em>Financial Sector Assessment Program (FSAP) — Technical Note on Stress Testing.</em> IMF, 2021. Scenario calibration methodology and back-testing standards. <a href="https://www.imf.org" target="_blank">https://www.imf.org</a></li>
+    <li>[7] Bank of England / PRA. <em>Supervisory Statement SS31/15 — Internal Capital Adequacy Assessment Process (ICAAP) and the Supervisory Review and Evaluation Process (SREP).</em> 2018. Management actions credibility standards — cross-jurisdictional reference. <a href="https://www.bankofengland.co.uk" target="_blank">https://www.bankofengland.co.uk</a></li>
+    <li>[8] BCBS. <em>Principles for Sound Stress Testing Practices and Supervision.</em> BIS, May 2009. <a href="https://www.bis.org/publ/bcbs155.htm" target="_blank">https://www.bis.org/publ/bcbs155.htm</a></li>
+  </ul>
+</div>
+
+<div class="chapter-nav">
+  <a class="nav-btn" href="chapter_06_inconsistency_flags.html">← Chapter 6 — Inconsistency Flags</a>
+  <span style="font-size:13px;color:var(--text-light)">Chapter 7 of 8 — Detection Framework</span>
+  <a class="nav-btn" href="chapter_08_icaap_narrative.html">Chapter 8 — ICAAP Narrative →</a>
+</div>
+</div>
+
+<script>
+Chart.defaults.font.family = "'Source Sans 3', sans-serif";
+Chart.defaults.color = '#555';
+const gc = 'rgba(0,0,0,0.05)';
+
+// TREND DIVERGENCE CHART
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8'],
+    datasets: [
+      {label: 'NPL % (managed — flat)', data:[4.0,4.0,4.1,4.1,4.1,4.2,4.2,4.2],
+       borderColor:'#27ae60',tension:0.2,fill:false,pointRadius:4,borderWidth:2},
+      {label: 'Stage 2 % (unmanaged — rising)', data:[8,10,12,14,16,18,20,21],
+       borderColor:'#c0392b',tension:0.3,fill:false,pointRadius:4,borderWidth:2,borderDash:[6,3]},
+      {label: 'Broad coverage % /10 (managed — stable)', data:[11,11.2,11.5,11.8,12,12,12.1,12.2],
+       borderColor:'#1a6ea8',tension:0.2,fill:false,pointRadius:4,borderWidth:2},
+      {label: 'Narrow coverage % /10 (honest — falling)', data:[7.8,7.6,7.3,6.9,6.5,6.1,5.6,5.2],
+       borderColor:'#e67e22',tension:0.3,fill:false,pointRadius:4,borderWidth:1.5,borderDash:[3,3]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom'},
+      tooltip:{callbacks:{label:c=>{
+        if(c.dataset.label.includes('coverage'))return c.dataset.label.replace('/10','')+': '+(c.raw*10).toFixed(0)+'%';
+        return c.dataset.label+': '+c.raw+'%';
+      }}}},
+    scales:{
+      y:{min:0,max:24,title:{display:true,text:'% (coverage metrics ÷10)'},grid:{color:gc}},
+      x:{grid:{color:gc}}
+    }
+  }
+});
+
+// REVERSE ENGINEERING CHART
+new Chart(document.getElementById('reverseChart'), {
+  type:'line',
+  data:{
+    labels:['Base','Year 1','Year 2','Year 3'],
+    datasets:[
+      {label:'Bank stated stressed CET1',data:[14.1,13.2,11.8,10.8],
+       borderColor:'#1a6ea8',tension:0.3,fill:false,pointRadius:6,borderWidth:2.5},
+      {label:'Internally consistent (reverse engineered)',data:[14.1,12.6,10.8,9.1],
+       borderColor:'#c0392b',tension:0.3,fill:false,pointRadius:6,borderWidth:2.5,borderDash:[7,3]},
+      {label:'7% Regulatory Floor',data:[7,7,7,7],
+       borderColor:'#e67e22',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{min:5,max:16,title:{display:true,text:'CET1 %'},grid:{color:gc}},
+      x:{grid:{color:gc}}
+    }
+  }
+});
+
+// RADAR CHART
+new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{
+    labels:['CET1 Ratio','PPP/RWA','LCR/ELAR','NSFR/ASRR','NPL Coverage (narrow)','Cost of Risk','NIM','CIR (inverted)','Stage 2 (inverted)','Capital Runway'],
+    datasets:[
+      {label:'Genuinely Healthy Bank',
+       data:[82,80,78,76,75,80,78,76,80,85],
+       backgroundColor:'rgba(39,174,96,0.15)',borderColor:'#27ae60',
+       pointBackgroundColor:'#27ae60',borderWidth:2},
+      {label:'Window Dressing Bank (reported)',
+       data:[85,30,82,35,72,45,38,40,20,28],
+       backgroundColor:'rgba(230,126,34,0.12)',borderColor:'#e67e22',
+       pointBackgroundColor:'#e67e22',borderWidth:2,borderDash:[5,3]},
+      {label:'Window Dressing Bank (adjusted)',
+       data:[68,22,58,35,35,32,38,40,20,18],
+       backgroundColor:'rgba(192,57,43,0.1)',borderColor:'#c0392b',
+       pointBackgroundColor:'#c0392b',borderWidth:2,borderDash:[3,3]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom'}},
+    scales:{r:{
+      min:0,max:100,
+      ticks:{stepSize:20,color:'#888',backdropColor:'transparent'},
+      grid:{color:'rgba(0,0,0,0.07)'},
+      angleLines:{color:'rgba(0,0,0,0.07)'},
+      pointLabels:{color:'#555',font:{size:11}}
+    }}
+  }
+});
+</script>
+</body>
+</html>
